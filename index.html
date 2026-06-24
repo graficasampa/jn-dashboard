@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/png" href="/logoJN.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>JN Gráfica · Dashboard</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
+  </head>
+  <body>
+    <div id="app">
+      <!-- Header -->
+      <header>
+        <div class="hdr-top">
+          <div class="hdr-logo">
+            <img src="/logoJN.png" alt="JN Gráfica" />
+            <span>JN Gráfica</span>
+          </div>
+          <div class="hdr-actions">
+            <div class="month-picker" id="monthPickerBtn">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+              <span id="monthLabel">Junho 2026</span>
+            </div>
+            <button class="btn-dl" id="btnDownload">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+              Baixar PDF
+            </button>
+          </div>
+        </div>
+      </header>
+
+      <!-- Platform selector -->
+      <div class="platform-bar">
+        <div class="platform-bar-inner" id="platformBar">
+          <!-- injected by JS -->
+        </div>
+      </div>
+
+      <!-- Sub-navigation (tabs) -->
+      <div class="sub-nav" id="subNav" style="display:none">
+        <div class="sub-nav-inner" id="subNavInner">
+          <!-- injected by JS -->
+        </div>
+      </div>
+
+      <!-- Main content -->
+      <main class="main" id="mainContent">
+        <div style="text-align:center;padding:60px 0;color:var(--t3)">Carregando...</div>
+      </main>
+
+      <!-- Footer -->
+      <footer>
+        <div class="ftr-inner">
+          <span>JN Gráfica · Dashboard de Marketing</span>
+          <span id="ftrPeriod"></span>
+        </div>
+      </footer>
+    </div>
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>

@@ -1,0 +1,81 @@
+{
+  "period": { "month": "2026-06", "label": "Junho 2026", "days": 23, "range": "01 a 23/06" },
+  "property": { "id": "492019962", "name": "JNRevenda" },
+  "summary": {
+    "revenue": 167313,
+    "orders": 1871,
+    "avgTicket": 89.42,
+    "conversionRate": 17.24
+  },
+  "kpis": {
+    "revenuePerDay": 7274,
+    "revenuePerDayPeak": { "value": 17747, "date": "2026-06-10", "label": "10/Jun (Qua)" },
+    "itemsSold": 2404,
+    "itemsPerOrder": 1.28,
+    "revenuePerSession": 15.42,
+    "sessions": 10848,
+    "pageviews": 60440,
+    "pagesPerSession": 5.57,
+    "engagementRate": 71.4,
+    "avgSessionDuration": "9m 22s",
+    "bounceRate": 28.6,
+    "returningCustomerRate": 97.4,
+    "returningRevenue": 163003,
+    "returningCustomers": 1113,
+    "top50ProductRevenue": 92.8,
+    "totalProducts": 111
+  },
+  "dailyRevenue": [
+    { "day": "01", "revenue": 6900, "orders": 85 },
+    { "day": "02", "revenue": 12000, "orders": 143 },
+    { "day": "03", "revenue": 8000, "orders": 102 },
+    { "day": "04", "revenue": 2600, "orders": 26 },
+    { "day": "05", "revenue": 7100, "orders": 88 },
+    { "day": "06", "revenue": 580, "orders": 10 },
+    { "day": "07", "revenue": 689, "orders": 12 },
+    { "day": "08", "revenue": 9200, "orders": 111 },
+    { "day": "09", "revenue": 12000, "orders": 134 },
+    { "day": "10", "revenue": 18000, "orders": 136 },
+    { "day": "11", "revenue": 7100, "orders": 117 },
+    { "day": "12", "revenue": 5300, "orders": 54 },
+    { "day": "13", "revenue": 1300, "orders": 10 },
+    { "day": "14", "revenue": 1400, "orders": 12 },
+    { "day": "15", "revenue": 12000, "orders": 116 },
+    { "day": "16", "revenue": 9700, "orders": 121 },
+    { "day": "17", "revenue": 9600, "orders": 117 },
+    { "day": "18", "revenue": 9100, "orders": 126 },
+    { "day": "19", "revenue": 8900, "orders": 79 },
+    { "day": "20", "revenue": 719, "orders": 4 },
+    { "day": "21", "revenue": 7190, "orders": 17 },
+    { "day": "22", "revenue": 14000, "orders": 123 },
+    { "day": "23", "revenue": 11000, "orders": 128 }
+  ],
+  "channels": [
+    { "name": "Organic Search", "sessions": 5412, "revenue": 83656, "orders": 934, "pct": 49.9 },
+    { "name": "Direct", "sessions": 2169, "revenue": 33462, "orders": 374, "pct": 20.0 },
+    { "name": "Referral", "sessions": 1627, "revenue": 25097, "orders": 281, "pct": 15.0 },
+    { "name": "Organic Social", "sessions": 868, "revenue": 13385, "orders": 150, "pct": 8.0 },
+    { "name": "Email", "sessions": 543, "revenue": 8365, "orders": 94, "pct": 5.0 },
+    { "name": "Paid Social", "sessions": 217, "revenue": 0, "orders": 0, "pct": 2.0 }
+  ],
+  "devices": [
+    { "name": "Mobile", "sessions": 7050, "pct": 65 },
+    { "name": "Desktop", "sessions": 3254, "pct": 30 },
+    { "name": "Tablet", "sessions": 544, "pct": 5 }
+  ],
+  "topProducts": [
+    { "rank": 1, "name": "Wind Banner 150×250cm", "revenue": 18420, "orders": 186, "pct": 11.0 },
+    { "rank": 2, "name": "Camiseta Sublimada", "revenue": 14736, "orders": 312, "pct": 8.8 },
+    { "rank": 3, "name": "Totem Display Chão", "revenue": 12548, "orders": 94, "pct": 7.5 },
+    { "rank": 4, "name": "Banner Lona 2×1m", "revenue": 10021, "orders": 224, "pct": 6.0 },
+    { "rank": 5, "name": "Adesivo Vinil Recortado", "revenue": 8349, "orders": 418, "pct": 5.0 }
+  ],
+  "insights": [
+    { "type": "pos", "tag": "Destaque", "title": "Dia 10/Jun faturou R$17.747 — pico do mês", "body": "Quarta-feira 10/06 bateu o maior faturamento do mês com 136 pedidos. Coincide com início de semana pós-copa. Padrão: mid-week performa 40% acima de segunda/sexta." },
+    { "type": "pos", "tag": "Destaque", "title": "97,4% da receita vem de clientes recorrentes", "body": "R$163.003 gerados por 1.113 clientes fiéis. Base consolidada e saudável. Oportunidade: programa de indicação para converter os 2,6% novos em recorrentes mais rápido." },
+    { "type": "pos", "tag": "Eficiência", "title": "Taxa de rejeição 28,6% — abaixo do benchmark de 30%", "body": "Sessões engajadas em 71,4% com tempo médio de 9m22s. Indica conteúdo e UX adequados ao público-alvo de revendedores gráficos." },
+    { "type": "warn", "tag": "Atenção", "title": "Fins de semana caem 85% vs dias úteis", "body": "Dias 06, 07, 13 e 14 somam apenas R$2.988 (< 2% da receita). Negócio é B2B — faz sentido. Não investir em campanhas pagas nesses dias." },
+    { "type": "warn", "tag": "Atenção", "title": "Paid Social: R$0 de receita com 217 sessões", "body": "Meta Ads gerou 217 sessões mas GA4 registra R$0 de receita nesse canal. Pixel de compra não está disparando no checkout. Verificar com urgência." },
+    { "type": "neg", "tag": "Problema", "title": "61 produtos sem nenhuma venda no mês", "body": "De 111 produtos, apenas 50 geraram receita (os Top 50 = 92,8% do total). Revisar precificação, visibilidade e descrição dos 61 produtos inativos." }
+  ]
+}
