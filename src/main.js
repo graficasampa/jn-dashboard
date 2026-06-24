@@ -123,11 +123,53 @@ async function renderContent() {
     `Gerado em ${new Date().toLocaleDateString('pt-BR')} · ${m?.label || state.month}`;
 }
 
+async function loadLastUpdated() {
+  try {
+    const res = await fetch('/data/lastUpdated.json');
+    if (!res.ok) return;
+    const { ts, sources } = await res.json();
+    if (!ts) return;
+
+    const badge = document.getElementById('updBadge');
+    const text  = document.getElementById('updText');
+    const dt    = new Date(ts);
+
+    // Data em horário de Brasília
+    const brtOffset = -3 * 60;
+    const brt = new Date(dt.getTime() + (brtOffset - dt.getTimezoneOffset()) * 60000);
+    const todayBRT  = new Date();
+    const todayStr  = todayBRT.toLocaleDateString('pt-BR', { timeZone: 'America/Sao_Paulo' });
+    const updStr    = brt.toLocaleDateString('pt-BR');
+    const hhmm      = brt.toLocaleTimeString('pt-BR', { hour:'2-digit', minute:'2-digit' });
+
+    let label;
+    if (updStr === todayStr) {
+      label = `Atualizado hoje às ${hhmm}`;
+    } else {
+      const yesterday = new Date(todayBRT);
+      yesterday.setDate(yesterday.getDate() - 1);
+      const yestStr = yesterday.toLocaleDateString('pt-BR', { timeZone: 'America/Sao_Paulo' });
+      label = updStr === yestStr
+        ? `Atualizado ontem às ${hhmm}`
+        : `Atualizado em ${updStr.slice(0,5)} às ${hhmm}`;
+    }
+
+    // Indicar fontes parciais
+    const sourceList = Object.entries(sources || {}).filter(([,v]) => v).map(([k]) => k.toUpperCase());
+    if (sourceList.length > 0 && sourceList.length < 2) {
+      label += ` (${sourceList.join(', ')})`;
+    }
+
+    text.textContent = label;
+    badge.classList.add('visible');
+  } catch {}
+}
+
 async function init() {
   updateMonthLabel();
   renderPlatformBar();
   renderSubNav();
-  await renderContent();
+  await Promise.all([renderContent(), loadLastUpdated()]);
 }
 
 init();

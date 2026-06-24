@@ -28,6 +28,15 @@ body{background:var(--bg);color:var(--t1);font-family:-apple-system,BlinkMacSyst
 .hdr-right{display:flex;align-items:center;gap:10px}
 .btn-pdf{display:flex;align-items:center;gap:5px;padding:5px 13px;background:var(--blu);color:#fff;border:none;border-radius:var(--rs);font-size:12px;font-weight:600;cursor:pointer;font-family:inherit;transition:background .15s}
 .btn-pdf:hover{background:#1040b0}
+/* LAST UPDATED BADGE */
+.upd-badge{display:none;align-items:center;gap:6px;padding:4px 10px;background:var(--grn-l);border:1px solid #AAECD4;border-radius:20px}
+.upd-badge.visible{display:flex}
+.upd-dot{width:7px;height:7px;border-radius:50%;background:var(--grn);flex-shrink:0;animation:pulse-dot 2.4s ease-in-out infinite}
+.upd-txt{font-size:11px;font-weight:600;color:var(--grn);white-space:nowrap}
+@keyframes pulse-dot{
+  0%,100%{box-shadow:0 0 0 0 rgba(10,138,88,.4)}
+  50%{box-shadow:0 0 0 5px rgba(10,138,88,0)}
+}
 .sec-nav{border-top:1px solid var(--bdr2);background:#fff}
 .sec-nav-inner{max-width:var(--max);margin:0 auto;padding:0 24px;display:flex;overflow-x:auto}
 .sec-nav a{display:block;padding:8px 14px;font-size:12px;font-weight:600;color:var(--t3);text-decoration:none;white-space:nowrap;border-bottom:2px solid transparent;transition:color .15s,border-color .15s}

@@ -1,0 +1,61 @@
+name: Atualizar Dados do Dashboard
+
+on:
+  schedule:
+    # 23:55 horário de Brasília (BRT = UTC-3) → 02:55 UTC
+    - cron: '55 2 * * *'
+  workflow_dispatch:
+    inputs:
+      platform:
+        description: 'Qual plataforma atualizar'
+        required: false
+        default: 'all'
+        type: choice
+        options: [all, ga4, meta]
+
+jobs:
+  update:
+    name: Buscar dados e publicar
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Node.js 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Instalar dependências
+        run: npm ci
+
+      - name: Buscar GA4
+        if: ${{ github.event.inputs.platform == 'all' || github.event.inputs.platform == 'ga4' || github.event_name == 'schedule' }}
+        env:
+          GA4_CREDENTIALS: ${{ secrets.GA4_CREDENTIALS }}
+          GA4_PROPERTY_ID: '492019962'
+        run: node scripts/fetch-ga4.js
+
+      - name: Buscar Meta Ads
+        if: ${{ github.event.inputs.platform == 'all' || github.event.inputs.platform == 'meta' || github.event_name == 'schedule' }}
+        env:
+          META_ACCESS_TOKEN: ${{ secrets.META_ACCESS_TOKEN }}
+          META_ACCOUNT_ID: 'act_489839481099112'
+        run: node scripts/fetch-meta.js
+
+      - name: Commit e push (se houver mudanças)
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add public/data/
+          if git diff --staged --quiet; then
+            echo "✓ Sem alterações nos dados."
+          else
+            git commit -m "data: atualização automática $(date -u '+%d/%m/%Y %H:%M UTC')"
+            git push
+            echo "✅ Dados publicados. Vercel redeployando..."
+          fi
