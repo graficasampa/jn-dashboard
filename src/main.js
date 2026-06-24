@@ -2,7 +2,6 @@ import './style.css';
 import { renderGA4, initGA4Charts } from './renderers/ga4.js';
 import { renderMeta } from './renderers/meta.js';
 
-// ── State ─────────────────────────────────────────────────
 let state = {
   month: '2026-06',
   platform: 'ga4',
@@ -10,7 +9,7 @@ let state = {
 };
 
 const AVAILABLE_MONTHS = [
-  { value: '2026-06', label: 'Junho 2026' }
+  { value: '2026-06', label: 'Junho 2026', days: 23 }
 ];
 
 const PLATFORMS = [
@@ -19,24 +18,19 @@ const PLATFORMS = [
     name: 'Google Analytics',
     sub: 'GA4 · Prop. 492019962 · JNRevenda',
     logoBg: '#FFF3E0',
-    logo: `<svg width="22" height="22" viewBox="0 0 48 48" fill="none">
-      <path d="M29 8C29 5.239 26.761 3 24 3s-5 2.239-5 5v26c0 2.761 2.239 5 5 5s5-2.239 5-5V8z" fill="#F9AB00"/>
-      <path d="M8 30c0-2.761 2.239-5 5-5s5 2.239 5 5v5c0 2.761-2.239 5-5 5s-5-2.239-5-5v-5z" fill="#E37400"/>
-      <circle cx="40" cy="35" r="5" fill="#E37400"/>
-    </svg>`,
-    dataFile: 'ga4.json',
+    logo: `<svg width="22" height="22" viewBox="0 0 24 24" fill="none"><rect x="2" y="15" width="5" height="7" rx="1" fill="#F9AB00"/><rect x="9.5" y="10" width="5" height="12" rx="1" fill="#E37400"/><rect x="17" y="3" width="5" height="19" rx="1" fill="#E37400"/></svg>`,
+    subnav: ['Resumo','Vendas & Receita','Top Produtos','Funil & Retenção','Tráfego','Insights'],
+    subnav_ids: ['resumo','vendas','produtos','funil','trafego','insights'],
     disabled: false
   },
   {
     id: 'meta',
     name: 'Meta Ads',
-    sub: 'Conta 489839481099112 · JN Impressão',
-    logoBg: '#E7F0FD',
-    logo: `<svg width="22" height="22" viewBox="0 0 36 36" fill="none">
-      <path d="M18 3C9.716 3 3 9.716 3 18s6.716 15 15 15 15-6.716 15-15S26.284 3 18 3z" fill="#1877F2"/>
-      <path d="M21.5 14.5c-1.35 0-2.25.9-2.813 2.25L17.5 19l-1.188-2.25C15.75 15.4 14.85 14.5 13.5 14.5c-2.025 0-3.375 1.575-3.375 3.825 0 2.7 2.138 5.063 7.875 8.175 5.738-3.112 7.875-5.475 7.875-8.175 0-2.25-1.35-3.825-3.375-3.825z" fill="#fff"/>
-    </svg>`,
-    dataFile: 'meta.json',
+    sub: 'JN Impressão · ID 489839481099112',
+    logoBg: '#E7F3FF',
+    logo: `<svg width="22" height="22" viewBox="0 0 24 24" fill="#1877F2"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>`,
+    subnav: ['Visão Geral','KPIs','Campanhas','Top Anúncios','Criativos','Insights'],
+    subnav_ids: ['meta-ads','meta-ads','meta-ads','meta-ads','meta-ads','meta-ads'],
     disabled: false
   },
   {
@@ -44,28 +38,23 @@ const PLATFORMS = [
     name: 'Google Ads',
     sub: 'Em breve · Conecte sua conta',
     logoBg: '#fff',
-    logo: `<svg width="22" height="22" viewBox="0 0 48 48" fill="none">
-      <path d="M33.86 4.77L15.49 36.55l-7.86-4.54 18.37-31.78 7.86 4.54z" fill="#FBBC04"/>
-      <path d="M48 36.55H15.49l-2.28-3.95 9.22-15.97 2.28 3.95-6.94 12.02H48v3.95z" fill="#4285F4"/>
-      <circle cx="7.63" cy="36.55" r="7.63" fill="#34A853"/>
-    </svg>`,
-    dataFile: null,
+    logo: `<svg width="22" height="22" viewBox="0 0 48 48" fill="none"><path d="M33.86 4.77L15.49 36.55l-7.86-4.54 18.37-31.78 7.86 4.54z" fill="#FBBC04"/><path d="M48 36.55H15.49l-2.28-3.95 9.22-15.97 2.28 3.95-6.94 12.02H48v3.95z" fill="#4285F4"/><circle cx="7.63" cy="36.55" r="7.63" fill="#34A853"/></svg>`,
+    subnav: ['Google Ads — Em breve'],
+    subnav_ids: ['gads'],
     disabled: true
   }
 ];
 
-// ── Data loading ──────────────────────────────────────────
 async function loadData(month, platform) {
   const key = `${month}/${platform}`;
   if (state.data[key]) return state.data[key];
   const res = await fetch(`/data/${month}/${platform}.json`);
-  if (!res.ok) throw new Error(`Data not found: ${key}`);
+  if (!res.ok) throw new Error(`Dados não encontrados: ${key}`);
   const data = await res.json();
   state.data[key] = data;
   return data;
 }
 
-// ── Render platform bar ───────────────────────────────────
 function renderPlatformBar() {
   const bar = document.getElementById('platformBar');
   bar.innerHTML = PLATFORMS.map(p => `
@@ -82,15 +71,31 @@ function renderPlatformBar() {
     </button>`).join('');
 }
 
-// ── Switch platform ───────────────────────────────────────
+function renderSubNav() {
+  const container = document.getElementById('subNavContainer');
+  const platform = PLATFORMS.find(p => p.id === state.platform);
+  if (!platform) { container.innerHTML = ''; return; }
+  container.innerHTML = `
+    <nav class="sub-nav">
+      <div class="sub-nav-inner">
+        ${platform.subnav.map((label, i) => `<a href="#${platform.subnav_ids[i]}">${label}</a>`).join('')}
+      </div>
+    </nav>`;
+}
+
+function updateMonthLabel() {
+  const m = AVAILABLE_MONTHS.find(m => m.value === state.month);
+  document.getElementById('monthLabel').textContent = m ? `${m.label} · ${m.days} dias` : state.month;
+}
+
 window.switchPlatform = async function(platformId) {
   if (state.platform === platformId) return;
   state.platform = platformId;
   renderPlatformBar();
+  renderSubNav();
   await renderContent();
 };
 
-// ── Render content ────────────────────────────────────────
 async function renderContent() {
   const main = document.getElementById('mainContent');
   main.innerHTML = '<div style="text-align:center;padding:60px 0;color:var(--t3)">Carregando...</div>';
@@ -102,32 +107,26 @@ async function renderContent() {
       initGA4Charts(data);
     } else if (state.platform === 'meta') {
       main.innerHTML = renderMeta(data);
+    } else {
+      main.innerHTML = `
+        <div style="padding:80px 24px;text-align:center">
+          <div style="font-size:20px;font-weight:800;color:var(--t1);margin-bottom:8px">Em breve</div>
+          <div style="font-size:14px;color:var(--t3)">Esta integração será disponibilizada em breve.</div>
+        </div>`;
     }
   } catch (e) {
-    main.innerHTML = `<div style="text-align:center;padding:60px 0;color:var(--red)">Erro ao carregar dados: ${e.message}</div>`;
+    main.innerHTML = `<div style="text-align:center;padding:60px 0;color:var(--red)">Erro: ${e.message}</div>`;
   }
 
-  // Update footer
-  const monthObj = AVAILABLE_MONTHS.find(m => m.value === state.month);
+  const m = AVAILABLE_MONTHS.find(m => m.value === state.month);
   document.getElementById('ftrPeriod').textContent =
-    `Gerado em ${new Date().toLocaleDateString('pt-BR')} · ${monthObj?.label || state.month}`;
+    `Gerado em ${new Date().toLocaleDateString('pt-BR')} · ${m?.label || state.month}`;
 }
 
-// ── Month picker ──────────────────────────────────────────
-function updateMonthLabel() {
-  const monthObj = AVAILABLE_MONTHS.find(m => m.value === state.month);
-  document.getElementById('monthLabel').textContent = monthObj?.label || state.month;
-}
-
-// ── PDF download ──────────────────────────────────────────
-document.getElementById('btnDownload').addEventListener('click', () => {
-  window.print();
-});
-
-// ── Init ──────────────────────────────────────────────────
 async function init() {
   updateMonthLabel();
   renderPlatformBar();
+  renderSubNav();
   await renderContent();
 }
 
