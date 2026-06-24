@@ -39,7 +39,7 @@ const PLATFORMS = [
     name: 'Google Ads',
     sub: 'JN Impressão · Conta 4987645148',
     logoBg: '#fff',
-    logo: `<svg width="22" height="22" viewBox="0 0 48 48" fill="none"><path d="M33.86 4.77L15.49 36.55l-7.86-4.54 18.37-31.78 7.86 4.54z" fill="#FBBC04"/><path d="M48 36.55H15.49l-2.28-3.95 9.22-15.97 2.28 3.95-6.94 12.02H48v3.95z" fill="#4285F4"/><circle cx="7.63" cy="36.55" r="7.63" fill="#34A853"/></svg>`,
+    logo: `<svg width="22" height="22" viewBox="0 0 192 192" xmlns="http://www.w3.org/2000/svg"><path d="M51.6 164L110 58.5l33.8 19.5L85.4 183.5z" fill="#FBBC04"/><path d="M144 78L192 164H96l33.8-19.5h37.4L141.6 97.5z" fill="#4285F4"/><circle cx="32" cy="144" r="30" fill="#34A853"/></svg>`,
     subnav: ['Resumo','Gasto Diário','Campanhas','Keywords','Insights'],
     subnav_ids: ['gads-resumo','gads-diario','gads-campanhas','gads-keywords','gads-insights'],
     disabled: false
