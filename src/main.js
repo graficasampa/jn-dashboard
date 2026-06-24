@@ -1,6 +1,7 @@
 import './style.css';
 import { renderGA4, initGA4Charts } from './renderers/ga4.js';
 import { renderMeta } from './renderers/meta.js';
+import { renderGads, initGadsCharts } from './renderers/gads.js';
 
 let state = {
   month: '2026-06',
@@ -36,12 +37,12 @@ const PLATFORMS = [
   {
     id: 'gads',
     name: 'Google Ads',
-    sub: 'Em breve · Conecte sua conta',
+    sub: 'JN Impressão · Conta 4987645148',
     logoBg: '#fff',
     logo: `<svg width="22" height="22" viewBox="0 0 48 48" fill="none"><path d="M33.86 4.77L15.49 36.55l-7.86-4.54 18.37-31.78 7.86 4.54z" fill="#FBBC04"/><path d="M48 36.55H15.49l-2.28-3.95 9.22-15.97 2.28 3.95-6.94 12.02H48v3.95z" fill="#4285F4"/><circle cx="7.63" cy="36.55" r="7.63" fill="#34A853"/></svg>`,
-    subnav: ['Google Ads — Em breve'],
-    subnav_ids: ['gads'],
-    disabled: true
+    subnav: ['Resumo','Gasto Diário','Campanhas','Keywords','Insights'],
+    subnav_ids: ['gads-resumo','gads-diario','gads-campanhas','gads-keywords','gads-insights'],
+    disabled: false
   }
 ];
 
@@ -107,12 +108,9 @@ async function renderContent() {
       initGA4Charts(data);
     } else if (state.platform === 'meta') {
       main.innerHTML = renderMeta(data);
-    } else {
-      main.innerHTML = `
-        <div style="padding:80px 24px;text-align:center">
-          <div style="font-size:20px;font-weight:800;color:var(--t1);margin-bottom:8px">Em breve</div>
-          <div style="font-size:14px;color:var(--t3)">Esta integração será disponibilizada em breve.</div>
-        </div>`;
+    } else if (state.platform === 'gads') {
+      main.innerHTML = renderGads(data);
+      initGadsCharts(data);
     }
   } catch (e) {
     main.innerHTML = `<div style="text-align:center;padding:60px 0;color:var(--red)">Erro: ${e.message}</div>`;
