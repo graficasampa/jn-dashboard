@@ -1,12 +1,14 @@
 import './style.css';
+import { renderHome, initHomeCharts } from './renderers/home.js';
 import { renderGA4, initGA4Charts } from './renderers/ga4.js';
 import { renderMeta } from './renderers/meta.js';
 import { renderGads, initGadsCharts } from './renderers/gads.js';
 
 let state = {
-  month: '2026-06',
+  view:     'hub',     // 'hub' | 'month'
+  month:    '2026-06',
   platform: 'ga4',
-  data: {}
+  data:     {}
 };
 
 const AVAILABLE_MONTHS = [
@@ -20,9 +22,8 @@ const PLATFORMS = [
     sub: 'GA4 · Prop. 492019962 · JNRevenda',
     logoBg: '#FFF3E0',
     logo: `<svg width="22" height="22" viewBox="0 0 24 24" fill="none"><rect x="2" y="15" width="5" height="7" rx="1" fill="#F9AB00"/><rect x="9.5" y="10" width="5" height="12" rx="1" fill="#E37400"/><rect x="17" y="3" width="5" height="19" rx="1" fill="#E37400"/></svg>`,
-    subnav: ['Resumo','Vendas & Receita','Top Produtos','Funil & Retenção','Tráfego','Insights'],
+    subnav:     ['Resumo','Vendas & Receita','Top Produtos','Funil & Retenção','Tráfego','Insights'],
     subnav_ids: ['resumo','vendas','produtos','funil','trafego','insights'],
-    disabled: false
   },
   {
     id: 'meta',
@@ -30,39 +31,68 @@ const PLATFORMS = [
     sub: 'JN Impressão · ID 489839481099112',
     logoBg: '#E7F3FF',
     logo: `<svg width="22" height="22" viewBox="0 0 24 24" fill="#1877F2"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>`,
-    subnav: ['Visão Geral','KPIs','Campanhas','Top Anúncios','Criativos','Insights'],
+    subnav:     ['Visão Geral','KPIs','Campanhas','Top Anúncios','Criativos','Insights'],
     subnav_ids: ['meta-ads','meta-ads','meta-ads','meta-ads','meta-ads','meta-ads'],
-    disabled: false
   },
   {
     id: 'gads',
     name: 'Google Ads',
     sub: 'JN Impressão · Conta 4987645148',
     logoBg: '#fff',
-    logo: `<svg width="22" height="22" viewBox="0 0 192 192" xmlns="http://www.w3.org/2000/svg"><path d="M51.6 164L110 58.5l33.8 19.5L85.4 183.5z" fill="#FBBC04"/><path d="M144 78L192 164H96l33.8-19.5h37.4L141.6 97.5z" fill="#4285F4"/><circle cx="32" cy="144" r="30" fill="#34A853"/></svg>`,
-    subnav: ['Resumo','Gasto Diário','Campanhas','Keywords','Insights'],
+    logo: `<img src="/google-ads-logo.svg" width="22" height="22" style="object-fit:contain;display:block">`,
+    subnav:     ['Resumo','Gasto Diário','Campanhas','Keywords','Insights'],
     subnav_ids: ['gads-resumo','gads-diario','gads-campanhas','gads-keywords','gads-insights'],
-    disabled: false
   }
 ];
 
-async function loadData(month, platform) {
-  const key = `${month}/${platform}`;
+// ── dados ───────────────────────────────────────────────
+async function loadData() {
+  if (state.view === 'hub') {
+    if (state.data['index']) return state.data['index'];
+    const res = await fetch('/data/index.json');
+    if (!res.ok) throw new Error('Índice não encontrado');
+    const data = await res.json();
+    state.data['index'] = data;
+    return data;
+  }
+  const key = `${state.month}/${state.platform}`;
   if (state.data[key]) return state.data[key];
-  const res = await fetch(`/data/${month}/${platform}.json`);
+  const res = await fetch(`/data/${state.month}/${state.platform}.json`);
   if (!res.ok) throw new Error(`Dados não encontrados: ${key}`);
   const data = await res.json();
   state.data[key] = data;
   return data;
 }
 
+// ── header ──────────────────────────────────────────────
+function updateHeader() {
+  const pill    = document.getElementById('monthLabel');
+  const backBtn = document.getElementById('backBtn');
+  const platBar = document.querySelector('.platform-bar');
+
+  if (state.view === 'hub') {
+    pill.textContent     = 'Visão Geral';
+    pill.style.cursor    = '';
+    pill.onclick         = null;
+    backBtn.style.display = 'none';
+    platBar.style.display = 'none';
+  } else {
+    const m = AVAILABLE_MONTHS.find(m => m.value === state.month);
+    pill.textContent      = m ? `${m.label} · ${m.days} dias` : state.month;
+    backBtn.style.display = 'flex';
+    platBar.style.display = '';
+  }
+}
+
+// ── plataformas ─────────────────────────────────────────
 function renderPlatformBar() {
+  if (state.view === 'hub') return;
   const bar = document.getElementById('platformBar');
   bar.innerHTML = PLATFORMS.map(p => `
     <button
-      class="psel${p.id === state.platform ? ' active' : ''}${p.disabled ? ' psel-disabled' : ''}"
+      class="psel${p.id === state.platform ? ' active' : ''}"
       id="psel-${p.id}"
-      ${p.disabled ? 'disabled' : `onclick="switchPlatform('${p.id}')"`}
+      onclick="switchPlatform('${p.id}')"
     >
       <div class="psel-logo" style="background:${p.logoBg}${p.id === 'gads' ? ';border:1px solid var(--bdr)' : ''}">${p.logo}</div>
       <div class="psel-info">
@@ -74,22 +104,52 @@ function renderPlatformBar() {
 
 function renderSubNav() {
   const container = document.getElementById('subNavContainer');
-  const platform = PLATFORMS.find(p => p.id === state.platform);
-  if (!platform) { container.innerHTML = ''; return; }
+  if (state.view === 'hub') { container.innerHTML = ''; return; }
+  const p = PLATFORMS.find(p => p.id === state.platform);
+  if (!p) { container.innerHTML = ''; return; }
   container.innerHTML = `
     <nav class="sub-nav">
       <div class="sub-nav-inner">
-        ${platform.subnav.map((label, i) => `<a href="#${platform.subnav_ids[i]}">${label}</a>`).join('')}
+        ${p.subnav.map((label, i) => `<a href="#${p.subnav_ids[i]}">${label}</a>`).join('')}
       </div>
     </nav>`;
 }
 
-function updateMonthLabel() {
-  const m = AVAILABLE_MONTHS.find(m => m.value === state.month);
-  document.getElementById('monthLabel').textContent = m ? `${m.label} · ${m.days} dias` : state.month;
+// ── conteúdo ────────────────────────────────────────────
+async function renderContent() {
+  const main = document.getElementById('mainContent');
+  main.innerHTML = '<div style="text-align:center;padding:60px 0;color:var(--t3)">Carregando...</div>';
+
+  try {
+    const data = await loadData();
+
+    if (state.view === 'hub') {
+      main.innerHTML = renderHome(data);
+      initHomeCharts(data);
+      document.getElementById('ftrPeriod').textContent =
+        `Painel Executivo · Atualizado em ${new Date().toLocaleDateString('pt-BR')}`;
+    } else {
+      if (state.platform === 'ga4') {
+        main.innerHTML = renderGA4(data);
+        initGA4Charts(data);
+      } else if (state.platform === 'meta') {
+        main.innerHTML = renderMeta(data);
+      } else if (state.platform === 'gads') {
+        main.innerHTML = renderGads(data);
+        initGadsCharts(data);
+      }
+      const m = AVAILABLE_MONTHS.find(m => m.value === state.month);
+      document.getElementById('ftrPeriod').textContent =
+        `Gerado em ${new Date().toLocaleDateString('pt-BR')} · ${m?.label || state.month}`;
+    }
+  } catch (e) {
+    main.innerHTML = `<div style="text-align:center;padding:60px 0;color:var(--red)">Erro: ${e.message}</div>`;
+  }
 }
 
+// ── navegação ────────────────────────────────────────────
 window.switchPlatform = async function(platformId) {
+  if (state.view !== 'month') return;
   if (state.platform === platformId) return;
   state.platform = platformId;
   renderPlatformBar();
@@ -97,30 +157,24 @@ window.switchPlatform = async function(platformId) {
   await renderContent();
 };
 
-async function renderContent() {
-  const main = document.getElementById('mainContent');
-  main.innerHTML = '<div style="text-align:center;padding:60px 0;color:var(--t3)">Carregando...</div>';
+window.goToMonth = async function(monthValue) {
+  state.month    = monthValue;
+  state.view     = 'month';
+  state.platform = 'ga4';
+  updateHeader();
+  renderPlatformBar();
+  renderSubNav();
+  await renderContent();
+};
 
-  try {
-    const data = await loadData(state.month, state.platform);
-    if (state.platform === 'ga4') {
-      main.innerHTML = renderGA4(data);
-      initGA4Charts(data);
-    } else if (state.platform === 'meta') {
-      main.innerHTML = renderMeta(data);
-    } else if (state.platform === 'gads') {
-      main.innerHTML = renderGads(data);
-      initGadsCharts(data);
-    }
-  } catch (e) {
-    main.innerHTML = `<div style="text-align:center;padding:60px 0;color:var(--red)">Erro: ${e.message}</div>`;
-  }
+window.goToHub = async function() {
+  state.view = 'hub';
+  updateHeader();
+  renderSubNav();
+  await renderContent();
+};
 
-  const m = AVAILABLE_MONTHS.find(m => m.value === state.month);
-  document.getElementById('ftrPeriod').textContent =
-    `Gerado em ${new Date().toLocaleDateString('pt-BR')} · ${m?.label || state.month}`;
-}
-
+// ── last updated ────────────────────────────────────────
 async function loadLastUpdated() {
   try {
     const res = await fetch('/data/lastUpdated.json');
@@ -131,40 +185,29 @@ async function loadLastUpdated() {
     const badge = document.getElementById('updBadge');
     const text  = document.getElementById('updText');
     const dt    = new Date(ts);
+    const TZ    = 'America/Sao_Paulo';
 
-    // Data em horário de Brasília
-    const brtOffset = -3 * 60;
-    const brt = new Date(dt.getTime() + (brtOffset - dt.getTimezoneOffset()) * 60000);
-    const todayBRT  = new Date();
-    const todayStr  = todayBRT.toLocaleDateString('pt-BR', { timeZone: 'America/Sao_Paulo' });
-    const updStr    = brt.toLocaleDateString('pt-BR');
-    const hhmm      = brt.toLocaleTimeString('pt-BR', { hour:'2-digit', minute:'2-digit' });
+    const todayStr   = new Date().toLocaleDateString('pt-BR', { timeZone: TZ });
+    const updStr     = dt.toLocaleDateString('pt-BR', { timeZone: TZ });
+    const hhmm       = dt.toLocaleTimeString('pt-BR', { timeZone: TZ, hour:'2-digit', minute:'2-digit' });
+    const yesterday  = new Date(Date.now() - 86400000).toLocaleDateString('pt-BR', { timeZone: TZ });
 
     let label;
-    if (updStr === todayStr) {
-      label = `Atualizado hoje às ${hhmm}`;
-    } else {
-      const yesterday = new Date(todayBRT);
-      yesterday.setDate(yesterday.getDate() - 1);
-      const yestStr = yesterday.toLocaleDateString('pt-BR', { timeZone: 'America/Sao_Paulo' });
-      label = updStr === yestStr
-        ? `Atualizado ontem às ${hhmm}`
-        : `Atualizado em ${updStr.slice(0,5)} às ${hhmm}`;
-    }
+    if (updStr === todayStr)        label = `Atualizado hoje às ${hhmm}`;
+    else if (updStr === yesterday)  label = `Atualizado ontem às ${hhmm}`;
+    else                            label = `Atualizado em ${updStr.slice(0,5)} às ${hhmm}`;
 
-    // Indicar fontes parciais
     const sourceList = Object.entries(sources || {}).filter(([,v]) => v).map(([k]) => k.toUpperCase());
-    if (sourceList.length > 0 && sourceList.length < 2) {
-      label += ` (${sourceList.join(', ')})`;
-    }
+    if (sourceList.length > 0 && sourceList.length < 3) label += ` (${sourceList.join(', ')})`;
 
     text.textContent = label;
     badge.classList.add('visible');
   } catch {}
 }
 
+// ── init ─────────────────────────────────────────────────
 async function init() {
-  updateMonthLabel();
+  updateHeader();
   renderPlatformBar();
   renderSubNav();
   await Promise.all([renderContent(), loadLastUpdated()]);

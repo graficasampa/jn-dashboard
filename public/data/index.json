@@ -1,0 +1,38 @@
+{
+  "months": [
+    {
+      "value": "2026-06",
+      "label": "Junho 2026",
+      "short": "Jun/26",
+      "days": 23,
+      "sources": { "ga4": true, "gads": true, "meta": true },
+      "ga4": {
+        "revenue":        167313,
+        "orders":         1871,
+        "sessions":       10848,
+        "avgTicket":      89.42,
+        "users":          2647,
+        "newUsers":       1534,
+        "returningUsers": 1113,
+        "addToCart":      531,
+        "itemsPurchased": 2404
+      },
+      "gads": {
+        "spend":       896.18,
+        "conversions": 212,
+        "roas":        24.0,
+        "clicks":      787
+      },
+      "meta": {
+        "spend":     4099.97,
+        "purchases": 298,
+        "roas":      7.3,
+        "reach":     107366
+      },
+      "derived": {
+        "totalInvestment": 4996.15,
+        "overallROAS":     33.5
+      }
+    }
+  ]
+}

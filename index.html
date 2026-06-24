@@ -2,7 +2,7 @@
 <html lang="pt-BR">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/png" href="/logoJN.png" />
+    <link rel="icon" type="image/png" href="/favicon.png" sizes="64x64" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>JN Gráfica · Dashboard</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
@@ -15,7 +15,11 @@
           <div class="hdr-brand">
             <img src="/logoJN.png" alt="JN Gráfica" style="height:22px;object-fit:contain;display:block;flex-shrink:0">
             <div class="hdr-sep"></div>
-            <span class="hdr-pill" id="monthLabel">Junho 2026</span>
+            <button class="back-btn" id="backBtn" style="display:none" onclick="window.goToHub()">
+              <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8l5 5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              Visão Geral
+            </button>
+            <span class="hdr-pill" id="monthLabel">Visão Geral</span>
           </div>
           <div class="hdr-right">
             <div class="upd-badge" id="updBadge">
