@@ -32,14 +32,9 @@ function computeStats(months) {
 
   const retRevPct = totRev > 0 ? totRetRev / totRev * 100 : 0;
   const newRevPct = totRev > 0 ? totNewRev / totRev * 100 : 0;
-  const retUserPct = (totRetUsers + totNewUsers) > 0 ? totRetUsers / (totRetUsers + totNewUsers) * 100 : 0;
-  const retOrderPct = totOrders > 0 ? totRetOrd / totOrders * 100 : 0;
-  const newOrderPct = totOrders > 0 ? totNewOrd / totOrders * 100 : 0;
   const revPerRet = totRetUsers > 0 ? totRetRev / totRetUsers : 0;
   const revPerNew = totNewUsers > 0 ? totNewRev / totNewUsers : 0;
   const revRatio  = revPerNew > 0 ? revPerRet / revPerNew : null;
-  const orderValueRet = totRetOrd > 0 ? totRetRev / totRetOrd : 0;
-  const orderValueNew = totNewOrd > 0 ? totNewRev / totNewOrd : 0;
 
   const gadsROAS    = totGadsSpend > 0 ? totGadsRev / totGadsSpend : 0;
   const metaROAS    = totMetaSpend > 0 ? totMetaRev / totMetaSpend : 0;
@@ -48,30 +43,17 @@ function computeStats(months) {
   const overallROAS = totInv > 0 ? totRev / totInv : 0;
 
   const sortByRev = [...valid].sort((a, b) => (b.ga4?.revenue || 0) - (a.ga4?.revenue || 0));
-  const sortByMetaROAS = [...valid].filter(m => m.meta?.roas).sort((a, b) => (b.meta?.roas || 0) - (a.meta?.roas || 0));
-  const sortByNewUsers = [...valid].sort((a, b) => (b.ga4?.newUsers || 0) - (a.ga4?.newUsers || 0));
 
   const half      = Math.floor(valid.length / 2);
   const avgNew1st = half > 0 ? sm(valid.slice(0, half), m => m.ga4.newUsers) / half : 0;
   const avgNew2nd = (valid.length - half) > 0 ? sm(valid.slice(half), m => m.ga4.newUsers) / (valid.length - half) : 0;
-  const latest = valid[valid.length - 1];
-  const prev = valid[valid.length - 2];
-  const latestRevDelta = latest && prev && prev.ga4?.revenue
-    ? ((latest.ga4.revenue || 0) - prev.ga4.revenue) / prev.ga4.revenue * 100
-    : null;
 
   return {
     totNewUsers, totRetUsers, totNewRev, totRetRev, totNewOrd, totRetOrd,
-    totRev, totOrders, retRevPct, newRevPct, retUserPct, retOrderPct, newOrderPct,
-    revPerRet, revPerNew, revRatio, orderValueRet, orderValueNew,
+    totRev, totOrders, retRevPct, newRevPct, revPerRet, revPerNew, revRatio,
     totGadsSpend, totGadsConv, totGadsRev, totMetaSpend, totMetaPurch, totMetaRev,
     totInv, gadsROAS, metaROAS, gadsCPA, metaCPA, overallROAS,
     bestRevMonth: sortByRev[0],
-    bestMetaMonth: sortByMetaROAS[0],
-    bestNewUsersMonth: sortByNewUsers[0],
-    latest,
-    prev,
-    latestRevDelta,
     avgNew1st, avgNew2nd,
     n: valid.length,
     periodLabel: valid.length > 1
@@ -121,97 +103,6 @@ function generateInsights(st) {
       type: 'warn', tag: 'ROAS Consolidado',
       title: `ROAS do período: ${_X(st.overallROAS)} — ${_R0(st.totRev)} gerados com ${_R0(st.totInv)} investidos`,
       body: `${st.n} meses analisados. ${st.overallROAS >= 10 ? 'Excelente retorno — aumentar budget com cautela, monitorando margem e CAC.' : st.overallROAS >= 5 ? 'Bom retorno. Identificar os meses e campanhas de maior ROAS e amplificar o que funciona.' : 'ROAS abaixo do ideal. Revisar segmentações, criativos e funil de conversão. Focar mais em base ativa antes de ampliar aquisição.'}`
-    }
-  ];
-}
-
-// ─── plano de ação executivo ─────────────────────────────────────────────────
-function generateActionPlan(st) {
-  const revGapIfNewUserImproves = st.totNewUsers * Math.max(st.revPerRet * 0.08 - st.revPerNew, 0);
-  const bestMeta = st.bestMetaMonth;
-  const latestMetaWeak = st.latest?.meta?.roas && bestMeta?.meta?.roas
-    ? st.latest.meta.roas < bestMeta.meta.roas * 0.5
-    : false;
-
-  return [
-    {
-      pri: 'P1',
-      area: 'Base ativa',
-      title: 'Criar máquina de recompra para clientes que já compraram',
-      why: `${_P(st.retRevPct)} da receita e ${_P(st.retOrderPct)} dos pedidos vêm de recorrentes, mesmo eles sendo só ${_P(st.retUserPct)} dos usuários.`,
-      action: 'Subir campanhas e fluxos separados para: clientes 30–60 dias sem compra, 60–120 dias, carrinho abandonado, compradores de alto ticket e recompra de produtos frequentes.',
-      metric: `Receita recorrente/mês, pedidos recorrentes e ROAS da base ativa. Meta inicial: proteger ${_R0(st.totRetRev / st.n)}/mês.`
-    },
-    {
-      pri: 'P1',
-      area: 'CRM / WhatsApp',
-      title: 'Transformar tráfego novo em primeira compra mais rápido',
-      why: `Novos usuários são ${_N(st.totNewUsers)}, mas geram só ${_P(st.newRevPct)} da receita. Cada novo usuário gera ${_R(st.revPerNew)} vs ${_R(st.revPerRet)} por recorrente.`,
-      action: 'Criar oferta de primeira compra com WhatsApp, cupom controlado, prova social e sequência de recuperação em até 7 dias após a visita ou orçamento.',
-      metric: `Receita de novos usuários e pedidos novos. Se novos chegarem a apenas 8% do valor de recorrentes, há espaço teórico de ${_R0(revGapIfNewUserImproves)} no período.`
-    },
-    {
-      pri: 'P1',
-      area: 'Mídia paga',
-      title: latestMetaWeak ? 'Auditar queda recente do Meta antes de aumentar verba' : 'Separar verba de aquisição e remarketing no Meta',
-      why: latestMetaWeak
-        ? `Meta teve pico de ROAS em ${bestMeta.short} (${_X(bestMeta.meta.roas)}) e agora está em ${_X(st.latest.meta.roas)}. Isso indica troca de mix, público saturado ou campanha perdendo qualidade.`
-        : `Meta soma ${_R0(st.totMetaSpend)} investidos, ${_N(st.totMetaPurch)} compras e ROAS médio ${_X(st.metaROAS)}.`,
-      action: 'Separar campanhas por objetivo: remarketing de base, aquisição fria, lookalike/compradores e catálogo/ofertas. Não misturar públicos frios com clientes ativos na mesma leitura.',
-      metric: `ROAS por público, CPA por compra e frequência. Pausar conjuntos com CPA acima de ${_R(st.metaCPA * 1.35)} sem ganho incremental.`
-    },
-    {
-      pri: 'P2',
-      area: 'Google Ads',
-      title: 'Corrigir mensuração e usar Google para capturar intenção',
-      why: `Google aparece com ROAS médio ${_X(st.gadsROAS)} e CPA ${_R(st.gadsCPA)}, mas parte do histórico usa estimativas/snapshots. Sem conversão real, a decisão de verba fica frágil.`,
-      action: 'Conectar conversões reais do Google Ads e separar campanhas de marca, pesquisa de alta intenção, shopping/produtos e remarketing. Marca deve ser medida separada para não inflar ROAS.',
-      metric: 'Conversões reais, parcela de impressão, custo por pedido e receita atribuída por tipo de campanha.'
-    },
-    {
-      pri: 'P2',
-      area: 'Sazonalidade',
-      title: 'Replicar o padrão dos melhores meses',
-      why: `${st.bestRevMonth.short} foi o pico: ${_R0(st.bestRevMonth.ga4?.revenue)} em receita, ${_N(st.bestRevMonth.ga4?.orders)} pedidos e ROAS geral ${_X(st.bestRevMonth.derived?.overallROAS)}.`,
-      action: 'Comparar campanhas, criativos, ofertas, produtos e canais dos 3 melhores meses contra os 3 piores. Transformar os padrões vencedores em calendário mensal.',
-      metric: 'Receita/dia, pedidos/dia, ticket médio, mix de produtos e investimento por canal.'
-    },
-    {
-      pri: 'P2',
-      area: 'Produto / oferta',
-      title: 'Cruzar audiência com produtos comprados',
-      why: `Hoje sabemos quem gera receita, mas ainda não vemos automaticamente quais produtos fazem o cliente voltar nem o intervalo ideal de recompra.`,
-      action: 'Criar análise de produtos por novo vs recorrente: itens de primeira compra, itens de recompra, combos, ticket e margem. Usar isso para ofertas segmentadas.',
-      metric: 'Produto por segmento, margem por pedido, recompra por categoria e dias até segunda compra.'
-    }
-  ];
-}
-
-function generateDataGaps(st) {
-  return [
-    {
-      title: 'LTV, margem e lucro por cliente',
-      body: 'Hoje a decisão usa receita e ROAS. Para escalar com segurança, falta enxergar margem por produto, lucro por pedido e LTV por cliente/coorte.'
-    },
-    {
-      title: 'Recência, frequência e valor da base',
-      body: 'Falta uma visão RFM: quem comprou recentemente, quem está esfriando, quem compra muito e quem vale reativar com desconto ou atendimento.'
-    },
-    {
-      title: 'Funil de WhatsApp/orçamento',
-      body: 'O painel ainda não mede quantos leads viram orçamento, quantos orçamentos viram pedido e onde o atendimento perde venda.'
-    },
-    {
-      title: 'Incrementalidade de mídia',
-      body: `Com recorrentes gerando ${_P(st.retRevPct)} da receita, precisamos separar vendas que aconteceriam sozinhas de vendas realmente incrementais das campanhas.`
-    },
-    {
-      title: 'Criativos e públicos vencedores por segmento',
-      body: 'Meta e Google mostram performance geral, mas ainda falta relacionar criativo/público com novo cliente, recorrente, ticket e produto comprado.'
-    },
-    {
-      title: 'Estoque, prazo e disponibilidade',
-      body: 'Campanha boa pode perder faturamento se empurrar produto com prazo ruim, baixa margem ou indisponibilidade. Essa camada ainda não está no painel.'
     }
   ];
 }
@@ -405,8 +296,6 @@ export function renderAudience(index) {
   if (!st) return '';
 
   const insights = generateInsights(st);
-  const actions = generateActionPlan(st);
-  const dataGaps = generateDataGaps(st);
   const gadsPct  = st.totInv > 0 ? st.totGadsSpend / st.totInv * 100 : 0;
   const metaPct  = 100 - gadsPct;
 
@@ -480,30 +369,6 @@ export function renderAudience(index) {
       </div>
     </div>
     <canvas id="audChart" style="width:100%;display:block"></canvas>
-  </div>
-
-  <!-- plano do analista -->
-  <div>
-    <div style="display:flex;align-items:flex-end;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:10px">
-      <div>
-        <div style="font-size:13px;font-weight:800;color:var(--t1)">Plano de Ação para Aumentar Faturamento</div>
-        <div style="font-size:11px;color:var(--t3);margin-top:2px">Prioridades automáticas a partir de audiência, recompra e mídia paga</div>
-      </div>
-      <div style="font-size:11px;color:var(--t2);font-weight:700">${st.n} meses analisados · ROAS geral ${_X(st.overallROAS)}</div>
-    </div>
-    <div class="aud-action-grid">
-      ${actions.map((a, i) => `
-      <div class="ins ${i < 3 ? 'warn' : 'pos'}" style="border-left-width:4px">
-        <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:6px">
-          <div class="ins-type">${a.pri} · ${a.area}</div>
-          <div style="font-size:9px;font-weight:800;color:${a.pri === 'P1' ? 'var(--red)' : 'var(--amb)'};background:var(--sur2);border:1px solid var(--bdr2);border-radius:999px;padding:3px 7px">${a.pri === 'P1' ? 'Executar agora' : 'Próximo ciclo'}</div>
-        </div>
-        <div class="ins-ttl">${a.title}</div>
-        <div class="ins-body"><b>Por quê:</b> ${a.why}</div>
-        <div class="ins-body" style="margin-top:6px"><b>Fazer:</b> ${a.action}</div>
-        <div class="ins-body" style="margin-top:6px;color:var(--t1)"><b>Medir:</b> ${a.metric}</div>
-      </div>`).join('')}
-    </div>
   </div>
 
   <!-- tabela mensal -->
@@ -583,19 +448,6 @@ export function renderAudience(index) {
         <div class="ins-type">${ins.tag}</div>
         <div class="ins-ttl">${ins.title}</div>
         <div class="ins-body">${ins.body}</div>
-      </div>`).join('')}
-    </div>
-  </div>
-
-  <!-- dados ausentes -->
-  <div>
-    <div style="font-size:13px;font-weight:800;color:var(--t1);margin-bottom:10px">Dados que Ainda Estamos Deixando de Ver</div>
-    <div class="aud-gap-grid">
-      ${dataGaps.map(g => `
-      <div class="ins warn">
-        <div class="ins-type">Próxima camada</div>
-        <div class="ins-ttl">${g.title}</div>
-        <div class="ins-body">${g.body}</div>
       </div>`).join('')}
     </div>
   </div>

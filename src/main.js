@@ -1,11 +1,11 @@
 import './style.css';
 import { renderHome, initHomeCharts } from './renderers/home.js';
 import { renderGA4, initGA4Charts } from './renderers/ga4.js';
-import { renderMeta, initMetaCharts } from './renderers/meta.js';
+import { renderMeta } from './renderers/meta.js';
 import { renderGads, initGadsCharts } from './renderers/gads.js';
 
 // ── configuração ─────────────────────────────────────────
-let AVAILABLE_MONTHS = [
+const AVAILABLE_MONTHS = [
   { value: '2025-07', label: 'Julho 2025',    short: 'Jul/25', slug: 'julho-2025'    },
   { value: '2025-08', label: 'Agosto 2025',   short: 'Ago/25', slug: 'agosto-2025'   },
   { value: '2025-09', label: 'Setembro 2025', short: 'Set/25', slug: 'setembro-2025' },
@@ -36,8 +36,8 @@ const PLATFORMS = [
     sub: 'JN Impressão · ID 489839481099112',
     logoBg: '#E7F3FF',
     logo: `<svg width="22" height="22" viewBox="0 0 24 24" fill="#1877F2"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>`,
-    subnav:     ['Visão Geral','Conversas','Campanhas','Top Anúncios','Criativos','Insights'],
-    subnav_ids: ['meta-ads','meta-conversas','meta-ads','meta-ads','meta-ads','meta-ads'],
+    subnav:     ['Visão Geral','KPIs','Campanhas','Top Anúncios','Criativos','Insights'],
+    subnav_ids: ['meta-ads','meta-ads','meta-ads','meta-ads','meta-ads','meta-ads'],
   },
   {
     id: 'gads', slug: 'google-ads',
@@ -52,50 +52,11 @@ const PLATFORMS = [
 
 const SLUG_TO_PLATFORM = Object.fromEntries(PLATFORMS.map(p => [p.slug, p.id]));
 const PLATFORM_SLUG    = Object.fromEntries(PLATFORMS.map(p => [p.id, p.slug]));
-let MONTH_BY_SLUG      = Object.fromEntries(AVAILABLE_MONTHS.map(m => [m.slug, m.value]));
-let MONTH_BY_VALUE     = Object.fromEntries(AVAILABLE_MONTHS.map(m => [m.value, m]));
-
-const MONTH_NAMES = ['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
-const MONTH_SHORT = ['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'];
-const SLUG_MONTHS = ['janeiro','fevereiro','marco','abril','maio','junho','julho','agosto','setembro','outubro','novembro','dezembro'];
-
-function monthMeta(value, fallback = {}) {
-  const [year, month] = String(value).split('-').map(Number);
-  const i = month - 1;
-  return {
-    value,
-    label: fallback.label || `${MONTH_NAMES[i] || value} ${year}`,
-    short: fallback.short || `${MONTH_SHORT[i] || String(month).padStart(2, '0')}/${String(year).slice(2)}`,
-    slug: fallback.slug || `${SLUG_MONTHS[i] || String(month).padStart(2, '0')}-${year}`,
-  };
-}
-
-function refreshMonthMaps() {
-  MONTH_BY_SLUG  = Object.fromEntries(AVAILABLE_MONTHS.map(m => [m.slug, m.value]));
-  MONTH_BY_VALUE = Object.fromEntries(AVAILABLE_MONTHS.map(m => [m.value, m]));
-}
+const MONTH_BY_SLUG    = Object.fromEntries(AVAILABLE_MONTHS.map(m => [m.slug, m.value]));
+const MONTH_BY_VALUE   = Object.fromEntries(AVAILABLE_MONTHS.map(m => [m.value, m]));
 
 // ── estado ───────────────────────────────────────────────
 let state = { view: 'hub', month: '2026-06', platform: 'ga4', data: {} };
-
-async function loadAvailableMonths() {
-  try {
-    const res = await fetch('/data/index.json');
-    if (!res.ok) throw new Error('index não encontrado');
-    const index = await res.json();
-    const months = (index.months || [])
-      .map(m => typeof m === 'string' ? monthMeta(m) : monthMeta(m.value, m))
-      .filter(m => m.value)
-      .sort((a, b) => a.value.localeCompare(b.value));
-    if (months.length) {
-      AVAILABLE_MONTHS = months;
-      state.month = months[months.length - 1].value;
-      refreshMonthMaps();
-    }
-  } catch {
-    refreshMonthMaps();
-  }
-}
 
 // ── roteamento de URL ────────────────────────────────────
 function stateFromPath() {
@@ -272,7 +233,6 @@ async function renderContent() {
         initGA4Charts(data);
       } else if (state.platform === 'meta') {
         main.innerHTML = renderMeta(data);
-        initMetaCharts(data);
       } else if (state.platform === 'gads') {
         main.innerHTML = renderGads(data);
         initGadsCharts(data);
@@ -347,7 +307,6 @@ async function loadLastUpdated() {
 
 // ── init ──────────────────────────────────────────────────
 async function init() {
-  await loadAvailableMonths();
   const s = stateFromPath();
   state.view     = s.view;
   state.month    = s.month    || state.month;

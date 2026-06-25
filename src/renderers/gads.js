@@ -1,18 +1,12 @@
-const num = v => {
-  const n = Number(v);
-  return Number.isFinite(n) ? n : null;
-};
-const fmt0 = v => num(v) == null ? '—' : num(v).toLocaleString('pt-BR', {minimumFractionDigits:0, maximumFractionDigits:0});
-const fmt2 = v => num(v) == null ? '—' : num(v).toLocaleString('pt-BR', {minimumFractionDigits:2, maximumFractionDigits:2});
-const brl  = v => num(v) == null ? '—' : 'R$ ' + fmt2(v);
-const brl0 = v => num(v) == null ? '—' : 'R$ ' + fmt0(v);
-const pct  = (v, d=1) => num(v) == null ? '—' : num(v).toFixed(d).replace('.',',') + '%';
-const mult = v => num(v) == null ? '—' : num(v).toFixed(1).replace('.',',') + '×';
-const monthSuffix = month => (month || '').slice(5) || '??';
+const fmt0 = v => Number(v).toLocaleString('pt-BR', {minimumFractionDigits:0, maximumFractionDigits:0});
+const fmt2 = v => Number(v).toLocaleString('pt-BR', {minimumFractionDigits:2, maximumFractionDigits:2});
+const brl  = v => 'R$ ' + fmt2(v);
+const brl0 = v => 'R$ ' + fmt0(v);
+const pct  = (v, d=1) => Number(v).toFixed(d).replace('.',',') + '%';
+const mult = v => Number(v).toFixed(1).replace('.',',') + '×';
 
 // ── Daily cost + conversions chart (canvas) ──────────────────────────────
-function drawGadsChart(canvas, daily, period) {
-  if (!daily?.length) return;
+function drawGadsChart(canvas, daily) {
   const dpr = window.devicePixelRatio || 1;
   const W   = (canvas.parentElement.clientWidth || 900) - 36;
   const H   = 180;
@@ -23,27 +17,18 @@ function drawGadsChart(canvas, daily, period) {
   const n   = daily.length;
   const PL=48, PR=12, PT=14, PB=44, CW=W-PL-PR, CH=H-PT-PB;
   const maxCost = Math.max(...daily.map(d => d.cost), 1);
-  const convValues = daily.map(d => num(d.attributedConversions));
-  const hasConvPts = convValues.filter(v => v != null && v > 0).length > 1;
-  const maxConv = Math.max(...convValues.filter(v => v != null), 1);
+  const maxConv = Math.max(...daily.map(d => d.conversions), 1);
   const sw = CW / n;
   const xm = i => PL + (i + .5) * sw;
+  const yc  = v => PT + CH - (v / maxCost) * CH;
   const ycv = v => PT + CH - (v / maxConv) * CH;
 
-  // Sombreia intervalos com gasto praticamente zerado, sem assumir dias fixos.
-  let rangeStart = null;
-  daily.forEach((d, i) => {
-    const low = (d.cost || 0) < 1;
-    if (low && rangeStart == null) rangeStart = i;
-    if ((!low || i === n - 1) && rangeStart != null) {
-      const end = low && i === n - 1 ? i : i - 1;
-      if (end - rangeStart >= 1) {
-        ctx.fillStyle = 'rgba(190,43,43,.04)';
-        ctx.fillRect(PL + rangeStart * sw, PT, (end - rangeStart + 1) * sw, CH);
-      }
-      rangeStart = null;
-    }
-  });
+  // pause zone shading (days 9–20 = indices 9–19)
+  ctx.fillStyle = 'rgba(190,43,43,.04)';
+  ctx.fillRect(PL + 9*sw, PT, 11*sw, CH);
+  ctx.fillStyle = 'rgba(190,43,43,.08)';
+  ctx.font = '9px system-ui,sans-serif'; ctx.textAlign = 'center'; ctx.fillStyle = '#BE2B2B';
+  ctx.fillText('campanhas pausadas', PL + 9*sw + 5.5*sw, PT + 10);
 
   // grid
   [0, .25, .5, .75, 1].forEach(t => {
@@ -65,12 +50,13 @@ function drawGadsChart(canvas, daily, period) {
   });
 
   // conversions line
-  if (hasConvPts) {
+  const hasPts = daily.filter(d => d.conversions > 0);
+  if (hasPts.length > 1) {
     ctx.beginPath(); ctx.strokeStyle = '#0A8A58'; ctx.lineWidth = 1.5; ctx.setLineDash([3,3]); ctx.lineJoin = 'round';
     let started = false;
-    convValues.forEach((v, i) => {
-      if (v != null) {
-        started ? ctx.lineTo(xm(i), ycv(v)) : (ctx.moveTo(xm(i), ycv(v)), started=true);
+    daily.forEach((d, i) => {
+      if (d.conversions > 0 || d.cost > 0) {
+        started ? ctx.lineTo(xm(i), ycv(d.conversions)) : (ctx.moveTo(xm(i), ycv(d.conversions)), started=true);
       }
     });
     ctx.stroke(); ctx.setLineDash([]);
@@ -78,11 +64,7 @@ function drawGadsChart(canvas, daily, period) {
 
   // x labels
   ctx.fillStyle = '#7A8FA3'; ctx.font = '9px system-ui,sans-serif'; ctx.textAlign = 'center';
-  const step = Math.max(1, Math.ceil(n / 8));
-  const mm = monthSuffix(period?.month);
-  daily.forEach((d, i) => {
-    if (i === 0 || i === n - 1 || i % step === 0) ctx.fillText(`${d.day || String(i + 1).padStart(2, '0')}.${mm}`, xm(i), PT+CH+13);
-  });
+  [0,3,6,8,12,15,18,21,22].forEach(i => ctx.fillText((i+1)+'.06', xm(i), PT+CH+13));
 
   // cost labels on active bars
   ctx.font = 'bold 8px system-ui,sans-serif';
@@ -96,8 +78,6 @@ function drawGadsChart(canvas, daily, period) {
 export function renderGads(data) {
   const s   = data.summary;
   const k   = data.kpis;
-  const conversionRate = k.conversionRate ?? (s.clicks > 0 ? (s.attributedConversions / s.clicks) * 100 : null);
-  const hasDailyAttributedConversions = (data.daily || []).some(d => num(d.attributedConversions) != null);
   const maxSpend = Math.max(...data.campaigns.map(c => c.spend));
 
   const campRows = data.campaigns.map(c => {
@@ -194,7 +174,7 @@ export function renderGads(data) {
     <div class="kpi">
       <div class="kpi-lbl">CPA — Custo por Conversão</div>
       <div class="kpi-val grn">${brl(s.cpa)}</div>
-      <div class="kpi-sub">${pct(conversionRate)} de conversão nos cliques</div>
+      <div class="kpi-sub">${pct(s.conversionRate)} de conversão nos cliques</div>
     </div>
     <div class="kpi">
       <div class="kpi-lbl">CPC Médio</div>
@@ -204,32 +184,32 @@ export function renderGads(data) {
     <div class="kpi" style="border-left:3px solid var(--red)">
       <div class="kpi-lbl">Dias Ativos no Mês</div>
       <div class="kpi-val" style="color:var(--red)">${s.activeDays} / ${data.period.days}</div>
-      <div class="kpi-sub">${s.pausedRange ? `<span class="badge br">Pausado ${s.pausedRange}</span>` : 'Sem pausas relevantes registradas'}</div>
+      <div class="kpi-sub"><span class="badge br">Pausado ${s.pausedRange}</span></div>
     </div>
   </div>
 
-  ${s.pausedRange ? `<!-- Alerta de pausa -->
+  <!-- Alerta de pausa -->
   <div style="padding:12px 16px;background:#FFF0F0;border:1px solid #FFCDD2;border-left:3px solid var(--red);border-radius:var(--rs);margin-bottom:24px;display:flex;align-items:flex-start;gap:10px">
     <div style="font-size:16px;flex-shrink:0">⚠️</div>
     <div>
-      <div style="font-size:12px;font-weight:700;color:var(--red);margin-bottom:3px">Campanhas com pausa registrada: ${s.pausedRange}</div>
-      <div style="font-size:11.5px;color:var(--t2)">Distribua o orçamento ao longo do mês para evitar perda de demanda em dias sem entrega.</div>
+      <div style="font-size:12px;font-weight:700;color:var(--red);margin-bottom:3px">Campanhas ficaram pausadas de 10/06 a 20/06 (11 dias)</div>
+      <div style="font-size:11.5px;color:var(--t2)">97,6% do orçamento foi gasto nos primeiros 9 dias. Os dias 10–20 tiveram custo praticamente zero. Reative o orçamento para distribuir melhor o investimento ao longo do mês.</div>
     </div>
-  </div>` : ''}
+  </div>
 </section>
 
 <!-- ═══ GRÁFICO DIÁRIO ═══ -->
 <section class="sec" id="gads-diario">
-  <div class="sec-ttl">Gasto Diário${hasDailyAttributedConversions ? ' & Conversões' : ''}</div>
+  <div class="sec-ttl">Gasto Diário & Conversões</div>
   <div class="card" style="margin-bottom:10px">
     <div style="display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-bottom:10px">
       <div>
         <div class="card-ttl">Custo por Dia — ${data.period.label}</div>
-        <div class="card-sub" style="margin-bottom:0">Barras azuis = gasto${hasDailyAttributedConversions ? ' · tracejado verde = conversões atribuídas' : ' · conversões atribuídas diárias indisponíveis'} · fundo vermelho claro = dias sem gasto relevante</div>
+        <div class="card-sub" style="margin-bottom:0">Barras azuis = gasto · tracejado verde = conversões · área vermelha = campanhas pausadas</div>
       </div>
       <div style="display:flex;gap:14px;align-items:center">
         <span style="display:flex;align-items:center;gap:5px;font-size:11px;color:var(--t2)"><span style="width:10px;height:10px;border-radius:2px;background:var(--blu);display:inline-block;opacity:.75"></span>Gasto</span>
-        ${hasDailyAttributedConversions ? '<span style="display:flex;align-items:center;gap:5px;font-size:11px;color:var(--t2)"><span style="width:14px;height:2px;background:var(--grn);display:inline-block;border-top:2px dashed var(--grn)"></span>Conversões</span>' : ''}
+        <span style="display:flex;align-items:center;gap:5px;font-size:11px;color:var(--t2)"><span style="width:14px;height:2px;background:var(--grn);display:inline-block;border-top:2px dashed var(--grn)"></span>Conversões</span>
       </div>
     </div>
     <canvas id="gadsChart" height="180"></canvas>
@@ -313,5 +293,5 @@ export function renderGads(data) {
 
 export function initGadsCharts(data) {
   const canvas = document.getElementById('gadsChart');
-  if (canvas) drawGadsChart(canvas, data.daily, data.period);
+  if (canvas) drawGadsChart(canvas, data.daily);
 }
