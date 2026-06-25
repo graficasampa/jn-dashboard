@@ -1,3 +1,5 @@
+import { renderAudience, initAudienceCharts } from './audience.js';
+
 // Formatos monetários — sempre R$ 5.000,00
 const R     = n => n == null ? '—' : 'R$ ' + n.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 const N     = n => n == null ? '—' : n.toLocaleString('pt-BR');
@@ -13,6 +15,7 @@ const chartLbl = v => v >= 1000 ? 'R$' + (v / 1000).toFixed(0) + 'k' : 'R$' + v.
 
 let _index        = null;
 let _activePeriod = 'current';
+let _activeView   = 'painel';   // 'painel' | 'audiencia'
 
 // ── período ────────────────────────────────────────────────
 function filterMonths(months, period) {
@@ -185,64 +188,85 @@ export function renderHome(index) {
   const months   = index.months || [];
   const filtered = filterMonths(months, _activePeriod);
 
+  const viewBtns = [
+    { key: 'painel',    label: 'Visão Geral'           },
+    { key: 'audiencia', label: 'Audiência & Estratégia' },
+  ].map(b => `<button class=”hvb${_activeView === b.key ? ' active' : ''}” onclick=”window.setHomeView('${b.key}')”>${b.label}</button>`).join('');
+
   const periodBtns = [
     { key: 'current', label: 'Mês atual' },
-    { key: '3',       label: '3 meses'      },
-    { key: '6',       label: '6 meses'      },
-    { key: 'all',     label: 'Tudo'         },
-  ].map(b => `<button class="hfb${_activePeriod === b.key ? ' active' : ''}" onclick="window.setHomePeriod('${b.key}')">${b.label}</button>`).join('');
+    { key: '3',       label: '3 meses'   },
+    { key: '6',       label: '6 meses'   },
+    { key: 'all',     label: 'Tudo'      },
+  ].map(b => `<button class=”hfb${_activePeriod === b.key ? ' active' : ''}” onclick=”window.setHomePeriod('${b.key}')”>${b.label}</button>`).join('');
 
-  return `
-    <div class="home-wrap">
-
-      <div class="home-topbar">
-        <div class="home-title">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
-            <rect x="3" y="3" width="7" height="7" rx="1.5" fill="var(--blu)" opacity=".9"/>
-            <rect x="14" y="3" width="7" height="7" rx="1.5" fill="var(--blu)" opacity=".55"/>
-            <rect x="3" y="14" width="7" height="7" rx="1.5" fill="var(--blu)" opacity=".55"/>
-            <rect x="14" y="14" width="7" height="7" rx="1.5" fill="var(--blu)" opacity=".28"/>
-          </svg>
-          Painel Executivo
-        </div>
-        <div class="hfb-group">${periodBtns}</div>
+  const topbar = `
+    <div class=”home-topbar”>
+      <div class=”home-title”>
+        <svg width=”16” height=”16” viewBox=”0 0 24 24” fill=”none”>
+          <rect x=”3” y=”3” width=”7” height=”7” rx=”1.5” fill=”var(--blu)” opacity=”.9”/>
+          <rect x=”14” y=”3” width=”7” height=”7” rx=”1.5” fill=”var(--blu)” opacity=”.55”/>
+          <rect x=”3” y=”14” width=”7” height=”7” rx=”1.5” fill=”var(--blu)” opacity=”.55”/>
+          <rect x=”14” y=”14” width=”7” height=”7” rx=”1.5” fill=”var(--blu)” opacity=”.28”/>
+        </svg>
+        Painel Executivo
       </div>
+      <div style=”display:flex;align-items:center;gap:8px;flex-wrap:wrap”>
+        <div class=”hvb-group”>${viewBtns}</div>
+        ${_activeView === 'painel' ? `<div class=”hfb-group”>${periodBtns}</div>` : ''}
+      </div>
+    </div>`;
 
-      <div class="hkpi-band" id="homeKpiBand">
+  // ── sub-aba: Audiência & Estratégia ────────────────────────
+  if (_activeView === 'audiencia') {
+    return `
+      <div class=”home-wrap”>
+        ${topbar}
+        ${renderAudience(index)}
+      </div>`;
+  }
+
+  // ── sub-aba padrão: Visão Geral ─────────────────────────────
+  return `
+    <div class=”home-wrap”>
+
+      ${topbar}
+
+      <div class=”hkpi-band” id=”homeKpiBand”>
         ${kpiBandHtml(filtered)}
       </div>
 
-      <div class="card">
-        <div class="card-hd">
-          <span class="card-title">Receita &amp; Investimento</span>
-          <div class="home-legend">
-            <span class="hleg"><span class="hleg-dot" style="background:var(--grn)"></span>Receita (GA4)</span>
-            <span class="hleg"><span class="hleg-dot" style="background:var(--ads)"></span>Google Ads</span>
-            <span class="hleg"><span class="hleg-dot" style="background:var(--meta)"></span>Meta Ads</span>
+      <div class=”card”>
+        <div class=”card-hd”>
+          <span class=”card-title”>Receita &amp; Investimento</span>
+          <div class=”home-legend”>
+            <span class=”hleg”><span class=”hleg-dot” style=”background:var(--grn)”></span>Receita (GA4)</span>
+            <span class=”hleg”><span class=”hleg-dot” style=”background:var(--ads)”></span>Google Ads</span>
+            <span class=”hleg”><span class=”hleg-dot” style=”background:var(--meta)”></span>Meta Ads</span>
           </div>
         </div>
-        <canvas id="homeChart" height="200" style="width:100%"></canvas>
-        ${months.length < 2 ? '<p class="chart-tip">O gráfico de tendência fica mais expressivo conforme os meses se acumulam.</p>' : ''}
+        <canvas id=”homeChart” height=”200” style=”width:100%”></canvas>
+        ${months.length < 2 ? '<p class=”chart-tip”>O gráfico de tendência fica mais expressivo conforme os meses se acumulam.</p>' : ''}
       </div>
 
-      <div class="card" id="home-historico">
-        <div class="card-hd">
-          <span class="card-title">Histórico Mensal</span>
-          <span class="card-sub">Clique em uma linha ou em “Ver detalhes” para abrir o mês completo</span>
+      <div class=”card” id=”home-historico”>
+        <div class=”card-hd”>
+          <span class=”card-title”>Histórico Mensal</span>
+          <span class=”card-sub”>Clique em uma linha ou em “Ver detalhes” para abrir o mês completo</span>
         </div>
-        <div class="htable-scroll">
-          <table class="htable">
+        <div class=”htable-scroll”>
+          <table class=”htable”>
             <thead>
-              <tr class="hthead-group">
-                <th rowspan="2" class="th-month">Mês</th>
-                <th colspan="4" class="thg thg-sum">Resumo</th>
-                <th colspan="3" class="thg thg-gads">Google Ads</th>
-                <th colspan="3" class="thg thg-meta">Meta Ads</th>
-                <th colspan="3" class="thg thg-aud">Audiência</th>
-                <th colspan="3" class="thg thg-eco">E-commerce</th>
-                <th rowspan="2" class="th-action"></th>
+              <tr class=”hthead-group”>
+                <th rowspan=”2” class=”th-month”>Mês</th>
+                <th colspan=”4” class=”thg thg-sum”>Resumo</th>
+                <th colspan=”3” class=”thg thg-gads”>Google Ads</th>
+                <th colspan=”3” class=”thg thg-meta”>Meta Ads</th>
+                <th colspan=”3” class=”thg thg-aud”>Audiência</th>
+                <th colspan=”3” class=”thg thg-eco”>E-commerce</th>
+                <th rowspan=”2” class=”th-action”></th>
               </tr>
-              <tr class="hthead-cols">
+              <tr class=”hthead-cols”>
                 <th>Receita</th><th>Pedidos</th><th>Inv. Total</th><th>ROAS</th>
                 <th>Invest.</th><th>Conversões</th><th>ROAS</th>
                 <th>Invest.</th><th>Compras</th><th>ROAS</th>
@@ -263,7 +287,11 @@ export function renderHome(index) {
 // ── gráfico ────────────────────────────────────────────────
 export function initHomeCharts(index) {
   _index = index;
-  _drawChart(index.months || [], _activePeriod);
+  if (_activeView === 'audiencia') {
+    initAudienceCharts(index);
+  } else {
+    _drawChart(index.months || [], _activePeriod);
+  }
 }
 
 function _drawChart(allMonths, period) {
@@ -370,9 +398,9 @@ function _bar(ctx, x, y, w, h) {
   }
 }
 
-// ── filtro ──────────────────────────────────────────────────
+// ── filtro de período ────────────────────────────────────────
 window.setHomePeriod = function (period) {
-  if (!_index) return;
+  if (!_index || _activeView !== 'painel') return;
   _activePeriod = period;
   const months   = _index.months || [];
   const filtered = filterMonths(months, period);
@@ -384,4 +412,14 @@ window.setHomePeriod = function (period) {
 
   document.getElementById('homeKpiBand').innerHTML = kpiBandHtml(filtered);
   _drawChart(months, period);
+};
+
+// ── troca de sub-aba ─────────────────────────────────────────
+window.setHomeView = function (view) {
+  if (!_index) return;
+  _activeView = view;
+  const main = document.getElementById('mainContent');
+  if (!main) return;
+  main.innerHTML = renderHome(_index);
+  initHomeCharts(_index);
 };

@@ -237,6 +237,10 @@ tbody td:not(:first-child){text-align:right}
 .hfb{padding:5px 13px;border:1.5px solid var(--bdr);border-radius:20px;background:#fff;font-size:12px;font-weight:600;color:var(--t3);cursor:pointer;transition:all .15s;font-family:inherit}
 .hfb:hover{border-color:var(--blu);color:var(--blu)}
 .hfb.active{border-color:var(--blu);background:var(--blu-l);color:var(--blu)}
+.hvb-group{display:flex;gap:3px;flex-wrap:wrap;background:var(--bg);border:1px solid var(--bdr);border-radius:22px;padding:3px}
+.hvb{padding:4px 14px;border:none;border-radius:18px;background:transparent;font-size:12px;font-weight:600;color:var(--t3);cursor:pointer;transition:all .15s;font-family:inherit}
+.hvb:hover{color:var(--blu)}
+.hvb.active{background:#fff;color:var(--blu);box-shadow:0 1px 4px rgba(0,0,0,.12)}
 
 /* KPI band: receita grande + 3 col + 4 col */
 .hkpi-band{display:grid;grid-template-columns:1.8fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;gap:10px}
