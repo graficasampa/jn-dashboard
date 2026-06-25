@@ -32,5 +32,187 @@
   "campaigns": [],
   "topAds": [],
   "topCreatives": [],
-  "insights": []
+  "insights": [],
+  "dailyConversations": [
+    {
+      "date": "2025-11-01",
+      "day": 1,
+      "label": "1 nov",
+      "conversations": 1
+    },
+    {
+      "date": "2025-11-02",
+      "day": 2,
+      "label": "2 nov",
+      "conversations": 2
+    },
+    {
+      "date": "2025-11-03",
+      "day": 3,
+      "label": "3 nov",
+      "conversations": 4
+    },
+    {
+      "date": "2025-11-04",
+      "day": 4,
+      "label": "4 nov",
+      "conversations": 4
+    },
+    {
+      "date": "2025-11-05",
+      "day": 5,
+      "label": "5 nov",
+      "conversations": 4
+    },
+    {
+      "date": "2025-11-06",
+      "day": 6,
+      "label": "6 nov",
+      "conversations": 1
+    },
+    {
+      "date": "2025-11-07",
+      "day": 7,
+      "label": "7 nov",
+      "conversations": 1
+    },
+    {
+      "date": "2025-11-08",
+      "day": 8,
+      "label": "8 nov",
+      "conversations": 1
+    },
+    {
+      "date": "2025-11-09",
+      "day": 9,
+      "label": "9 nov",
+      "conversations": 2
+    },
+    {
+      "date": "2025-11-10",
+      "day": 10,
+      "label": "10 nov",
+      "conversations": 4
+    },
+    {
+      "date": "2025-11-11",
+      "day": 11,
+      "label": "11 nov",
+      "conversations": 1
+    },
+    {
+      "date": "2025-11-12",
+      "day": 12,
+      "label": "12 nov",
+      "conversations": 7
+    },
+    {
+      "date": "2025-11-13",
+      "day": 13,
+      "label": "13 nov",
+      "conversations": 5
+    },
+    {
+      "date": "2025-11-14",
+      "day": 14,
+      "label": "14 nov",
+      "conversations": 2
+    },
+    {
+      "date": "2025-11-15",
+      "day": 15,
+      "label": "15 nov",
+      "conversations": 9
+    },
+    {
+      "date": "2025-11-16",
+      "day": 16,
+      "label": "16 nov",
+      "conversations": 3
+    },
+    {
+      "date": "2025-11-17",
+      "day": 17,
+      "label": "17 nov",
+      "conversations": 5
+    },
+    {
+      "date": "2025-11-18",
+      "day": 18,
+      "label": "18 nov",
+      "conversations": 6
+    },
+    {
+      "date": "2025-11-19",
+      "day": 19,
+      "label": "19 nov",
+      "conversations": 5
+    },
+    {
+      "date": "2025-11-20",
+      "day": 20,
+      "label": "20 nov",
+      "conversations": 4
+    },
+    {
+      "date": "2025-11-21",
+      "day": 21,
+      "label": "21 nov",
+      "conversations": 5
+    },
+    {
+      "date": "2025-11-22",
+      "day": 22,
+      "label": "22 nov",
+      "conversations": 3
+    },
+    {
+      "date": "2025-11-23",
+      "day": 23,
+      "label": "23 nov",
+      "conversations": 2
+    },
+    {
+      "date": "2025-11-24",
+      "day": 24,
+      "label": "24 nov",
+      "conversations": 3
+    },
+    {
+      "date": "2025-11-25",
+      "day": 25,
+      "label": "25 nov",
+      "conversations": 1
+    },
+    {
+      "date": "2025-11-26",
+      "day": 26,
+      "label": "26 nov",
+      "conversations": 0
+    },
+    {
+      "date": "2025-11-27",
+      "day": 27,
+      "label": "27 nov",
+      "conversations": 0
+    },
+    {
+      "date": "2025-11-28",
+      "day": 28,
+      "label": "28 nov",
+      "conversations": 0
+    },
+    {
+      "date": "2025-11-29",
+      "day": 29,
+      "label": "29 nov",
+      "conversations": 0
+    },
+    {
+      "date": "2025-11-30",
+      "day": 30,
+      "label": "30 nov",
+      "conversations": 0
+    }
+  ]
 }

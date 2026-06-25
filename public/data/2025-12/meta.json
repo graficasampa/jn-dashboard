@@ -32,5 +32,193 @@
   "campaigns": [],
   "topAds": [],
   "topCreatives": [],
-  "insights": []
+  "insights": [],
+  "dailyConversations": [
+    {
+      "date": "2025-12-01",
+      "day": 1,
+      "label": "1 dez",
+      "conversations": 0
+    },
+    {
+      "date": "2025-12-02",
+      "day": 2,
+      "label": "2 dez",
+      "conversations": 0
+    },
+    {
+      "date": "2025-12-03",
+      "day": 3,
+      "label": "3 dez",
+      "conversations": 0
+    },
+    {
+      "date": "2025-12-04",
+      "day": 4,
+      "label": "4 dez",
+      "conversations": 0
+    },
+    {
+      "date": "2025-12-05",
+      "day": 5,
+      "label": "5 dez",
+      "conversations": 0
+    },
+    {
+      "date": "2025-12-06",
+      "day": 6,
+      "label": "6 dez",
+      "conversations": 0
+    },
+    {
+      "date": "2025-12-07",
+      "day": 7,
+      "label": "7 dez",
+      "conversations": 0
+    },
+    {
+      "date": "2025-12-08",
+      "day": 8,
+      "label": "8 dez",
+      "conversations": 0
+    },
+    {
+      "date": "2025-12-09",
+      "day": 9,
+      "label": "9 dez",
+      "conversations": 0
+    },
+    {
+      "date": "2025-12-10",
+      "day": 10,
+      "label": "10 dez",
+      "conversations": 0
+    },
+    {
+      "date": "2025-12-11",
+      "day": 11,
+      "label": "11 dez",
+      "conversations": 0
+    },
+    {
+      "date": "2025-12-12",
+      "day": 12,
+      "label": "12 dez",
+      "conversations": 0
+    },
+    {
+      "date": "2025-12-13",
+      "day": 13,
+      "label": "13 dez",
+      "conversations": 0
+    },
+    {
+      "date": "2025-12-14",
+      "day": 14,
+      "label": "14 dez",
+      "conversations": 0
+    },
+    {
+      "date": "2025-12-15",
+      "day": 15,
+      "label": "15 dez",
+      "conversations": 0
+    },
+    {
+      "date": "2025-12-16",
+      "day": 16,
+      "label": "16 dez",
+      "conversations": 0
+    },
+    {
+      "date": "2025-12-17",
+      "day": 17,
+      "label": "17 dez",
+      "conversations": 0
+    },
+    {
+      "date": "2025-12-18",
+      "day": 18,
+      "label": "18 dez",
+      "conversations": 0
+    },
+    {
+      "date": "2025-12-19",
+      "day": 19,
+      "label": "19 dez",
+      "conversations": 0
+    },
+    {
+      "date": "2025-12-20",
+      "day": 20,
+      "label": "20 dez",
+      "conversations": 0
+    },
+    {
+      "date": "2025-12-21",
+      "day": 21,
+      "label": "21 dez",
+      "conversations": 0
+    },
+    {
+      "date": "2025-12-22",
+      "day": 22,
+      "label": "22 dez",
+      "conversations": 0
+    },
+    {
+      "date": "2025-12-23",
+      "day": 23,
+      "label": "23 dez",
+      "conversations": 0
+    },
+    {
+      "date": "2025-12-24",
+      "day": 24,
+      "label": "24 dez",
+      "conversations": 0
+    },
+    {
+      "date": "2025-12-25",
+      "day": 25,
+      "label": "25 dez",
+      "conversations": 0
+    },
+    {
+      "date": "2025-12-26",
+      "day": 26,
+      "label": "26 dez",
+      "conversations": 0
+    },
+    {
+      "date": "2025-12-27",
+      "day": 27,
+      "label": "27 dez",
+      "conversations": 0
+    },
+    {
+      "date": "2025-12-28",
+      "day": 28,
+      "label": "28 dez",
+      "conversations": 0
+    },
+    {
+      "date": "2025-12-29",
+      "day": 29,
+      "label": "29 dez",
+      "conversations": 0
+    },
+    {
+      "date": "2025-12-30",
+      "day": 30,
+      "label": "30 dez",
+      "conversations": 0
+    },
+    {
+      "date": "2025-12-31",
+      "day": 31,
+      "label": "31 dez",
+      "conversations": 0
+    }
+  ]
 }

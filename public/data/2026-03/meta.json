@@ -32,5 +32,193 @@
   "campaigns": [],
   "topAds": [],
   "topCreatives": [],
-  "insights": []
+  "insights": [],
+  "dailyConversations": [
+    {
+      "date": "2026-03-01",
+      "day": 1,
+      "label": "1 mar",
+      "conversations": 0
+    },
+    {
+      "date": "2026-03-02",
+      "day": 2,
+      "label": "2 mar",
+      "conversations": 0
+    },
+    {
+      "date": "2026-03-03",
+      "day": 3,
+      "label": "3 mar",
+      "conversations": 0
+    },
+    {
+      "date": "2026-03-04",
+      "day": 4,
+      "label": "4 mar",
+      "conversations": 0
+    },
+    {
+      "date": "2026-03-05",
+      "day": 5,
+      "label": "5 mar",
+      "conversations": 0
+    },
+    {
+      "date": "2026-03-06",
+      "day": 6,
+      "label": "6 mar",
+      "conversations": 0
+    },
+    {
+      "date": "2026-03-07",
+      "day": 7,
+      "label": "7 mar",
+      "conversations": 0
+    },
+    {
+      "date": "2026-03-08",
+      "day": 8,
+      "label": "8 mar",
+      "conversations": 0
+    },
+    {
+      "date": "2026-03-09",
+      "day": 9,
+      "label": "9 mar",
+      "conversations": 3
+    },
+    {
+      "date": "2026-03-10",
+      "day": 10,
+      "label": "10 mar",
+      "conversations": 4
+    },
+    {
+      "date": "2026-03-11",
+      "day": 11,
+      "label": "11 mar",
+      "conversations": 3
+    },
+    {
+      "date": "2026-03-12",
+      "day": 12,
+      "label": "12 mar",
+      "conversations": 1
+    },
+    {
+      "date": "2026-03-13",
+      "day": 13,
+      "label": "13 mar",
+      "conversations": 0
+    },
+    {
+      "date": "2026-03-14",
+      "day": 14,
+      "label": "14 mar",
+      "conversations": 3
+    },
+    {
+      "date": "2026-03-15",
+      "day": 15,
+      "label": "15 mar",
+      "conversations": 0
+    },
+    {
+      "date": "2026-03-16",
+      "day": 16,
+      "label": "16 mar",
+      "conversations": 2
+    },
+    {
+      "date": "2026-03-17",
+      "day": 17,
+      "label": "17 mar",
+      "conversations": 2
+    },
+    {
+      "date": "2026-03-18",
+      "day": 18,
+      "label": "18 mar",
+      "conversations": 3
+    },
+    {
+      "date": "2026-03-19",
+      "day": 19,
+      "label": "19 mar",
+      "conversations": 1
+    },
+    {
+      "date": "2026-03-20",
+      "day": 20,
+      "label": "20 mar",
+      "conversations": 1
+    },
+    {
+      "date": "2026-03-21",
+      "day": 21,
+      "label": "21 mar",
+      "conversations": 1
+    },
+    {
+      "date": "2026-03-22",
+      "day": 22,
+      "label": "22 mar",
+      "conversations": 3
+    },
+    {
+      "date": "2026-03-23",
+      "day": 23,
+      "label": "23 mar",
+      "conversations": 4
+    },
+    {
+      "date": "2026-03-24",
+      "day": 24,
+      "label": "24 mar",
+      "conversations": 0
+    },
+    {
+      "date": "2026-03-25",
+      "day": 25,
+      "label": "25 mar",
+      "conversations": 0
+    },
+    {
+      "date": "2026-03-26",
+      "day": 26,
+      "label": "26 mar",
+      "conversations": 0
+    },
+    {
+      "date": "2026-03-27",
+      "day": 27,
+      "label": "27 mar",
+      "conversations": 0
+    },
+    {
+      "date": "2026-03-28",
+      "day": 28,
+      "label": "28 mar",
+      "conversations": 0
+    },
+    {
+      "date": "2026-03-29",
+      "day": 29,
+      "label": "29 mar",
+      "conversations": 0
+    },
+    {
+      "date": "2026-03-30",
+      "day": 30,
+      "label": "30 mar",
+      "conversations": 0
+    },
+    {
+      "date": "2026-03-31",
+      "day": 31,
+      "label": "31 mar",
+      "conversations": 0
+    }
+  ]
 }
