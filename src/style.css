@@ -248,11 +248,11 @@ tbody td:not(:first-child){text-align:right}
 .hkpi{background:var(--sur);border:1px solid var(--bdr);border-radius:var(--r);padding:18px 20px;min-width:0}
 .hkpi-big{grid-column:1;border-color:var(--grn);background:linear-gradient(135deg,#F0FBF6,#fff)}
 .hkpi-lbl{font-size:10.5px;font-weight:600;color:var(--t3);text-transform:uppercase;letter-spacing:.04em;margin-bottom:6px}
-.hkpi-valrow{display:flex;align-items:center;gap:7px;min-width:0;margin-bottom:4px}
-.hkpi-val{font-size:clamp(14px,1.45vw,20px);font-weight:800;letter-spacing:-.02em;line-height:1.15;margin-bottom:4px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0}
+.hkpi-valrow{display:flex;align-items:center;gap:7px;min-width:0;margin-bottom:4px;flex-wrap:wrap}
+.hkpi-val{font-size:clamp(14px,1.45vw,20px);font-weight:800;letter-spacing:-.02em;line-height:1.15;margin-bottom:4px;min-width:0}
 .hkpi-valrow .hkpi-val{margin-bottom:0;min-width:0}
 .hkpi-big .hkpi-val{font-size:clamp(20px,2.1vw,26px)}
-.hkpi-sub{font-size:11px;color:var(--t3);line-height:1.4;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.hkpi-sub{font-size:11px;color:var(--t3);line-height:1.4}
 .hkpi-trend{display:inline-flex;align-items:center;gap:2px;border-radius:999px;padding:2px 5px;font-size:10px;font-weight:800;line-height:1;white-space:nowrap;flex-shrink:0}
 .hkpi-trend.up{color:var(--grn);background:var(--grn-l)}
 .hkpi-trend.down{color:var(--red);background:#FFF0F0}
