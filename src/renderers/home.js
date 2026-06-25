@@ -267,9 +267,12 @@ export function initHomeCharts(index) {
 }
 
 function _drawChart(allMonths, period) {
-  const months = filterMonths(allMonths, period);
   const canvas = document.getElementById('homeChart');
-  if (!canvas || !months.length) return;
+  if (!canvas || !allMonths.length) return;
+
+  // Sempre renderiza TODOS os meses; período selecionado = destaque, resto = transparente
+  const months   = allMonths;
+  const selected = new Set(filterMonths(allMonths, period).map(m => m.value));
 
   const DPR = window.devicePixelRatio || 1;
   const W   = canvas.offsetWidth;
@@ -310,16 +313,18 @@ function _drawChart(allMonths, period) {
   }
 
   months.forEach((m, i) => {
+    const active = selected.has(m.value);
+    const dimAlpha = 0.18;   // transparência dos meses fora do período
     const cx = PAD.l + slotW * (i + 0.8);
 
     // Receita (verde)
     const rH = CH * (revenues[i] / maxRev);
     const ry = PAD.t + CH - rH;
     ctx.fillStyle   = '#0A8A58';
-    ctx.globalAlpha = 0.82;
+    ctx.globalAlpha = active ? 0.88 : dimAlpha;
     _bar(ctx, cx - bW * 1.15, ry, bW, rH);
-    ctx.globalAlpha = 1;
-    if (revenues[i]) {
+    if (revenues[i] && active) {
+      ctx.globalAlpha = 1;
       ctx.fillStyle = '#0A8A58';
       ctx.font = 'bold 9px system-ui,sans-serif';
       ctx.textAlign = 'center';
@@ -330,28 +335,28 @@ function _drawChart(allMonths, period) {
     const gH = CH * (gadsSpends[i] / maxInv) * 0.5;
     const gy = PAD.t + CH - gH;
     ctx.fillStyle   = '#D4620A';
-    ctx.globalAlpha = 0.8;
+    ctx.globalAlpha = active ? 0.85 : dimAlpha;
     _bar(ctx, cx + 2, gy, bW, gH);
 
     // Meta (azul) empilhado
     const mH = CH * (metaSpends[i] / maxInv) * 0.5;
     const my = gy - mH;
     ctx.fillStyle   = '#1877F2';
-    ctx.globalAlpha = 0.7;
+    ctx.globalAlpha = active ? 0.75 : dimAlpha;
     if (mH > 0) _bar(ctx, cx + 2, my, bW, mH);
     ctx.globalAlpha = 1;
 
     const totalInv = gadsSpends[i] + metaSpends[i];
-    if (totalInv) {
+    if (totalInv && active) {
       ctx.fillStyle = '#D4620A';
       ctx.font = '9px system-ui,sans-serif';
       ctx.textAlign = 'center';
       ctx.fillText(chartLbl(totalInv), cx + bW * 0.6 + 2, my - 5);
     }
 
-    // Label X
-    ctx.fillStyle = '#4A5670';
-    ctx.font = '600 11px system-ui,sans-serif';
+    // Label X — negrito e mais escuro para meses em destaque
+    ctx.fillStyle = active ? '#1a2540' : '#9AAABB';
+    ctx.font = active ? 'bold 11px system-ui,sans-serif' : '10px system-ui,sans-serif';
     ctx.textAlign = 'center';
     ctx.fillText(labels[i], cx, H - PAD.b + 14);
   });

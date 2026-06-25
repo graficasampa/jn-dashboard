@@ -1,8 +1,9 @@
 {
-  "ts": "2026-06-24T16:31:11.301Z",
+  "ts": "2026-06-25T12:00:00.000Z",
   "month": "2026-06",
   "sources": {
     "ga4": true,
-    "meta": true
+    "meta": true,
+    "gads": true
   }
 }

@@ -2,87 +2,87 @@
   "period": { "month": "2026-06", "label": "Junho 2026", "days": 25, "range": "01 a 25/06" },
   "account": { "id": "489839481099112", "name": "JN Impressão" },
   "summary": {
-    "spend": 4099.97,
-    "revenue": 29856,
-    "roas": 7.3,
-    "purchases": 298,
-    "conversations": 504,
-    "reach": 107366,
-    "impressions": 232352,
-    "clicks": 3592,
+    "spend": 4356.45,
+    "revenue": 31933,
+    "roas": 7.33,
+    "purchases": 323,
+    "conversations": 538,
+    "reach": 114062,
+    "impressions": 246032,
+    "clicks": 3777,
     "frequency": 2.16
   },
   "kpis": {
-    "cpa": 5.45,
+    "cpa": 5.34,
     "costPerMessage": 4.71,
-    "roasSales": 17.8,
-    "cpm": 17.65,
-    "cpc": 1.14,
-    "ctr": 1.55,
-    "revenuePerSpend": 7.28
+    "roasSales": 17.6,
+    "cpm": 17.71,
+    "cpc": 1.15,
+    "ctr": 1.54,
+    "revenuePerSpend": 7.33
   },
   "campaigns": [
     {
       "id": "camp_04", "name": "[04] Campanha de Vendas [Genérica]",
       "status": "ACTIVE", "objective": "CONVERSIONS",
-      "spend": 849.77, "revenue": 15340, "roas": 18.1,
-      "impressions": 41190, "clicks": 750, "ctr": 1.82, "cpr": 5.55,
-      "result": 153, "resultType": "purchases"
+      "spend": 889.14, "revenue": 16031, "roas": 18.0,
+      "impressions": 42839, "clicks": 779, "ctr": 1.82, "cpr": 5.42,
+      "result": 164, "resultType": "purchases"
     },
     {
       "id": "camp_01", "name": "[01] Campanha de Vendas [WIND Banner]",
       "status": "ACTIVE", "objective": "CONVERSIONS",
-      "spend": 643.50, "revenue": 11914, "roas": 18.5,
-      "impressions": 37984, "clicks": 342, "ctr": 0.90, "cpr": 4.80,
-      "result": 134, "resultType": "purchases"
+      "spend": 690.41, "revenue": 12506, "roas": 18.1,
+      "impressions": 40703, "clicks": 352, "ctr": 0.86, "cpr": 4.76,
+      "result": 145, "resultType": "purchases"
     },
     {
       "id": "camp_07", "name": "[07] Campanha de Vendas [Catálogo]",
       "status": "PAUSED", "objective": "CONVERSIONS",
-      "spend": 128.19, "revenue": 1002, "roas": 7.8,
-      "impressions": 15827, "clicks": 195, "ctr": 1.23, "cpr": 12.82,
-      "result": 10, "resultType": "purchases"
+      "spend": 128.19, "revenue": 1547, "roas": 12.1,
+      "impressions": 15827, "clicks": 194, "ctr": 1.23, "cpr": 11.65,
+      "result": 11, "resultType": "purchases"
     },
     {
       "id": "camp_03", "name": "[03] Engajamento Mensagens [Genérica]",
       "status": "ACTIVE", "objective": "MESSAGES",
-      "spend": 2371.39, "revenue": null, "roas": null,
-      "impressions": 109773, "clicks": 2118, "ctr": 1.93, "cpr": 4.71,
-      "result": 504, "resultType": "conversations"
+      "spend": 2531.13, "revenue": null, "roas": null,
+      "impressions": 116927, "clicks": 2242, "ctr": 1.92, "cpr": 4.71,
+      "result": 538, "resultType": "conversations"
     },
     {
       "id": "camp_09", "name": "[09] Engajamento Publicação [Genérica]",
       "status": "ACTIVE", "objective": "ENGAGEMENT",
-      "spend": 107.12, "revenue": null, "roas": null,
-      "impressions": 27578, "clicks": 193, "ctr": 0.70, "cpr": 0.01,
-      "result": 14588, "resultType": "engagements"
+      "spend": 117.58, "revenue": null, "roas": null,
+      "impressions": 29736, "clicks": 210, "ctr": 0.71, "cpr": 0.01,
+      "result": 16025, "resultType": "engagements"
     }
   ],
   "topAds": [
-    { "rank": 1, "id": "ad_09a", "name": "AD 09 · Wind Banner à partir de R$149,99", "status": "ACTIVE", "spend": 964.54, "roas": null, "impressions": 49574, "ctr": 1.90, "cpr": 3.91, "result": 247, "resultType": "conversations" },
-    { "rank": 2, "id": "ad_05",  "name": "AD 5 · WIND Copa", "status": "ACTIVE", "spend": 617.02, "roas": 18.5, "impressions": 36701, "ctr": 0.91, "cpr": 4.67, "result": 132, "resultType": "purchases" },
-    { "rank": 3, "id": "ad_08a", "name": "AD 08 · Material pra Copa (ativo)", "status": "ACTIVE", "spend": 610.74, "roas": null, "impressions": 26409, "ctr": 2.03, "cpr": 5.40, "result": 113, "resultType": "conversations" },
-    { "rank": 4, "id": "ad_12a", "name": "AD 12 · Totens (ativo)", "status": "ACTIVE", "spend": 365.96, "roas": 19.1, "impressions": 15615, "ctr": 1.68, "cpr": 4.07, "result": 90, "resultType": "purchases" },
-    { "rank": 5, "id": "ad_08p", "name": "AD 08 · Material pra Copa (pausado)", "status": "PAUSED", "spend": 221.68, "roas": null, "impressions": 10170, "ctr": 1.88, "cpr": 6.93, "result": 32, "resultType": "conversations" },
+    { "rank": 1, "id": "ad_09a", "name": "AD 09 · Wind Banner à partir de R$149,99", "status": "ACTIVE", "spend": 1029.49, "roas": null, "impressions": 52972, "ctr": 1.90, "cpr": 3.91, "result": 263, "resultType": "conversations" },
+    { "rank": 2, "id": "ad_05",  "name": "AD 5 · WIND Copa", "status": "ACTIVE", "spend": 661.99, "roas": 18.5, "impressions": 39383, "ctr": 0.91, "cpr": 4.67, "result": 142, "resultType": "purchases" },
+    { "rank": 3, "id": "ad_08a", "name": "AD 08 · Material pra Copa (ativo)", "status": "ACTIVE", "spend": 652.07, "roas": null, "impressions": 28187, "ctr": 2.03, "cpr": 5.40, "result": 121, "resultType": "conversations" },
+    { "rank": 4, "id": "ad_12a", "name": "AD 12 · Totens (ativo)", "status": "ACTIVE", "spend": 382.92, "roas": 19.1, "impressions": 16338, "ctr": 1.68, "cpr": 4.07, "result": 94, "resultType": "purchases" },
+    { "rank": 5, "id": "ad_08p", "name": "AD 08 · Material pra Copa (pausado)", "status": "PAUSED", "spend": 236.62, "roas": null, "impressions": 10855, "ctr": 1.88, "cpr": 6.93, "result": 34, "resultType": "conversations" },
     { "rank": 6, "id": "ad_12p", "name": "AD 12 · Totens (pausado)", "status": "PAUSED", "spend": 203.55, "roas": 7.3, "impressions": 10067, "ctr": 1.99, "cpr": 7.27, "result": 28, "resultType": "purchases" },
-    { "rank": 7, "id": "ad_09b", "name": "AD 09 · Wind Banner R$149,99 (v2)", "status": "ACTIVE", "spend": 175.17, "roas": null, "impressions": 8527, "ctr": 1.45, "cpr": 4.87, "result": 36, "resultType": "conversations" },
-    { "rank": 8, "id": "ad_01",  "name": "AD 01 · Vídeo Genérico", "status": "ACTIVE", "spend": 82.87, "roas": 11.8, "impressions": 3473, "ctr": 2.22, "cpr": 7.53, "result": 11, "resultType": "purchases" },
-    { "rank": 9, "id": "ad_11a", "name": "AD 11 · Quer aumentar sua renda? (v1)", "status": "ACTIVE", "spend": 80.74, "roas": null, "impressions": 2090, "ctr": 3.92, "cpr": 3.84, "result": 21, "resultType": "conversations" },
-    { "rank": 10, "id": "ad_11b", "name": "AD 11 · Material Para Copa do Mundo", "status": "ACTIVE", "spend": 70.53, "roas": 12.5, "impressions": 3504, "ctr": 2.40, "cpr": 7.05, "result": 10, "resultType": "purchases" }
+    { "rank": 7, "id": "ad_09b", "name": "AD 09 · Wind Banner R$149,99 (v2)", "status": "ACTIVE", "spend": 187.04, "roas": null, "impressions": 9102, "ctr": 1.45, "cpr": 4.87, "result": 38, "resultType": "conversations" },
+    { "rank": 8, "id": "ad_01",  "name": "AD 01 · Vídeo Genérico", "status": "ACTIVE", "spend": 86.71, "roas": 11.8, "impressions": 3634, "ctr": 2.22, "cpr": 7.53, "result": 12, "resultType": "purchases" },
+    { "rank": 9, "id": "ad_11a", "name": "AD 11 · Quer aumentar sua renda? (v1)", "status": "ACTIVE", "spend": 86.18, "roas": null, "impressions": 2231, "ctr": 3.92, "cpr": 3.84, "result": 22, "resultType": "conversations" },
+    { "rank": 10, "id": "ad_11b", "name": "AD 11 · Material Para Copa do Mundo", "status": "ACTIVE", "spend": 73.79, "roas": 12.5, "impressions": 3666, "ctr": 2.40, "cpr": 7.05, "result": 10, "resultType": "purchases" }
   ],
   "topCreatives": [
-    { "adId": "ad_09a", "name": "AD 09 · Wind Banner", "spend": 964.54, "result": 247, "resultType": "conversations", "cpr": 3.91, "previewUrl": "https://business.facebook.com/ads/api/preview_iframe.php?d=AQJWhK9lEkAgUn_8TSh9alvFHlOT9mWb9CNpLOeApdNBQqMU_f1Hvt5kxaY7Uf2yo7gjZmnc9ldWwDmBTYN9bgU9mJPx2-gus3T3GbtvMECFE2dqU6z3xt36dQ6UteFFUeRmVVYBFrHmXPaZyIjCLmOYprTL5HGHT-zTaBNsEP3KFxXpoVRZIdwh29dY9S5Qjygpb_IRy6ExdaKhUnfMdr3CCXYCcC4_tH-Vb8ARxhR6Zg&t=AQL4szEDCg8tjrdh9U0" },
-    { "adId": "ad_05",  "name": "AD 5 · WIND Copa", "spend": 617.02, "result": 132, "resultType": "purchases", "roas": 18.5, "previewUrl": "https://business.facebook.com/ads/api/preview_iframe.php?d=AQKHiOko61Vy_D2DfQZ43Hya84bBaDRJQd9NwB4j90QQ8X4dLP0kvwh0YqddaaRJir001K49uZ_jZyim5y8lN1hnU0VPB8iGWWTifSYPVUWzIbPdGnMUHUSruSNs96qXHzIuEi9gTxnf6M3EJUQXOrw5zETRasC52QOAae00ltOCkvcWtUWqJVIzbZkWLcwN9tBwhF8rmn4YzSNyBNv2Q-HqBwfinxIu_kWKohwC6oHmmg&t=AQKuJ65Z2fPkL56koiA" },
-    { "adId": "ad_08a", "name": "AD 08 · Material Copa", "spend": 610.74, "result": 113, "resultType": "conversations", "cpr": 5.40, "previewUrl": "https://business.facebook.com/ads/api/preview_iframe.php?d=AQKYv13Uhmoq0YfD44LeLaVYIgVGJBWsqAN_S88r15VyI9tY-fs9nJjbn98xQczN9KrrwTxaRyUdGDrs9IqPeeX2fxjvkNRP-l5St977mO7ZO-hlZd0wN7QKoiQR5Gn1IAzDogyvbenKleAwUXzEsPfD3LvU49gMH9OEbzLRkWvQOotUXvmRN2JUkE2sq8m5likMfpgT6yDh9dRZW1gfQu-2bPldE4CyZrCDE5VZkm6WKQ&t=AQJazul2P2ExkqIZevI" },
-    { "adId": "ad_12a", "name": "AD 12 · Totens", "spend": 365.96, "result": 90, "resultType": "purchases", "roas": 19.1, "previewUrl": "https://business.facebook.com/ads/api/preview_iframe.php?d=AQJ8osTiwcgdVauNn7OZjtqgmdHaIJ6Aw2v3h3bWzNpOxC0Bj9sKbNmzwYhMb39Iq7e_fTIQIQtwEyZy7TM5ONqEPmaoYP90bSls2rpUO_ryd7BEDE8T3IIwanblvEypOd80pHpaMD2odD0udgrJV5xv33sZlWb7ACxC014uRAMiwXPo2SLLjU67I5ReSxY0dda0iG-jB9TvslfIkT9btP0tBCHrpW3A32NEocq8M-CPTA&t=AQKp8fj5fon0jCN8rr4" },
-    { "adId": "ad_11a", "name": "AD 11 · Quer aumentar renda?", "spend": 80.74, "result": 21, "resultType": "conversations", "ctr": 3.92, "previewUrl": "https://business.facebook.com/ads/api/preview_iframe.php?d=AQJaRGZiETnt0Lf-a0g7qb4eV7hgPAeXVNiz69L2QFpM0Pgrdzw5On_oCc4O6gpQ7ICZsVFSLBfpXP3aOMX95bqauxewRlakVqfmvhRfug1-OFRDxktq_5ssqc7adlhiPUKFLbVSj-JeETF5zmGie6ccz-Vo-WVTEUdGoCVEnNJruoJJahpRXeIil-yQ6C2ZfWjZj2I2UwsopK1PR5QGKvm4CarUleQCxgqP79BCOGFIZA&t=AQKXUmtqVAuAG9Z0o8Q" }
+    { "adId": "ad_09a", "name": "AD 09 · Wind Banner", "spend": 1029.49, "result": 263, "resultType": "conversations", "cpr": 3.91, "previewUrl": "https://business.facebook.com/ads/api/preview_iframe.php?d=AQJWhK9lEkAgUn_8TSh9alvFHlOT9mWb9CNpLOeApdNBQqMU_f1Hvt5kxaY7Uf2yo7gjZmnc9ldWwDmBTYN9bgU9mJPx2-gus3T3GbtvMECFE2dqU6z3xt36dQ6UteFFUeRmVVYBFrHmXPaZyIjCLmOYprTL5HGHT-zTaBNsEP3KFxXpoVRZIdwh29dY9S5Qjygpb_IRy6ExdaKhUnfMdr3CCXYCcC4_tH-Vb8ARxhR6Zg&t=AQL4szEDCg8tjrdh9U0" },
+    { "adId": "ad_05",  "name": "AD 5 · WIND Copa", "spend": 661.99, "result": 142, "resultType": "purchases", "roas": 18.5, "previewUrl": "https://business.facebook.com/ads/api/preview_iframe.php?d=AQKHiOko61Vy_D2DfQZ43Hya84bBaDRJQd9NwB4j90QQ8X4dLP0kvwh0YqddaaRJir001K49uZ_jZyim5y8lN1hnU0VPB8iGWWTifSYPVUWzIbPdGnMUHUSruSNs96qXHzIuEi9gTxnf6M3EJUQXOrw5zETRasC52QOAae00ltOCkvcWtUWqJVIzbZkWLcwN9tBwhF8rmn4YzSNyBNv2Q-HqBwfinxIu_kWKohwC6oHmmg&t=AQKuJ65Z2fPkL56koiA" },
+    { "adId": "ad_08a", "name": "AD 08 · Material Copa", "spend": 652.07, "result": 121, "resultType": "conversations", "cpr": 5.40, "previewUrl": "https://business.facebook.com/ads/api/preview_iframe.php?d=AQKYv13Uhmoq0YfD44LeLaVYIgVGJBWsqAN_S88r15VyI9tY-fs9nJjbn98xQczN9KrrwTxaRyUdGDrs9IqPeeX2fxjvkNRP-l5St977mO7ZO-hlZd0wN7QKoiQR5Gn1IAzDogyvbenKleAwUXzEsPfD3LvU49gMH9OEbzLRkWvQOotUXvmRN2JUkE2sq8m5likMfpgT6yDh9dRZW1gfQu-2bPldE4CyZrCDE5VZkm6WKQ&t=AQJazul2P2ExkqIZevI" },
+    { "adId": "ad_12a", "name": "AD 12 · Totens", "spend": 382.92, "result": 94, "resultType": "purchases", "roas": 19.1, "previewUrl": "https://business.facebook.com/ads/api/preview_iframe.php?d=AQJ8osTiwcgdVauNn7OZjtqgmdHaIJ6Aw2v3h3bWzNpOxC0Bj9sKbNmzwYhMb39Iq7e_fTIQIQtwEyZy7TM5ONqEPmaoYP90bSls2rpUO_ryd7BEDE8T3IIwanblvEypOd80pHpaMD2odD0udgrJV5xv33sZlWb7ACxC014uRAMiwXPo2SLLjU67I5ReSxY0dda0iG-jB9TvslfIkT9btP0tBCHrpW3A32NEocq8M-CPTA&t=AQKp8fj5fon0jCN8rr4" },
+    { "adId": "ad_11a", "name": "AD 11 · Quer aumentar renda?", "spend": 86.18, "result": 22, "resultType": "conversations", "ctr": 3.92, "previewUrl": "https://business.facebook.com/ads/api/preview_iframe.php?d=AQJaRGZiETnt0Lf-a0g7qb4eV7hgPAeXVNiz69L2QFpM0Pgrdzw5On_oCc4O6gpQ7ICZsVFSLBfpXP3aOMX95bqauxewRlakVqfmvhRfug1-OFRDxktq_5ssqc7adlhiPUKFLbVSj-JeETF5zmGie6ccz-Vo-WVTEUdGoCVEnNJruoJJahpRXeIil-yQ6C2ZfWjZj2I2UwsopK1PR5QGKvm4CarUleQCxgqP79BCOGFIZA&t=AQKXUmtqVAuAG9Z0o8Q" }
   ],
   "insights": [
-    { "type": "pos", "tag": "Destaque", "title": "ROAS 17,8× nas vendas: R$1.621 gerou R$28.854 de receita", "body": "As campanhas de conversão atingiram ROAS de 17,8× — para cada R$1 investido, R$17,80 de receita. CPA de R$5,45 representa 5,4% do ticket médio, resultado excelente para produto físico personalizado." },
-    { "type": "pos", "tag": "Destaque", "title": "WIND Banner domina: CPR R$3,91 e ROAS 18,5× — melhor criativo", "body": "AD 09 soma R$1.139,71 de gasto e 283 conversas WPP. Preço âncora (R$199,99 → R$149,99) + urgência funcionam excepcionalmente — replicar estrutura em outros produtos." },
-    { "type": "pos", "tag": "Eficiência", "title": "Copa 2026: criativos temáticos geraram 155 compras e 145 conversas", "body": "AD 5 WIND Copa (ROAS 18,5×), AD 12 Totens Copa (ROAS 19,1×) e AD 08 Material Copa somam forte desempenho. Manter temática Copa até encerramento e criar criativos pós-Copa." },
-    { "type": "warn", "tag": "Atenção", "title": "57,8% do budget em Mensagens: R$2.371 sem atribuição de receita", "body": "A campanha [03] é a maior do mês mas gera conversas de WhatsApp sem rastreio. Implementar UTMs e configurar conversão offline para mensurar o impacto real." },
-    { "type": "warn", "tag": "Atenção", "title": "[07] Catálogo: ROAS 7,8× vs 18,5× das melhores campanhas", "body": "10 compras com ROAS 7,8×, menos da metade das campanhas de imagem. Antes de reativar: revisar segmentação, feed do catálogo e criativos com overlay de preço." },
-    { "type": "neg", "tag": "Problema", "title": "Pixel Meta ≠ GA4: 298 compras no Meta, R$0 em Paid Social no GA4", "body": "Meta Ads reporta R$29.856 de receita mas GA4 registra R$0 em Paid Social. Evento Purchase não está disparando no checkout. Verificar no Meta Events Manager com prioridade máxima." }
+    { "type": "pos", "tag": "Destaque", "title": "ROAS 17,6× nas vendas: R$1.708 gerou R$30.085 de receita", "body": "As campanhas de conversão atingiram ROAS de 17,6× — para cada R$1 investido, R$17,60 de receita. CPA de R$5,34 representa 5,3% do ticket médio, resultado excelente para produto físico personalizado." },
+    { "type": "pos", "tag": "Destaque", "title": "WIND Banner domina: CPR R$3,91 e ROAS 18,1× — melhor criativo", "body": "AD 09 soma R$1.216,53 de gasto e 301 conversas WPP. Preço âncora (R$199,99 → R$149,99) + urgência funcionam excepcionalmente — replicar estrutura em outros produtos." },
+    { "type": "pos", "tag": "Eficiência", "title": "Copa 2026: criativos temáticos geraram 264 compras e 155 conversas", "body": "AD 5 WIND Copa (ROAS 18,5×), AD 12 Totens Copa (ROAS 19,1×) e AD 08 Material Copa somam forte desempenho. Manter temática Copa até encerramento e criar criativos pós-Copa." },
+    { "type": "warn", "tag": "Atenção", "title": "58,1% do budget em Mensagens: R$2.531 sem atribuição de receita", "body": "A campanha [03] é a maior do mês mas gera conversas de WhatsApp sem rastreio. Implementar UTMs e configurar conversão offline para mensurar o impacto real." },
+    { "type": "warn", "tag": "Atenção", "title": "[07] Catálogo: ROAS 12,1× vs 18,1× das melhores campanhas", "body": "11 compras com ROAS 12,1× — melhorou mas ainda abaixo das campanhas de imagem. Antes de escalar: revisar segmentação, feed do catálogo e criativos com overlay de preço." },
+    { "type": "neg", "tag": "Problema", "title": "Pixel Meta ≠ GA4: 323 compras no Meta, R$0 em Paid Social no GA4", "body": "Meta Ads reporta R$31.933 de receita mas GA4 registra R$0 em Paid Social. Evento Purchase não está disparando no checkout. Verificar no Meta Events Manager com prioridade máxima." }
   ]
 }

@@ -1,0 +1,70 @@
+{
+  "period": {
+    "month": "2026-05",
+    "label": "Maio 2026",
+    "days": 31,
+    "range": "01 a 31/05",
+    "note": "Gasto estimado via canais GA4 (Cross-network + Paid Search)"
+  },
+  "account": {
+    "id": "4987645148",
+    "name": "JN Impressão",
+    "currency": "BRL"
+  },
+  "summary": {
+    "spend": 2245.91,
+    "clicks": 1753,
+    "impressions": 20624,
+    "ctr": 8.5,
+    "cpc": 1.28,
+    "attributedRevenue": 49410,
+    "attributedConversions": 592,
+    "roas": 22.0,
+    "cpa": 3.79,
+    "activeDays": 31,
+    "pausedRange": null
+  },
+  "kpis": {
+    "spendPerActiveDay": 72.45,
+    "revenuePerClick": 28.19,
+    "conversionRate": 33.8,
+    "impressionShare": null,
+    "searchTopImprShare": null
+  },
+  "campaigns": [
+    {
+      "name": "Performance Max - Genérica",
+      "type": "PERFORMANCE_MAX",
+      "typeBadge": "PMax",
+      "status": "ACTIVE",
+      "spend": 1347.55,
+      "clicks": 964,
+      "impressions": 11343,
+      "ctr": 8.5,
+      "cpc": 1.28,
+      "revenue": 27441,
+      "conversions": 308,
+      "roas": 20.4,
+      "cpa": 4.38
+    },
+    {
+      "name": "[SEARCH] GENÉRICA",
+      "type": "SEARCH",
+      "typeBadge": "Search",
+      "status": "ACTIVE",
+      "spend": 898.36,
+      "clicks": 789,
+      "impressions": 9281,
+      "ctr": 8.5,
+      "cpc": 1.28,
+      "revenue": 21969,
+      "conversions": 284,
+      "roas": 24.5,
+      "cpa": 3.16
+    }
+  ],
+  "adGroups": [],
+  "keywords": [],
+  "daily": [],
+  "insights": []
+}

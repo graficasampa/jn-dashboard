@@ -4,20 +4,25 @@ import { renderGA4, initGA4Charts } from './renderers/ga4.js';
 import { renderMeta } from './renderers/meta.js';
 import { renderGads, initGadsCharts } from './renderers/gads.js';
 
-let state = {
-  view:     'hub',     // 'hub' | 'month'
-  month:    '2026-06',
-  platform: 'ga4',
-  data:     {}
-};
-
+// ── configuração ─────────────────────────────────────────
 const AVAILABLE_MONTHS = [
-  { value: '2026-06', label: 'Junho 2026', days: 23 }
+  { value: '2025-07', label: 'Julho 2025',    short: 'Jul/25', slug: 'julho-2025'    },
+  { value: '2025-08', label: 'Agosto 2025',   short: 'Ago/25', slug: 'agosto-2025'   },
+  { value: '2025-09', label: 'Setembro 2025', short: 'Set/25', slug: 'setembro-2025' },
+  { value: '2025-10', label: 'Outubro 2025',  short: 'Out/25', slug: 'outubro-2025'  },
+  { value: '2025-11', label: 'Novembro 2025', short: 'Nov/25', slug: 'novembro-2025' },
+  { value: '2025-12', label: 'Dezembro 2025', short: 'Dez/25', slug: 'dezembro-2025' },
+  { value: '2026-01', label: 'Janeiro 2026',  short: 'Jan/26', slug: 'janeiro-2026'  },
+  { value: '2026-02', label: 'Fevereiro 2026',short: 'Fev/26', slug: 'fevereiro-2026'},
+  { value: '2026-03', label: 'Março 2026',    short: 'Mar/26', slug: 'marco-2026'    },
+  { value: '2026-04', label: 'Abril 2026',    short: 'Abr/26', slug: 'abril-2026'    },
+  { value: '2026-05', label: 'Maio 2026',     short: 'Mai/26', slug: 'maio-2026'     },
+  { value: '2026-06', label: 'Junho 2026',    short: 'Jun/26', slug: 'junho-2026'    },
 ];
 
 const PLATFORMS = [
   {
-    id: 'ga4',
+    id: 'ga4', slug: 'google-analytics',
     name: 'Google Analytics',
     sub: 'GA4 · Prop. 492019962 · JNRevenda',
     logoBg: '#FFF3E0',
@@ -26,7 +31,7 @@ const PLATFORMS = [
     subnav_ids: ['resumo','vendas','produtos','funil','trafego','insights'],
   },
   {
-    id: 'meta',
+    id: 'meta', slug: 'meta-ads',
     name: 'Meta Ads',
     sub: 'JN Impressão · ID 489839481099112',
     logoBg: '#E7F3FF',
@@ -35,7 +40,7 @@ const PLATFORMS = [
     subnav_ids: ['meta-ads','meta-ads','meta-ads','meta-ads','meta-ads','meta-ads'],
   },
   {
-    id: 'gads',
+    id: 'gads', slug: 'google-ads',
     name: 'Google Ads',
     sub: 'JN Impressão · Conta 4987645148',
     logoBg: '#fff',
@@ -45,16 +50,104 @@ const PLATFORMS = [
   }
 ];
 
-// ── dados ───────────────────────────────────────────────
-async function loadData() {
+const SLUG_TO_PLATFORM = Object.fromEntries(PLATFORMS.map(p => [p.slug, p.id]));
+const PLATFORM_SLUG    = Object.fromEntries(PLATFORMS.map(p => [p.id, p.slug]));
+const MONTH_BY_SLUG    = Object.fromEntries(AVAILABLE_MONTHS.map(m => [m.slug, m.value]));
+const MONTH_BY_VALUE   = Object.fromEntries(AVAILABLE_MONTHS.map(m => [m.value, m]));
+
+// ── estado ───────────────────────────────────────────────
+let state = { view: 'hub', month: '2026-06', platform: 'ga4', data: {} };
+
+// ── roteamento de URL ────────────────────────────────────
+function stateFromPath() {
+  const parts = location.pathname.replace(/^\/+/, '').split('/').filter(Boolean);
+  if (!parts.length || parts[0] === 'hub') return { view: 'hub' };
+  const monthValue = MONTH_BY_SLUG[parts[0]] || parts[0];
+  const platform   = SLUG_TO_PLATFORM[parts[1]] || 'ga4';
+  return { view: 'month', month: monthValue, platform };
+}
+
+function pushURL() {
+  let url;
   if (state.view === 'hub') {
-    if (state.data['index']) return state.data['index'];
-    const res = await fetch('/data/index.json');
-    if (!res.ok) throw new Error('Índice não encontrado');
-    const data = await res.json();
-    state.data['index'] = data;
-    return data;
+    url = '/hub';
+  } else {
+    const m = MONTH_BY_VALUE[state.month];
+    url = `/${m?.slug || state.month}/${PLATFORM_SLUG[state.platform] || state.platform}`;
   }
+  if (location.pathname !== url) history.pushState({}, '', url);
+}
+
+window.addEventListener('popstate', async () => {
+  const s = stateFromPath();
+  state.view     = s.view;
+  state.month    = s.month    || state.month;
+  state.platform = s.platform || state.platform;
+  updateHeader();
+  renderPlatformBar();
+  renderSubNav();
+  await renderContent();
+});
+
+// ── carregamento de dados ────────────────────────────────
+// Hub: deriva dos mesmos JSONs que as abas de detalhe usam
+async function loadHubData() {
+  if (state.data['__hub__']) return state.data['__hub__'];
+
+  const months = await Promise.all(AVAILABLE_MONTHS.map(async m => {
+    const [ga4, gads, meta] = await Promise.all([
+      fetch(`/data/${m.value}/ga4.json`).then(r => r.ok ? r.json() : null).catch(() => null),
+      fetch(`/data/${m.value}/gads.json`).then(r => r.ok ? r.json() : null).catch(() => null),
+      fetch(`/data/${m.value}/meta.json`).then(r => r.ok ? r.json() : null).catch(() => null),
+    ]);
+
+    const gadsSpend = gads?.summary?.spend    || 0;
+    const metaSpend = meta?.summary?.spend    || 0;
+    const totalInv  = gadsSpend + metaSpend;
+    const revenue   = ga4?.summary?.revenue   || 0;
+
+    return {
+      ...m,
+      days: ga4?.period?.days ?? 0,
+      sources: { ga4: !!ga4, gads: !!gads, meta: !!meta },
+      ga4: ga4 ? {
+        revenue,
+        orders:         ga4.summary.orders,
+        sessions:       ga4.kpis.sessions,
+        avgTicket:      ga4.summary.avgTicket,
+        users:          (ga4.retention?.new?.users || 0) + (ga4.retention?.returning?.users || 0),
+        newUsers:       ga4.retention?.new?.users        || 0,
+        returningUsers: ga4.retention?.returning?.users  || 0,
+        addToCart:      ga4.funnel?.[2]?.count           || 0,
+        itemsPurchased: ga4.kpis?.itemsSold              || 0,
+      } : null,
+      gads: gads ? {
+        spend:       gadsSpend,
+        conversions: gads.summary.attributedConversions,
+        roas:        gads.summary.roas,
+        clicks:      gads.summary.clicks,
+      } : null,
+      meta: meta ? {
+        spend:     metaSpend,
+        purchases: meta.summary.purchases,
+        roas:      meta.summary.roas,
+        reach:     meta.summary.reach,
+      } : null,
+      derived: {
+        totalInvestment: totalInv,
+        overallROAS:     totalInv > 0 ? revenue / totalInv : null,
+      }
+    };
+  }));
+
+  const result = { months };
+  state.data['__hub__'] = result;
+  return result;
+}
+
+async function loadData() {
+  if (state.view === 'hub') return loadHubData();
+
   const key = `${state.month}/${state.platform}`;
   if (state.data[key]) return state.data[key];
   const res = await fetch(`/data/${state.month}/${state.platform}.json`);
@@ -64,27 +157,28 @@ async function loadData() {
   return data;
 }
 
-// ── header ──────────────────────────────────────────────
-function updateHeader() {
+// ── header ───────────────────────────────────────────────
+function updateHeader(data) {
   const pill    = document.getElementById('monthLabel');
   const backBtn = document.getElementById('backBtn');
   const platBar = document.querySelector('.platform-bar');
 
   if (state.view === 'hub') {
-    pill.textContent     = 'Visão Geral';
-    pill.style.cursor    = '';
-    pill.onclick         = null;
+    pill.textContent      = 'Visão Geral';
+    pill.style.cursor     = '';
+    pill.onclick          = null;
     backBtn.style.display = 'none';
     platBar.style.display = 'none';
   } else {
-    const m = AVAILABLE_MONTHS.find(m => m.value === state.month);
-    pill.textContent      = m ? `${m.label} · ${m.days} dias` : state.month;
+    const days  = data?.period?.days ?? '';
+    const label = data?.period?.label ?? (MONTH_BY_VALUE[state.month]?.label || state.month);
+    pill.textContent      = days ? `${label} · ${days} dias` : label;
     backBtn.style.display = 'flex';
     platBar.style.display = '';
   }
 }
 
-// ── plataformas ─────────────────────────────────────────
+// ── barra de plataformas ─────────────────────────────────
 function renderPlatformBar() {
   if (state.view === 'hub') return;
   const bar = document.getElementById('platformBar');
@@ -115,13 +209,14 @@ function renderSubNav() {
     </nav>`;
 }
 
-// ── conteúdo ────────────────────────────────────────────
+// ── conteúdo ─────────────────────────────────────────────
 async function renderContent() {
   const main = document.getElementById('mainContent');
   main.innerHTML = '<div style="text-align:center;padding:60px 0;color:var(--t3)">Carregando...</div>';
 
   try {
     const data = await loadData();
+    updateHeader(data);
 
     if (state.view === 'hub') {
       main.innerHTML = renderHome(data);
@@ -138,20 +233,20 @@ async function renderContent() {
         main.innerHTML = renderGads(data);
         initGadsCharts(data);
       }
-      const m = AVAILABLE_MONTHS.find(m => m.value === state.month);
+      const label = data?.period?.label ?? (MONTH_BY_VALUE[state.month]?.label || state.month);
       document.getElementById('ftrPeriod').textContent =
-        `Gerado em ${new Date().toLocaleDateString('pt-BR')} · ${m?.label || state.month}`;
+        `Gerado em ${new Date().toLocaleDateString('pt-BR')} · ${label}`;
     }
   } catch (e) {
     main.innerHTML = `<div style="text-align:center;padding:60px 0;color:var(--red)">Erro: ${e.message}</div>`;
   }
 }
 
-// ── navegação ────────────────────────────────────────────
+// ── navegação ─────────────────────────────────────────────
 window.switchPlatform = async function(platformId) {
-  if (state.view !== 'month') return;
-  if (state.platform === platformId) return;
+  if (state.view !== 'month' || state.platform === platformId) return;
   state.platform = platformId;
+  pushURL();
   renderPlatformBar();
   renderSubNav();
   await renderContent();
@@ -161,7 +256,7 @@ window.goToMonth = async function(monthValue) {
   state.month    = monthValue;
   state.view     = 'month';
   state.platform = 'ga4';
-  updateHeader();
+  pushURL();
   renderPlatformBar();
   renderSubNav();
   await renderContent();
@@ -169,12 +264,13 @@ window.goToMonth = async function(monthValue) {
 
 window.goToHub = async function() {
   state.view = 'hub';
+  pushURL();
   updateHeader();
   renderSubNav();
   await renderContent();
 };
 
-// ── last updated ────────────────────────────────────────
+// ── badge "última atualização" ────────────────────────────
 async function loadLastUpdated() {
   try {
     const res = await fetch('/data/lastUpdated.json');
@@ -187,15 +283,15 @@ async function loadLastUpdated() {
     const dt    = new Date(ts);
     const TZ    = 'America/Sao_Paulo';
 
-    const todayStr   = new Date().toLocaleDateString('pt-BR', { timeZone: TZ });
-    const updStr     = dt.toLocaleDateString('pt-BR', { timeZone: TZ });
-    const hhmm       = dt.toLocaleTimeString('pt-BR', { timeZone: TZ, hour:'2-digit', minute:'2-digit' });
-    const yesterday  = new Date(Date.now() - 86400000).toLocaleDateString('pt-BR', { timeZone: TZ });
+    const todayStr  = new Date().toLocaleDateString('pt-BR', { timeZone: TZ });
+    const updStr    = dt.toLocaleDateString('pt-BR', { timeZone: TZ });
+    const hhmm      = dt.toLocaleTimeString('pt-BR', { timeZone: TZ, hour:'2-digit', minute:'2-digit' });
+    const yesterday = new Date(Date.now() - 86400000).toLocaleDateString('pt-BR', { timeZone: TZ });
 
     let label;
-    if (updStr === todayStr)        label = `Atualizado hoje às ${hhmm}`;
-    else if (updStr === yesterday)  label = `Atualizado ontem às ${hhmm}`;
-    else                            label = `Atualizado em ${updStr.slice(0,5)} às ${hhmm}`;
+    if (updStr === todayStr)       label = `Atualizado hoje às ${hhmm}`;
+    else if (updStr === yesterday) label = `Atualizado ontem às ${hhmm}`;
+    else                           label = `Atualizado em ${updStr.slice(0,5)} às ${hhmm}`;
 
     const sourceList = Object.entries(sources || {}).filter(([,v]) => v).map(([k]) => k.toUpperCase());
     if (sourceList.length > 0 && sourceList.length < 3) label += ` (${sourceList.join(', ')})`;
@@ -205,9 +301,13 @@ async function loadLastUpdated() {
   } catch {}
 }
 
-// ── init ─────────────────────────────────────────────────
+// ── init ──────────────────────────────────────────────────
 async function init() {
-  updateHeader();
+  const s = stateFromPath();
+  state.view     = s.view;
+  state.month    = s.month    || state.month;
+  state.platform = s.platform || state.platform;
+
   renderPlatformBar();
   renderSubNav();
   await Promise.all([renderContent(), loadLastUpdated()]);

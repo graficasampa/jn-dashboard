@@ -1,0 +1,36 @@
+{
+  "period": {
+    "month": "2026-05",
+    "label": "Maio 2026",
+    "days": 31,
+    "range": "01 a 31/05"
+  },
+  "account": {
+    "id": "489839481099112",
+    "name": "JN Impressão"
+  },
+  "summary": {
+    "spend": 2635.24,
+    "revenue": 57290.12,
+    "roas": 21.74,
+    "purchases": 506,
+    "conversations": null,
+    "reach": 86062,
+    "impressions": 201436,
+    "clicks": 3860,
+    "frequency": 2.34
+  },
+  "kpis": {
+    "cpa": 5.21,
+    "costPerMessage": null,
+    "roasSales": 21.74,
+    "cpm": 13.08,
+    "cpc": 0.68,
+    "ctr": 1.92,
+    "revenuePerSpend": 21.74
+  },
+  "campaigns": [],
+  "topAds": [],
+  "topCreatives": [],
+  "insights": []
+}

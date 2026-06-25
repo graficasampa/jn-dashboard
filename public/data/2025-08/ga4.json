@@ -1,0 +1,369 @@
+{
+  "period": {
+    "month": "2025-08",
+    "label": "Agosto 2025",
+    "days": 31,
+    "range": "01 a 31/08"
+  },
+  "property": {
+    "id": "492019962",
+    "name": "JNRevenda"
+  },
+  "summary": {
+    "revenue": 187977.3,
+    "orders": 1988,
+    "avgTicket": 94.56,
+    "conversionRate": 16.81
+  },
+  "kpis": {
+    "revenuePerDay": 6063.78,
+    "itemsSold": 2513,
+    "itemsPerOrder": 1.26,
+    "revenuePerSession": 15.9,
+    "sessions": 11826,
+    "pageviews": 62205,
+    "pagesPerSession": 5.26,
+    "engagementRate": 71.5,
+    "bounceRate": 28.5,
+    "returningCustomerRate": 41.99,
+    "returningRevenue": 180127.95,
+    "returningCustomers": 1903
+  },
+  "dailyRevenue": [
+    {
+      "day": "01",
+      "revenue": 4714.6,
+      "orders": 60
+    },
+    {
+      "day": "02",
+      "revenue": 636.73,
+      "orders": 13
+    },
+    {
+      "day": "03",
+      "revenue": 1091.25,
+      "orders": 16
+    },
+    {
+      "day": "04",
+      "revenue": 9305.29,
+      "orders": 76
+    },
+    {
+      "day": "05",
+      "revenue": 15686.06,
+      "orders": 99
+    },
+    {
+      "day": "06",
+      "revenue": 5864.56,
+      "orders": 103
+    },
+    {
+      "day": "07",
+      "revenue": 10385.57,
+      "orders": 108
+    },
+    {
+      "day": "08",
+      "revenue": 6077.67,
+      "orders": 53
+    },
+    {
+      "day": "09",
+      "revenue": 1863.45,
+      "orders": 7
+    },
+    {
+      "day": "10",
+      "revenue": 1721.65,
+      "orders": 13
+    },
+    {
+      "day": "11",
+      "revenue": 6523.67,
+      "orders": 77
+    },
+    {
+      "day": "12",
+      "revenue": 7805.71,
+      "orders": 98
+    },
+    {
+      "day": "13",
+      "revenue": 13858.98,
+      "orders": 106
+    },
+    {
+      "day": "14",
+      "revenue": 7495.14,
+      "orders": 113
+    },
+    {
+      "day": "15",
+      "revenue": 7155.9,
+      "orders": 65
+    },
+    {
+      "day": "16",
+      "revenue": 737.82,
+      "orders": 10
+    },
+    {
+      "day": "17",
+      "revenue": 2327.42,
+      "orders": 22
+    },
+    {
+      "day": "18",
+      "revenue": 8972.93,
+      "orders": 96
+    },
+    {
+      "day": "19",
+      "revenue": 6387.34,
+      "orders": 97
+    },
+    {
+      "day": "20",
+      "revenue": 10469.52,
+      "orders": 100
+    },
+    {
+      "day": "21",
+      "revenue": 9974.62,
+      "orders": 110
+    },
+    {
+      "day": "22",
+      "revenue": 4420.73,
+      "orders": 59
+    },
+    {
+      "day": "23",
+      "revenue": 276.25,
+      "orders": 7
+    },
+    {
+      "day": "24",
+      "revenue": 917.89,
+      "orders": 9
+    },
+    {
+      "day": "25",
+      "revenue": 6083.76,
+      "orders": 82
+    },
+    {
+      "day": "26",
+      "revenue": 9244.64,
+      "orders": 120
+    },
+    {
+      "day": "27",
+      "revenue": 12320.9,
+      "orders": 98
+    },
+    {
+      "day": "28",
+      "revenue": 9094.05,
+      "orders": 88
+    },
+    {
+      "day": "29",
+      "revenue": 4899.1,
+      "orders": 57
+    },
+    {
+      "day": "30",
+      "revenue": 1129.51,
+      "orders": 14
+    },
+    {
+      "day": "31",
+      "revenue": 534.59,
+      "orders": 12
+    }
+  ],
+  "dailySessions": [
+    464,
+    103,
+    80,
+    441,
+    492,
+    514,
+    576,
+    467,
+    101,
+    52,
+    433,
+    473,
+    521,
+    570,
+    681,
+    128,
+    86,
+    494,
+    535,
+    601,
+    567,
+    513,
+    95,
+    79,
+    520,
+    547,
+    495,
+    514,
+    493,
+    129,
+    76
+  ],
+  "channels": [
+    {
+      "name": "Organic Search",
+      "cls": "ch-org",
+      "revenue": 83618.63,
+      "orders": 772,
+      "avgTicket": 108.31,
+      "pct": 44.5,
+      "sessions": 4902,
+      "warn": false
+    },
+    {
+      "name": "Direct",
+      "cls": "ch-dir",
+      "revenue": 60254.82,
+      "orders": 746,
+      "avgTicket": 80.77,
+      "pct": 32.1,
+      "sessions": 3936,
+      "warn": false
+    },
+    {
+      "name": "Unassigned",
+      "cls": "ch-unk",
+      "revenue": 28075.64,
+      "orders": 304,
+      "avgTicket": 92.35,
+      "pct": 14.9,
+      "sessions": 1571,
+      "warn": false
+    },
+    {
+      "name": "Cross-network",
+      "cls": "ch-ppc",
+      "revenue": 10175.95,
+      "orders": 106,
+      "avgTicket": 96.0,
+      "pct": 5.4,
+      "sessions": 638,
+      "warn": false
+    },
+    {
+      "name": "Paid Search",
+      "cls": "ch-ps",
+      "revenue": 5607.7,
+      "orders": 51,
+      "avgTicket": 109.95,
+      "pct": 3.0,
+      "sessions": 501,
+      "warn": false
+    },
+    {
+      "name": "Referral",
+      "cls": "ch-ref",
+      "revenue": 244.56,
+      "orders": 9,
+      "avgTicket": 27.17,
+      "pct": 0.1,
+      "sessions": 195,
+      "warn": false
+    }
+  ],
+  "funnel": [
+    {
+      "step": 1,
+      "name": "Usuários totais no site",
+      "count": 2346,
+      "pct": 100,
+      "base": true
+    },
+    {
+      "step": 2,
+      "name": "Visualizaram produto (view_item)",
+      "count": 340,
+      "pct": 14.5,
+      "base": false
+    },
+    {
+      "step": 3,
+      "name": "Adicionaram ao carrinho",
+      "count": 2644,
+      "pct": 112.7,
+      "base": false
+    },
+    {
+      "step": 4,
+      "name": "Iniciaram checkout",
+      "count": 2028,
+      "pct": 86.4,
+      "base": false
+    },
+    {
+      "step": 5,
+      "name": "Concluíram o pedido",
+      "count": 1988,
+      "pct": 84.7,
+      "highlight": true,
+      "base": false
+    }
+  ],
+  "retention": {
+    "returning": {
+      "users": 985,
+      "sessions": 9801,
+      "orders": 1903,
+      "revenue": 180127.95,
+      "revPct": 95.82,
+      "convRate": 19.42,
+      "revenuePerUser": 182.87
+    },
+    "new": {
+      "users": 1361,
+      "sessions": 1359,
+      "orders": 57,
+      "revenue": 6453.75,
+      "revPct": 3.43,
+      "convRate": 4.19,
+      "revenuePerUser": 4.74
+    }
+  },
+  "top50Products": [],
+  "formStats": {
+    "starts": 9461,
+    "submits": 1988,
+    "rate": 21.01
+  },
+  "devices": [
+    {
+      "device": "desktop",
+      "sessions": 7687,
+      "revenue": 135343.66,
+      "orders": 1392
+    },
+    {
+      "device": "mobile",
+      "sessions": 3548,
+      "revenue": 46994.32,
+      "orders": 537
+    },
+    {
+      "device": "tablet",
+      "sessions": 591,
+      "revenue": 5639.32,
+      "orders": 60
+    }
+  ],
+  "insights": []
+}

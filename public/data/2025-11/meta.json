@@ -1,0 +1,36 @@
+{
+  "period": {
+    "month": "2025-11",
+    "label": "Novembro 2025",
+    "days": 30,
+    "range": "01 a 30/11"
+  },
+  "account": {
+    "id": "489839481099112",
+    "name": "JN Impressão"
+  },
+  "summary": {
+    "spend": 2485.52,
+    "revenue": 54830.57,
+    "roas": 22.06,
+    "purchases": 567,
+    "conversations": null,
+    "reach": 26592,
+    "impressions": 140863,
+    "clicks": 2008,
+    "frequency": 5.3
+  },
+  "kpis": {
+    "cpa": 4.38,
+    "costPerMessage": null,
+    "roasSales": 22.06,
+    "cpm": 17.64,
+    "cpc": 1.24,
+    "ctr": 1.43,
+    "revenuePerSpend": 22.06
+  },
+  "campaigns": [],
+  "topAds": [],
+  "topCreatives": [],
+  "insights": []
+}
