@@ -202,19 +202,19 @@ export function renderHome(index) {
 
   const topbar = `
     <div class=”home-topbar”>
-      <div class=”home-title”>
-        <svg width=”16” height=”16” viewBox=”0 0 24 24” fill=”none”>
-          <rect x=”3” y=”3” width=”7” height=”7” rx=”1.5” fill=”var(--blu)” opacity=”.9”/>
-          <rect x=”14” y=”3” width=”7” height=”7” rx=”1.5” fill=”var(--blu)” opacity=”.55”/>
-          <rect x=”3” y=”14” width=”7” height=”7” rx=”1.5” fill=”var(--blu)” opacity=”.55”/>
-          <rect x=”14” y=”14” width=”7” height=”7” rx=”1.5” fill=”var(--blu)” opacity=”.28”/>
-        </svg>
-        Painel Executivo
-      </div>
-      <div style=”display:flex;align-items:center;gap:8px;flex-wrap:wrap”>
+      <div class=”home-topbar-left”>
+        <div class=”home-title”>
+          <svg width=”16” height=”16” viewBox=”0 0 24 24” fill=”none”>
+            <rect x=”3” y=”3” width=”7” height=”7” rx=”1.5” fill=”var(--blu)” opacity=”.9”/>
+            <rect x=”14” y=”3” width=”7” height=”7” rx=”1.5” fill=”var(--blu)” opacity=”.55”/>
+            <rect x=”3” y=”14” width=”7” height=”7” rx=”1.5” fill=”var(--blu)” opacity=”.55”/>
+            <rect x=”14” y=”14” width=”7” height=”7” rx=”1.5” fill=”var(--blu)” opacity=”.28”/>
+          </svg>
+          Painel Executivo
+        </div>
         <div class=”hvb-group”>${viewBtns}</div>
-        ${_activeView === 'painel' ? `<div class=”hfb-group”>${periodBtns}</div>` : ''}
       </div>
+      ${_activeView === 'painel' ? `<div class=”hfb-group”>${periodBtns}</div>` : ''}
     </div>`;
 
   // ── sub-aba: Audiência & Estratégia ────────────────────────

@@ -74,7 +74,7 @@ export function renderMeta(data) {
     <div class="kpi" style="border-top:3px solid var(--blu)">
       <div class="kpi-lbl">CPA — Custo por Compra</div>
       <div class="kpi-val">${brl2(kpis.cpa)}</div>
-      <div class="kpi-sub">≈ 5,4% do ticket médio · excelente</div>
+      <div class="kpi-sub">≈ 5,3% do ticket médio · excelente</div>
     </div>
     <div class="kpi" style="border-top:3px solid var(--meta)">
       <div class="kpi-lbl">Custo por Mensagem WPP</div>
@@ -84,7 +84,7 @@ export function renderMeta(data) {
     <div class="kpi gold" style="border-top:3px solid #C9980A">
       <div class="kpi-lbl">ROAS — Campanhas de Venda</div>
       <div class="kpi-val brl">${kpis.roasSales.toFixed(1).replace('.',',')}×</div>
-      <div class="kpi-sub">R$1.621 gasto → R$28.854 receita</div>
+      <div class="kpi-sub">R$1.708 gasto → R$30.085 receita</div>
     </div>
   </div>
 

@@ -231,7 +231,8 @@ tbody td:not(:first-child){text-align:right}
 /* ── HOME EXECUTIVA ─────────────────────────────────── */
 .home-wrap{max-width:var(--max);margin:0 auto;padding:24px 20px;display:flex;flex-direction:column;gap:18px}
 
-.home-topbar{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px}
+.home-topbar{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px}
+.home-topbar-left{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
 .home-title{display:flex;align-items:center;gap:8px;font-size:16px;font-weight:700;color:var(--t1)}
 .hfb-group{display:flex;gap:4px;flex-wrap:wrap}
 .hfb{padding:5px 13px;border:1.5px solid var(--bdr);border-radius:20px;background:#fff;font-size:12px;font-weight:600;color:var(--t3);cursor:pointer;transition:all .15s;font-family:inherit}
