@@ -179,6 +179,8 @@ tbody td:not(:first-child){text-align:right}
 .ins.neg .ins-type{color:var(--red)}
 .ins-ttl{font-size:12px;font-weight:700;color:var(--t1);margin-bottom:5px;line-height:1.35}
 .ins-body{font-size:11.5px;color:var(--t2);line-height:1.55}
+.aud-action-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.aud-gap-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
 
 /* FUNNEL */
 .fn-step{display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid var(--bdr2)}
@@ -221,6 +223,7 @@ tbody td:not(:first-child){text-align:right}
   .g4,.g3{grid-template-columns:repeat(2,1fr)}
   .g2,.g21{grid-template-columns:1fr}
   .ins-grid{grid-template-columns:1fr}
+  .aud-action-grid,.aud-gap-grid{grid-template-columns:1fr}
   .hl-band{grid-template-columns:repeat(2,1fr)}
 }
 
