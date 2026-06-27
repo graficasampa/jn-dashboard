@@ -1,8 +1,13 @@
-const fmt = (v) => Number(v).toLocaleString('pt-BR', {minimumFractionDigits:0,maximumFractionDigits:0});
-const brl = (v) => 'R$' + fmt(v);
-const brl2 = (v) => 'R$' + Number(v).toLocaleString('pt-BR', {minimumFractionDigits:2,maximumFractionDigits:2});
-const pct = (v, d=1) => Number(v).toFixed(d).replace('.',',') + '%';
-const k = (v) => v >= 1000 ? (v/1000).toFixed(1).replace('.',',') + 'K' : fmt(v);
+const num = v => {
+  const n = Number(v);
+  return Number.isFinite(n) ? n : null;
+};
+const fmt = (v) => num(v) == null ? '—' : num(v).toLocaleString('pt-BR', {minimumFractionDigits:0,maximumFractionDigits:0});
+const brl = (v) => num(v) == null ? '—' : 'R$' + fmt(v);
+const brl2 = (v) => num(v) == null ? '—' : 'R$' + num(v).toLocaleString('pt-BR', {minimumFractionDigits:2,maximumFractionDigits:2});
+const pct = (v, d=1) => num(v) == null ? '—' : num(v).toFixed(d).replace('.',',') + '%';
+const k = (v) => num(v) == null ? '—' : num(v) >= 1000 ? (num(v)/1000).toFixed(1).replace('.',',') + 'K' : fmt(v);
+const monthShort = ['jan','fev','mar','abr','mai','jun','jul','ago','set','out','nov','dez'];
 
 const STATUS_BADGE = {
   ACTIVE: '<span class="badge bg">Ativo</span>',
@@ -22,13 +27,49 @@ function creativeMetrics(c) {
     : { lbl: 'Conversas', val: `<div style="font-size:11px;font-weight:700;color:var(--meta)">${fmt(c.result)}</div>` };
   const secondary = c.roas
     ? { lbl: 'ROAS', val: `<div style="font-size:11px;font-weight:700;color:var(--grn)">${c.roas.toFixed(1).replace('.',',')}×</div>` }
-    : { lbl: 'CPR', val: `<div style="font-size:11px;font-weight:700;color:var(--grn)">${brl2(c.cpr)}</div>` };
+    : c.cpr != null
+      ? { lbl: 'CPR', val: `<div style="font-size:11px;font-weight:700;color:var(--grn)">${brl2(c.cpr)}</div>` }
+      : { lbl: 'CTR', val: `<div style="font-size:11px;font-weight:700;color:var(--meta)">${pct(c.ctr)}</div>` };
   return { primary, secondary };
+}
+
+function conversationChartHtml(data) {
+  const daily = Array.isArray(data.dailyConversations) ? data.dailyConversations : [];
+  const totalDaily = daily.reduce((sum, d) => sum + (num(d.conversations) || 0), 0);
+  const avg = daily.length ? totalDaily / daily.length : null;
+  const peak = daily.reduce((best, d) => (d.conversations || 0) > (best?.conversations || 0) ? d : best, null);
+
+  return `
+  <div class="card" id="meta-conversas" style="margin-bottom:24px">
+    <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:12px">
+      <div>
+        <div class="card-ttl">Conversas Iniciadas por Dia</div>
+        <div class="card-sub" style="margin-bottom:0">Barras roxas = conversas iniciadas no WhatsApp via campanhas Meta</div>
+      </div>
+      ${daily.length ? `
+      <div style="display:grid;grid-template-columns:repeat(3,auto);gap:14px;text-align:right;font-size:11px;color:var(--t2)">
+        <div><b style="color:var(--t1);font-size:13px">${fmt(totalDaily)}</b><br>Total</div>
+        <div><b style="color:var(--t1);font-size:13px">${avg == null ? '—' : avg.toFixed(1).replace('.', ',')}</b><br>Média/dia</div>
+        <div><b style="color:#9C27B0;font-size:13px">${peak ? fmt(peak.conversations) : '—'}</b><br>Pico</div>
+      </div>` : ''}
+    </div>
+    ${daily.length ? `
+      <canvas id="metaConvChart" style="width:100%;display:block"></canvas>
+    ` : `
+      <div style="border:1px dashed var(--bdr);border-radius:8px;padding:22px;text-align:center;background:var(--sur2);color:var(--t2)">
+        <div style="font-size:13px;font-weight:800;color:var(--t1);margin-bottom:5px">Série diária ainda não disponível neste snapshot</div>
+        <div style="font-size:12px;line-height:1.5">O sync da Meta salva <code>dailyConversations</code>. No próximo fetch com token válido, este espaço vira o gráfico diário.</div>
+      </div>
+    `}
+  </div>`;
 }
 
 export function renderMeta(data) {
   const s = data.summary;
   const kpis = data.kpis;
+  const campaigns = data.campaigns || [];
+  const roasTotal = s.roas ?? kpis.revenuePerSpend ?? (s.spend > 0 ? s.revenue / s.spend : null);
+  const roasSales = kpis.roasSales ?? null;
 
   return `
 <div id="panel-meta" class="platform-panel visible">
@@ -40,12 +81,12 @@ export function renderMeta(data) {
     <div>
       <div class="hl-val" style="color:var(--meta)">${brl(s.spend)}</div>
       <div class="hl-lbl">Investimento Total</div>
-      <div><span class="hl-trend hl-neutral">${data.period.days} dias · ${data.campaigns.length} campanhas</span></div>
+      <div><span class="hl-trend hl-neutral">${data.period.days} dias · ${campaigns.length} campanhas</span></div>
     </div>
     <div>
       <div class="hl-val" style="color:var(--grn)">${brl(s.revenue)}</div>
       <div class="hl-lbl">Receita Atribuída (Meta)</div>
-      <div><span class="hl-trend hl-up">↑ ROAS ${kpis.roasSales.toFixed(1).replace('.',',')}× vendas</span></div>
+      <div><span class="hl-trend hl-up">↑ ROAS total ${roasTotal ? roasTotal.toFixed(1).replace('.',',') : '—'}×</span></div>
     </div>
     <div>
       <div class="hl-val hl-grn">${fmt(s.purchases)}</div>
@@ -83,7 +124,7 @@ export function renderMeta(data) {
     </div>
     <div class="kpi gold" style="border-top:3px solid #C9980A">
       <div class="kpi-lbl">ROAS — Campanhas de Venda</div>
-      <div class="kpi-val brl">${kpis.roasSales.toFixed(1).replace('.',',')}×</div>
+      <div class="kpi-val brl">${roasSales ? roasSales.toFixed(1).replace('.',',') : '—'}×</div>
       <div class="kpi-sub">R$1.708 gasto → R$30.085 receita</div>
     </div>
   </div>
@@ -112,8 +153,10 @@ export function renderMeta(data) {
     </div>
   </div>
 
+  ${conversationChartHtml(data)}
+
   <!-- Campanhas + Budget -->
-  <div class="g21" style="margin-bottom:24px">
+  <div class="g21" id="meta-campanhas" style="margin-bottom:24px">
     <div class="tbl-card">
       <div class="tbl-head"><div class="card-ttl" style="margin-bottom:0">Campanhas — ${data.period.label}</div></div>
       <div class="tbl-wrap">
@@ -155,7 +198,7 @@ export function renderMeta(data) {
   </div>
 
   <!-- Top Anúncios -->
-  <div class="tbl-card" style="margin-bottom:24px">
+  <div class="tbl-card" id="meta-top-anuncios" style="margin-bottom:24px">
     <div class="tbl-head"><div class="card-ttl" style="margin-bottom:0">Top Anúncios por Gasto — ${data.period.label}</div></div>
     <div class="tbl-wrap"><div class="tbl-scroll">
       <table>
@@ -179,7 +222,7 @@ export function renderMeta(data) {
   </div>
 
   <!-- Criativos em Destaque -->
-  <div class="sec-ttl" style="margin-top:4px">Criativos em Destaque — Top ${data.topCreatives.length} Anúncios</div>
+  <div class="sec-ttl" id="meta-criativos" style="margin-top:4px">Criativos em Destaque — Top ${data.topCreatives.length} Anúncios</div>
   <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-bottom:24px">
     ${data.topCreatives.map(c => {
       const m = creativeMetrics(c);
@@ -210,7 +253,7 @@ export function renderMeta(data) {
   </div>
 
   <!-- Insights -->
-  <div class="sec-ttl">Insights & Recomendações</div>
+  <div class="sec-ttl" id="meta-insights">Insights & Recomendações</div>
   <div class="ins-grid">
     ${data.insights.map(i => `
     <div class="ins ${i.type}">
@@ -222,4 +265,88 @@ export function renderMeta(data) {
 
 </section>
 </div>`;
+}
+
+function drawMetaConversationsChart(canvas, daily) {
+  if (!canvas || !daily?.length) return;
+  const DPR = window.devicePixelRatio || 1;
+  const W = canvas.offsetWidth || 900;
+  const H = 260;
+  canvas.width = W * DPR;
+  canvas.height = H * DPR;
+  canvas.style.width = W + 'px';
+  canvas.style.height = H + 'px';
+  const ctx = canvas.getContext('2d');
+  ctx.scale(DPR, DPR);
+
+  const values = daily.map(d => num(d.conversations) || 0);
+  const max = Math.max(...values, 1);
+  const yMax = Math.max(3, Math.ceil(max * 1.15));
+  const PAD = { t: 22, r: 24, b: 42, l: 34 };
+  const CW = W - PAD.l - PAD.r;
+  const CH = H - PAD.t - PAD.b;
+  const slot = CW / values.length;
+  const bW = Math.max(5, Math.min(slot * 0.55, 24));
+
+  ctx.clearRect(0, 0, W, H);
+  ctx.lineWidth = 1;
+  ctx.strokeStyle = '#D9DCE3';
+  ctx.fillStyle = '#A2A8B5';
+  ctx.font = '10px system-ui,sans-serif';
+  ctx.textAlign = 'right';
+
+  const steps = Math.min(6, yMax);
+  for (let i = 0; i <= steps; i++) {
+    const v = Math.round((yMax / steps) * i);
+    const y = PAD.t + CH * (1 - v / yMax);
+    ctx.beginPath();
+    ctx.moveTo(PAD.l, y);
+    ctx.lineTo(W - PAD.r, y);
+    ctx.stroke();
+    ctx.fillText(String(v), PAD.l - 7, y + 3);
+  }
+
+  values.forEach((v, i) => {
+    const x = PAD.l + slot * i + (slot - bW) / 2;
+    const h = CH * (v / yMax);
+    const y = PAD.t + CH - h;
+    const grad = ctx.createLinearGradient(x, y, x + bW, y);
+    grad.addColorStop(0, '#A21CAF');
+    grad.addColorStop(1, '#8B1BB1');
+    ctx.fillStyle = grad;
+    ctx.globalAlpha = v > 0 ? 0.94 : 0.22;
+    if (v > 0) {
+      if (ctx.roundRect) {
+        ctx.beginPath(); ctx.roundRect(x, y, bW, h, [4, 4, 0, 0]); ctx.fill();
+      } else {
+        ctx.fillRect(x, y, bW, h);
+      }
+    }
+
+    if (v > 0) {
+      ctx.globalAlpha = 1;
+      ctx.fillStyle = '#9C27B0';
+      ctx.font = 'bold 10px system-ui,sans-serif';
+      ctx.textAlign = 'center';
+      ctx.fillText(String(v), x + bW / 2, y - 7);
+    }
+
+    const day = daily[i].day || Number((daily[i].date || '').slice(-2)) || i + 1;
+    const month = daily[i].date ? monthShort[Number(daily[i].date.slice(5, 7)) - 1] : '';
+    const showEvery = values.length > 24 ? 2 : 1;
+    if (i % showEvery === 0 || i === values.length - 1) {
+      ctx.globalAlpha = 1;
+      ctx.fillStyle = '#9AA3B2';
+      ctx.font = '9px system-ui,sans-serif';
+      ctx.textAlign = 'center';
+      ctx.fillText(month ? `${day} ${month}` : String(day), x + bW / 2, H - 14);
+    }
+  });
+
+  ctx.globalAlpha = 1;
+}
+
+export function initMetaCharts(data) {
+  const daily = Array.isArray(data?.dailyConversations) ? data.dailyConversations : [];
+  drawMetaConversationsChart(document.getElementById('metaConvChart'), daily);
 }

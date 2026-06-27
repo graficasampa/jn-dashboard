@@ -381,11 +381,11 @@ export function renderAudience(index) {
           <th>Usuários</th>
           <th style="color:var(--blu)">Novos</th>
           <th style="color:var(--grn)">Recorrentes</th>
-          <th>Rev. Novos</th>
-          <th style="color:var(--grn)">Rev. Recorrentes</th>
-          <th>% Rev. Rec.</th>
-          <th>Rev./Novo</th>
-          <th style="color:var(--grn)">Rev./Recorrente</th>
+          <th>Receita Novos</th>
+          <th style="color:var(--grn)">Receita Recorrentes</th>
+          <th>% Receita Recorrente</th>
+          <th>Receita/Novo</th>
+          <th style="color:var(--grn)">Receita/Recorrente</th>
         </tr></thead>
         <tbody>${rows}</tbody>
       </table>

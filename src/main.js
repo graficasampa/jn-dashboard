@@ -1,10 +1,14 @@
 import './style.css';
 import { renderHome, initHomeCharts } from './renderers/home.js';
 import { renderGA4, initGA4Charts } from './renderers/ga4.js';
-import { renderMeta } from './renderers/meta.js';
+import { renderMeta, initMetaCharts } from './renderers/meta.js';
 import { renderGads, initGadsCharts } from './renderers/gads.js';
+import { renderBalcao, initBalcao } from './renderers/balcao.js';
 
 // ── configuração ─────────────────────────────────────────
+const BALCAO_API_URL = import.meta.env?.VITE_BALCAO_API_URL || '';
+const BALCAO_API_TOKEN = import.meta.env?.VITE_BALCAO_API_TOKEN || '';
+
 const AVAILABLE_MONTHS = [
   { value: '2025-07', label: 'Julho 2025',    short: 'Jul/25', slug: 'julho-2025'    },
   { value: '2025-08', label: 'Agosto 2025',   short: 'Ago/25', slug: 'agosto-2025'   },
@@ -36,8 +40,8 @@ const PLATFORMS = [
     sub: 'JN Impressão · ID 489839481099112',
     logoBg: '#E7F3FF',
     logo: `<svg width="22" height="22" viewBox="0 0 24 24" fill="#1877F2"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>`,
-    subnav:     ['Visão Geral','KPIs','Campanhas','Top Anúncios','Criativos','Insights'],
-    subnav_ids: ['meta-ads','meta-ads','meta-ads','meta-ads','meta-ads','meta-ads'],
+    subnav:     ['Visão Geral','Conversas','Campanhas','Top Anúncios','Criativos','Insights'],
+    subnav_ids: ['meta-ads','meta-conversas','meta-campanhas','meta-top-anuncios','meta-criativos','meta-insights'],
   },
   {
     id: 'gads', slug: 'google-ads',
@@ -47,6 +51,15 @@ const PLATFORMS = [
     logo: `<img src="/google-ads-logo.svg" width="22" height="22" style="object-fit:contain;display:block">`,
     subnav:     ['Resumo','Gasto Diário','Campanhas','Keywords','Insights'],
     subnav_ids: ['gads-resumo','gads-diario','gads-campanhas','gads-keywords','gads-insights'],
+  },
+  {
+    id: 'balcao', slug: 'vendas-balcao',
+    name: 'Vendas de Balcão',
+    sub: 'Entrada manual · Google Sheets',
+    logoBg: '#EDFAF4',
+    logo: `<svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M4 7h16v12a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V7Z" fill="#0A8A58" opacity=".16"/><path d="M7 7V5a3 3 0 0 1 3-3h4a3 3 0 0 1 3 3v2M4 7h16v12a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V7Z" stroke="#0A8A58" stroke-width="1.8" stroke-linecap="round"/><path d="M8 13h8M8 17h5" stroke="#0A8A58" stroke-width="1.8" stroke-linecap="round"/></svg>`,
+    subnav:     ['Resumo','Lançamento'],
+    subnav_ids: ['balcao-resumo','balcao-resumo'],
   }
 ];
 
@@ -93,6 +106,7 @@ window.addEventListener('popstate', async () => {
 // Hub: deriva dos mesmos JSONs que as abas de detalhe usam
 async function loadHubData() {
   if (state.data['__hub__']) return state.data['__hub__'];
+  const balcaoByMonth = await loadBalcaoMap();
 
   const months = await Promise.all(AVAILABLE_MONTHS.map(async m => {
     const [ga4, gads, meta] = await Promise.all([
@@ -105,6 +119,9 @@ async function loadHubData() {
     const metaSpend = meta?.summary?.spend    || 0;
     const totalInv  = gadsSpend + metaSpend;
     const revenue   = ga4?.summary?.revenue   || 0;
+    const balcao     = balcaoByMonth[m.value] || emptyBalcao(m.value);
+    const totalRevenue = revenue + (balcao.revenue || 0);
+    const totalOrders  = (ga4?.summary?.orders || 0) + (balcao.orders || 0);
 
     return {
       ...m,
@@ -113,6 +130,7 @@ async function loadHubData() {
       ga4: ga4 ? {
         revenue,
         orders:         ga4.summary.orders,
+        purchasers:     ga4.summary?.purchasers ?? ga4.kpis?.purchasers ?? null,
         sessions:       ga4.kpis.sessions,
         avgTicket:      ga4.summary.avgTicket,
         users:            (ga4.retention?.new?.users || 0) + (ga4.retention?.returning?.users || 0),
@@ -122,7 +140,7 @@ async function loadHubData() {
         returningRevenue: ga4.retention?.returning?.revenue  || 0,
         newOrders:        ga4.retention?.new?.orders         || 0,
         returningOrders:  ga4.retention?.returning?.orders   || 0,
-        addToCart:        ga4.funnel?.[2]?.count             || 0,
+        addToCart:        ga4.kpis?.itemsAddedToCart ?? ga4.funnel?.[2]?.count ?? 0,
         itemsPurchased:   ga4.kpis?.itemsSold                || 0,
       } : null,
       gads: gads ? {
@@ -137,9 +155,12 @@ async function loadHubData() {
         roas:      meta.summary.roas,
         reach:     meta.summary.reach,
       } : null,
+      balcao,
       derived: {
         totalInvestment: totalInv,
-        overallROAS:     totalInv > 0 ? revenue / totalInv : null,
+        totalRevenue,
+        totalOrders,
+        overallROAS:     totalInv > 0 ? totalRevenue / totalInv : null,
       }
     };
   }));
@@ -151,6 +172,7 @@ async function loadHubData() {
 
 async function loadData() {
   if (state.view === 'hub') return loadHubData();
+  if (state.platform === 'balcao') return loadBalcaoDetail(state.month);
 
   const key = `${state.month}/${state.platform}`;
   if (state.data[key]) return state.data[key];
@@ -233,9 +255,13 @@ async function renderContent() {
         initGA4Charts(data);
       } else if (state.platform === 'meta') {
         main.innerHTML = renderMeta(data);
+        initMetaCharts(data);
       } else if (state.platform === 'gads') {
         main.innerHTML = renderGads(data);
         initGadsCharts(data);
+      } else if (state.platform === 'balcao') {
+        main.innerHTML = renderBalcao(data);
+        initBalcao(data);
       }
       const label = data?.period?.label ?? (MONTH_BY_VALUE[state.month]?.label || state.month);
       document.getElementById('ftrPeriod').textContent =
@@ -244,6 +270,87 @@ async function renderContent() {
   } catch (e) {
     main.innerHTML = `<div style="text-align:center;padding:60px 0;color:var(--red)">Erro: ${e.message}</div>`;
   }
+}
+
+function emptyBalcao(month) {
+  const m = MONTH_BY_VALUE[month] || {};
+  return { month, label: m.label || month, orders: 0, revenue: 0, avgTicket: 0, notes: '', updatedAt: '', updatedBy: '' };
+}
+
+function normalizeBalcaoMonth(value) {
+  const raw = String(value || '').trim();
+  if (/^\d{4}-\d{2}$/.test(raw)) return raw;
+
+  const parsed = new Date(raw);
+  if (!Number.isNaN(parsed.getTime())) {
+    const y = parsed.getFullYear();
+    const m = String(parsed.getMonth() + 1).padStart(2, '0');
+    return `${y}-${m}`;
+  }
+
+  const match = raw.match(/\b(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\b.*\b(20\d{2})\b/i);
+  if (match) {
+    const months = { jan:'01', feb:'02', mar:'03', apr:'04', may:'05', jun:'06', jul:'07', aug:'08', sep:'09', oct:'10', nov:'11', dec:'12' };
+    return `${match[2]}-${months[match[1].slice(0, 3).toLowerCase()]}`;
+  }
+
+  return raw;
+}
+
+function jsonp(url, params = {}) {
+  return new Promise((resolve, reject) => {
+    if (!url) return resolve({ ok: true, data: [] });
+    const callback = `__balcao_cb_${Date.now()}_${Math.random().toString(36).slice(2)}`;
+    const script = document.createElement('script');
+    const u = new URL(url);
+    Object.entries({ ...params, callback }).forEach(([k, v]) => u.searchParams.set(k, v));
+    const cleanup = () => {
+      delete window[callback];
+      script.remove();
+    };
+    window[callback] = payload => {
+      cleanup();
+      resolve(payload);
+    };
+    script.onerror = () => {
+      cleanup();
+      reject(new Error('Falha ao carregar dados de Vendas de Balcão.'));
+    };
+    script.src = u.toString();
+    document.body.appendChild(script);
+  });
+}
+
+async function loadBalcaoMap() {
+  if (state.data.__balcaoMap) return state.data.__balcaoMap;
+  if (!BALCAO_API_URL) {
+    state.data.__balcaoMap = {};
+    return state.data.__balcaoMap;
+  }
+  const payload = await jsonp(BALCAO_API_URL, { action: 'list' }).catch(() => ({ ok: false, data: [] }));
+  const rows = Array.isArray(payload.data) ? payload.data : [];
+  const normalizedRows = rows.map(row => ({ ...row, month: normalizeBalcaoMonth(row.month) }));
+  state.data.__balcaoMap = Object.fromEntries(normalizedRows.map(row => [row.month, row]));
+  return state.data.__balcaoMap;
+}
+
+async function loadBalcaoDetail(month) {
+  const [ga4, balcaoMap] = await Promise.all([
+    fetch(`/data/${month}/ga4.json`).then(r => r.ok ? r.json() : null).catch(() => null),
+    loadBalcaoMap(),
+  ]);
+  const m = MONTH_BY_VALUE[month] || { value: month, label: month };
+  const b = balcaoMap[month] || emptyBalcao(month);
+  return {
+    period: ga4?.period || { month, label: m.label, days: m.days || '', range: m.label },
+    ga4: {
+      revenue: ga4?.summary?.revenue || 0,
+      orders: ga4?.summary?.orders || 0,
+    },
+    balcao: b,
+    apiUrl: BALCAO_API_URL,
+    token: BALCAO_API_TOKEN,
+  };
 }
 
 // ── navegação ─────────────────────────────────────────────

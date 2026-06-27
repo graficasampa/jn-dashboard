@@ -37,83 +37,118 @@ function periodRange(filtered) {
   return `${filtered[0].short} – ${filtered[filtered.length - 1].short}`;
 }
 
+function previousPeriod(months, filtered) {
+  if (!months.length || !filtered.length) return [];
+  const firstIdx = months.findIndex(m => m.value === filtered[0].value);
+  if (firstIdx <= 0) return [];
+  const size = filtered.length;
+  const prev = months.slice(Math.max(0, firstIdx - size), firstIdx);
+  return prev.length === size ? prev : [];
+}
+
+function trendHtml(current, previous) {
+  if (current == null || previous == null || previous === 0) return '';
+  const delta = ((current - previous) / previous) * 100;
+  if (!Number.isFinite(delta) || Math.abs(delta) < 0.05) return '';
+  const up = delta > 0;
+  const icon = up
+    ? '<svg width="13" height="13" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M8 12V4M8 4L4.5 7.5M8 4l3.5 3.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>'
+    : '<svg width="13" height="13" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M8 4v8M8 12l3.5-3.5M8 12 4.5 8.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+  const label = `${up ? '+' : ''}${delta.toFixed(0)}% vs período anterior`;
+  return `<span class="hkpi-trend ${up ? 'up' : 'down'}" title="${label}">${icon}<span>${up ? '+' : ''}${delta.toFixed(0)}%</span></span>`;
+}
+
 // ── agregação ───────────────────────────────────────────────
 function agg(months) {
   return months.reduce((a, m) => ({
-    revenue:        a.revenue        + (m.ga4?.revenue        || 0),
-    orders:         a.orders         + (m.ga4?.orders         || 0),
+    revenue:        a.revenue        + (m.derived?.totalRevenue ?? m.ga4?.revenue ?? 0),
+    orders:         a.orders         + (m.derived?.totalOrders  ?? m.ga4?.orders  ?? 0),
     sessions:       a.sessions       + (m.ga4?.sessions       || 0),
     users:          a.users          + (m.ga4?.users          || 0),
     newUsers:       a.newUsers       + (m.ga4?.newUsers       || 0),
     returningUsers: a.returningUsers + (m.ga4?.returningUsers || 0),
+    purchasers:     a.purchasers     + (m.ga4?.purchasers     ?? 0),
     addToCart:      a.addToCart      + (m.ga4?.addToCart      || 0),
     itemsPurchased: a.itemsPurchased + (m.ga4?.itemsPurchased || 0),
     gadsSpend:      a.gadsSpend      + (m.gads?.spend         || 0),
     gadsConv:       a.gadsConv       + (m.gads?.conversions   || 0),
     metaSpend:      a.metaSpend      + (m.meta?.spend         || 0),
     metaPurch:      a.metaPurch      + (m.meta?.purchases     || 0),
+    balcaoRevenue:  a.balcaoRevenue  + (m.balcao?.revenue     || 0),
+    balcaoOrders:   a.balcaoOrders   + (m.balcao?.orders      || 0),
     totalInv:       a.totalInv       + (m.derived?.totalInvestment || 0),
   }), {
-    revenue:0, orders:0, sessions:0, users:0, newUsers:0, returningUsers:0,
+    revenue:0, orders:0, sessions:0, users:0, newUsers:0, returningUsers:0, purchasers:0,
     addToCart:0, itemsPurchased:0, gadsSpend:0, gadsConv:0,
-    metaSpend:0, metaPurch:0, totalInv:0
+    metaSpend:0, metaPurch:0, balcaoRevenue:0, balcaoOrders:0, totalInv:0
   });
 }
 
 // ── KPI band ────────────────────────────────────────────────
-function kpiBandHtml(filtered) {
+function kpiBandHtml(months, filtered) {
   if (!filtered.length) return '<p style="padding:20px;color:var(--t3)">Sem dados no período</p>';
   const a    = agg(filtered);
+  const prev = previousPeriod(months, filtered);
+  const p    = prev.length ? agg(prev) : null;
   const roas = a.totalInv > 0 ? a.revenue / a.totalInv : null;
+  const prevRoas = p && p.totalInv > 0 ? p.revenue / p.totalInv : null;
 
   const cards = [
     {
       label: 'Receita Total',
       value: R(a.revenue),
-      sub:   periodRange(filtered),
+      trend: trendHtml(a.revenue, p?.revenue),
+      sub:   a.balcaoRevenue > 0 ? `${periodRange(filtered)} · Balcão ${R(a.balcaoRevenue)}` : periodRange(filtered),
       big:   true,
       color: 'var(--grn)'
     },
     {
       label: 'Investimento Total',
       value: R(a.totalInv),
+      trend: trendHtml(a.totalInv, p?.totalInv),
       sub:   `G.Ads ${R(a.gadsSpend)} · Meta ${R(a.metaSpend)}`,
       color: 'var(--t1)'
     },
     {
       label: 'ROAS Geral',
       value: roas ? roas.toFixed(1) + '×' : '—',
+      trend: trendHtml(roas, prevRoas),
       sub:   'Receita ÷ Investimento',
       color: roas == null ? 'var(--t2)' : roas >= 10 ? 'var(--grn)' : roas >= 3 ? 'var(--amb)' : 'var(--red)'
     },
     {
       label: 'Conv. G.Ads',
       value: N(a.gadsConv),
+      trend: trendHtml(a.gadsConv, p?.gadsConv),
       sub:   `Invest. ${R(a.gadsSpend)}`,
       color: 'var(--ads)'
     },
     {
       label: 'Compras Meta',
       value: N(a.metaPurch),
+      trend: trendHtml(a.metaPurch, p?.metaPurch),
       sub:   `Invest. ${R(a.metaSpend)}`,
       color: 'var(--meta)'
     },
     {
       label: 'Usuários',
       value: N(a.users),
+      trend: trendHtml(a.users, p?.users),
       sub:   `${N(a.newUsers)} novos · ${N(a.returningUsers)} retorno`,
       color: 'var(--t1)'
     },
     {
       label: 'Pedidos',
       value: N(a.orders),
-      sub:   `Ticket médio ${R(a.orders ? a.revenue / a.orders : null)}`,
+      trend: trendHtml(a.orders, p?.orders),
+      sub:   `${a.balcaoOrders > 0 ? `${N(a.balcaoOrders)} balcão · ` : ''}Ticket médio ${R(a.orders ? a.revenue / a.orders : null)}`,
       color: 'var(--t1)'
     },
     {
       label: 'E-commerce',
-      value: N(a.itemsPurchased),
-      sub:   `${N(a.addToCart)} adicionados ao carrinho`,
+      value: a.purchasers > 0 ? N(a.purchasers) : '—',
+      trend: trendHtml(a.purchasers || null, p?.purchasers || null),
+      sub:   `${N(a.orders)} pedidos · ${N(a.itemsPurchased)} itens comprados`,
       color: 'var(--t1)'
     },
   ];
@@ -121,7 +156,10 @@ function kpiBandHtml(filtered) {
   return cards.map(c => `
     <div class="hkpi${c.big ? ' hkpi-big' : ''}">
       <div class="hkpi-lbl">${c.label}</div>
-      <div class="hkpi-val" style="color:${c.color}">${c.value}</div>
+      <div class="hkpi-valrow">
+        <div class="hkpi-val" style="color:${c.color}">${c.value}</div>
+        ${c.trend || ''}
+      </div>
       <div class="hkpi-sub">${c.sub}</div>
     </div>`).join('');
 }
@@ -132,23 +170,19 @@ function tableRowHtml(m) {
   const me = m.meta    || {};
   const ga = m.ga4     || {};
   const d  = m.derived || {};
-
-  const srcs = ['ga4', 'gads', 'meta'].map(s => {
-    const on  = m.sources?.[s];
-    const lbl = s === 'ga4' ? 'GA4' : s === 'gads' ? 'ADS' : 'META';
-    return `<span class="src-badge ${on ? 'src-on' : 'src-off'}">${lbl}</span>`;
-  }).join('');
+  const totalRevenue = d.totalRevenue ?? ga.revenue;
+  const totalOrders = d.totalOrders ?? ga.orders;
 
   return `
     <tr class="hrow" onclick="window.goToMonth('${m.value}')">
       <td class="hrow-month">
         <div class="hrow-name">${m.label}</div>
-        <div class="hrow-days">${m.days} dias ${srcs}</div>
+        <div class="hrow-days">${m.days} dias</div>
       </td>
 
       <!-- Resumo -->
-      <td class="td-rev">${R(ga.revenue)}</td>
-      <td>${N(ga.orders)}</td>
+      <td class="td-rev">${R(totalRevenue)}</td>
+      <td>${N(totalOrders)}</td>
       <td>${R(d.totalInvestment)}</td>
       <td style="${roasClr(d.overallROAS)};font-weight:700">${ROAS(d.overallROAS)}</td>
 
@@ -168,8 +202,8 @@ function tableRowHtml(m) {
       <td style="color:var(--grn)">${N(ga.returningUsers)}</td>
 
       <!-- E-commerce -->
+      <td>${ga.purchasers != null ? N(ga.purchasers) : '—'}</td>
       <td>${N(ga.orders)}</td>
-      <td>${N(ga.addToCart)}</td>
       <td>${N(ga.itemsPurchased)}</td>
 
       <!-- Ação -->
@@ -191,36 +225,36 @@ export function renderHome(index) {
   const viewBtns = [
     { key: 'painel',    label: 'Visão Geral'           },
     { key: 'audiencia', label: 'Audiência & Estratégia' },
-  ].map(b => `<button class=”hvb${_activeView === b.key ? ' active' : ''}” onclick=”window.setHomeView('${b.key}')”>${b.label}</button>`).join('');
+  ].map(b => `<button class="hvb${_activeView === b.key ? ' active' : ''}" onclick="window.setHomeView('${b.key}')">${b.label}</button>`).join('');
 
   const periodBtns = [
     { key: 'current', label: 'Mês atual' },
     { key: '3',       label: '3 meses'   },
     { key: '6',       label: '6 meses'   },
     { key: 'all',     label: 'Tudo'      },
-  ].map(b => `<button class=”hfb${_activePeriod === b.key ? ' active' : ''}” onclick=”window.setHomePeriod('${b.key}')”>${b.label}</button>`).join('');
+  ].map(b => `<button class="hfb${_activePeriod === b.key ? ' active' : ''}" onclick="window.setHomePeriod('${b.key}')">${b.label}</button>`).join('');
 
   const topbar = `
-    <div class=”home-topbar”>
-      <div class=”home-topbar-left”>
-        <div class=”home-title”>
-          <svg width=”16” height=”16” viewBox=”0 0 24 24” fill=”none”>
-            <rect x=”3” y=”3” width=”7” height=”7” rx=”1.5” fill=”var(--blu)” opacity=”.9”/>
-            <rect x=”14” y=”3” width=”7” height=”7” rx=”1.5” fill=”var(--blu)” opacity=”.55”/>
-            <rect x=”3” y=”14” width=”7” height=”7” rx=”1.5” fill=”var(--blu)” opacity=”.55”/>
-            <rect x=”14” y=”14” width=”7” height=”7” rx=”1.5” fill=”var(--blu)” opacity=”.28”/>
+    <div class="home-topbar">
+      <div class="home-topbar-left">
+        <div class="home-title">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+            <rect x="3" y="3" width="7" height="7" rx="1.5" fill="var(--blu)" opacity=".9"/>
+            <rect x="14" y="3" width="7" height="7" rx="1.5" fill="var(--blu)" opacity=".55"/>
+            <rect x="3" y="14" width="7" height="7" rx="1.5" fill="var(--blu)" opacity=".55"/>
+            <rect x="14" y="14" width="7" height="7" rx="1.5" fill="var(--blu)" opacity=".28"/>
           </svg>
           Painel Executivo
         </div>
-        <div class=”hvb-group”>${viewBtns}</div>
+        <div class="hvb-group">${viewBtns}</div>
       </div>
-      ${_activeView === 'painel' ? `<div class=”hfb-group”>${periodBtns}</div>` : ''}
+      ${_activeView === 'painel' ? `<div class="hfb-group">${periodBtns}</div>` : ''}
     </div>`;
 
   // ── sub-aba: Audiência & Estratégia ────────────────────────
   if (_activeView === 'audiencia') {
     return `
-      <div class=”home-wrap”>
+      <div class="home-wrap">
         ${topbar}
         ${renderAudience(index)}
       </div>`;
@@ -228,50 +262,60 @@ export function renderHome(index) {
 
   // ── sub-aba padrão: Visão Geral ─────────────────────────────
   return `
-    <div class=”home-wrap”>
+    <div class="home-wrap">
 
       ${topbar}
 
-      <div class=”hkpi-band” id=”homeKpiBand”>
-        ${kpiBandHtml(filtered)}
+      <div class="hkpi-band" id="homeKpiBand">
+        ${kpiBandHtml(months, filtered)}
       </div>
 
-      <div class=”card”>
-        <div class=”card-hd”>
-          <span class=”card-title”>Receita &amp; Investimento</span>
-          <div class=”home-legend”>
-            <span class=”hleg”><span class=”hleg-dot” style=”background:var(--grn)”></span>Receita (GA4)</span>
-            <span class=”hleg”><span class=”hleg-dot” style=”background:var(--ads)”></span>Google Ads</span>
-            <span class=”hleg”><span class=”hleg-dot” style=”background:var(--meta)”></span>Meta Ads</span>
+      <div class="card">
+        <div class="card-hd">
+          <span class="card-title">Receita &amp; Investimento</span>
+          <div class="home-legend">
+            <span class="hleg"><span class="hleg-dot" style="background:var(--grn)"></span>Receita (GA4)</span>
+            <span class="hleg"><span class="hleg-dot" style="background:var(--ads)"></span>Google Ads</span>
+            <span class="hleg"><span class="hleg-dot" style="background:var(--meta)"></span>Meta Ads</span>
           </div>
         </div>
-        <canvas id=”homeChart” height=”200” style=”width:100%”></canvas>
-        ${months.length < 2 ? '<p class=”chart-tip”>O gráfico de tendência fica mais expressivo conforme os meses se acumulam.</p>' : ''}
+        <canvas id="homeChart" height="200" style="width:100%"></canvas>
+        ${months.length < 2 ? '<p class="chart-tip">O gráfico de tendência fica mais expressivo conforme os meses se acumulam.</p>' : ''}
       </div>
 
-      <div class=”card” id=”home-historico”>
-        <div class=”card-hd”>
-          <span class=”card-title”>Histórico Mensal</span>
-          <span class=”card-sub”>Clique em uma linha ou em “Ver detalhes” para abrir o mês completo</span>
+      <div class="card card-compact">
+        <div class="card-hd">
+          <span class="card-title">Compradores Oficiais (GA4)</span>
+          <div class="home-legend">
+            <span class="hleg"><span class="hleg-dot" style="background:#7C3AED;border-radius:50%"></span>Total de compradores</span>
+          </div>
         </div>
-        <div class=”htable-scroll”>
-          <table class=”htable”>
+        <canvas id="homePurchasersChart" height="120" style="width:100%"></canvas>
+      </div>
+
+      <div class="card" id="home-historico">
+        <div class="card-hd">
+          <span class="card-title">Histórico Mensal</span>
+          <span class="card-sub">Clique em uma linha ou em "Ver detalhes" para abrir o mês completo</span>
+        </div>
+        <div class="htable-scroll">
+          <table class="htable">
             <thead>
-              <tr class=”hthead-group”>
-                <th rowspan=”2” class=”th-month”>Mês</th>
-                <th colspan=”4” class=”thg thg-sum”>Resumo</th>
-                <th colspan=”3” class=”thg thg-gads”>Google Ads</th>
-                <th colspan=”3” class=”thg thg-meta”>Meta Ads</th>
-                <th colspan=”3” class=”thg thg-aud”>Audiência</th>
-                <th colspan=”3” class=”thg thg-eco”>E-commerce</th>
-                <th rowspan=”2” class=”th-action”></th>
+              <tr class="hthead-group">
+                <th rowspan="2" class="th-month">Mês</th>
+                <th colspan="4" class="thg thg-sum">Resumo</th>
+                <th colspan="3" class="thg thg-gads">Google Ads</th>
+                <th colspan="3" class="thg thg-meta">Meta Ads</th>
+                <th colspan="3" class="thg thg-aud">Audiência</th>
+                <th colspan="3" class="thg thg-eco">E-commerce</th>
+                <th rowspan="2" class="th-action"></th>
               </tr>
-              <tr class=”hthead-cols”>
+              <tr class="hthead-cols">
                 <th>Receita</th><th>Pedidos</th><th>Inv. Total</th><th>ROAS</th>
                 <th>Invest.</th><th>Conversões</th><th>ROAS</th>
                 <th>Invest.</th><th>Compras</th><th>ROAS</th>
                 <th>Usuários</th><th>Novos</th><th>Retorno</th>
-                <th>Compradores</th><th>Carrinho</th><th>Itens</th>
+                <th>Compradores</th><th>Pedidos</th><th>Itens</th>
               </tr>
             </thead>
             <tbody>
@@ -291,6 +335,7 @@ export function initHomeCharts(index) {
     initAudienceCharts(index);
   } else {
     _drawChart(index.months || [], _activePeriod);
+    _drawPurchasersChart(index.months || [], _activePeriod);
   }
 }
 
@@ -351,10 +396,10 @@ function _drawChart(allMonths, period) {
     ctx.fillStyle   = '#0A8A58';
     ctx.globalAlpha = active ? 0.88 : dimAlpha;
     _bar(ctx, cx - bW * 1.15, ry, bW, rH);
-    if (revenues[i] && active) {
-      ctx.globalAlpha = 1;
+    if (revenues[i]) {
+      ctx.globalAlpha = active ? 1 : 0.45;
       ctx.fillStyle = '#0A8A58';
-      ctx.font = 'bold 9px system-ui,sans-serif';
+      ctx.font = `${active ? 'bold ' : '600 '}${active ? 9 : 8.5}px system-ui,sans-serif`;
       ctx.textAlign = 'center';
       ctx.fillText(chartLbl(revenues[i]), cx - bW * 0.6, ry - 5);
     }
@@ -375,18 +420,101 @@ function _drawChart(allMonths, period) {
     ctx.globalAlpha = 1;
 
     const totalInv = gadsSpends[i] + metaSpends[i];
-    if (totalInv && active) {
+    if (totalInv) {
+      ctx.globalAlpha = active ? 1 : 0.5;
       ctx.fillStyle = '#D4620A';
-      ctx.font = '9px system-ui,sans-serif';
+      ctx.font = `${active ? '600 ' : ''}${active ? 9 : 8.5}px system-ui,sans-serif`;
       ctx.textAlign = 'center';
       ctx.fillText(chartLbl(totalInv), cx + bW * 0.6 + 2, my - 5);
     }
+    ctx.globalAlpha = 1;
 
     // Label X — negrito e mais escuro para meses em destaque
     ctx.fillStyle = active ? '#1a2540' : '#9AAABB';
     ctx.font = active ? 'bold 11px system-ui,sans-serif' : '10px system-ui,sans-serif';
     ctx.textAlign = 'center';
     ctx.fillText(labels[i], cx, H - PAD.b + 14);
+  });
+}
+
+function _drawPurchasersChart(allMonths, period) {
+  const canvas = document.getElementById('homePurchasersChart');
+  if (!canvas || !allMonths.length) return;
+
+  const months = allMonths;
+  const selected = new Set(filterMonths(allMonths, period).map(m => m.value));
+  const purchasers = months.map(m => m.ga4?.purchasers ?? null);
+  if (!purchasers.some(v => v != null && v > 0)) return;
+
+  const DPR = window.devicePixelRatio || 1;
+  const W = canvas.offsetWidth;
+  const H = 120;
+  canvas.width = W * DPR;
+  canvas.height = H * DPR;
+  canvas.style.width = W + 'px';
+  canvas.style.height = H + 'px';
+  const ctx = canvas.getContext('2d');
+  ctx.scale(DPR, DPR);
+
+  const labels = months.map(m => m.short || m.label.slice(0, 3));
+  const PAD = { t: 22, r: 16, b: 34, l: 50 };
+  const CW = W - PAD.l - PAD.r;
+  const CH = H - PAD.t - PAD.b;
+  const n = months.length;
+  const maxPurch = Math.max(...purchasers.filter(v => v != null), 1) * 1.18;
+  const slotW = CW / (n + 1);
+  const barW = Math.min(slotW * 0.22, 22);
+
+  ctx.clearRect(0, 0, W, H);
+  ctx.strokeStyle = '#E8EDF5';
+  ctx.lineWidth = 1;
+  for (let i = 0; i <= 2; i++) {
+    const y = PAD.t + CH * (1 - i / 2);
+    ctx.beginPath();
+    ctx.moveTo(PAD.l, y);
+    ctx.lineTo(W - PAD.r, y);
+    ctx.stroke();
+  }
+
+  ctx.strokeStyle = '#7C3AED';
+  ctx.lineWidth = 2;
+  ctx.beginPath();
+  let started = false;
+  purchasers.forEach((buyers, i) => {
+    if (buyers == null) return;
+    const cx = PAD.l + slotW * (i + 0.8);
+    const y = PAD.t + CH - CH * (buyers / maxPurch);
+    if (started) ctx.lineTo(cx, y);
+    else { ctx.moveTo(cx, y); started = true; }
+  });
+  if (started) ctx.stroke();
+
+  purchasers.forEach((buyers, i) => {
+    if (buyers == null) return;
+    const active = selected.has(months[i].value);
+    const cx = PAD.l + slotW * (i + 0.8);
+    const y = PAD.t + CH - CH * (buyers / maxPurch);
+    const barH = Math.max(4, CH * (buyers / maxPurch));
+    const barY = PAD.t + CH - barH;
+
+    ctx.globalAlpha = active ? 0.2 : 0.08;
+    ctx.fillStyle = '#7C3AED';
+    _bar(ctx, cx - barW / 2, barY, barW, barH);
+
+    ctx.globalAlpha = active ? 1 : 0.52;
+    ctx.fillStyle = '#7C3AED';
+    ctx.beginPath();
+    ctx.arc(cx, y, active ? 4 : 3, 0, Math.PI * 2);
+    ctx.fill();
+
+    ctx.font = `${active ? '700 ' : '600 '}${active ? 10 : 9}px system-ui,sans-serif`;
+    ctx.textAlign = 'center';
+    ctx.fillText(buyers.toLocaleString('pt-BR'), cx, y - 8);
+
+    ctx.fillStyle = active ? '#1a2540' : '#9AAABB';
+    ctx.font = active ? 'bold 10px system-ui,sans-serif' : '9px system-ui,sans-serif';
+    ctx.fillText(labels[i], cx, H - PAD.b + 17);
+    ctx.globalAlpha = 1;
   });
 }
 
@@ -410,8 +538,9 @@ window.setHomePeriod = function (period) {
     b.classList.toggle('active', b.textContent.trim().includes(map[period]));
   });
 
-  document.getElementById('homeKpiBand').innerHTML = kpiBandHtml(filtered);
+  document.getElementById('homeKpiBand').innerHTML = kpiBandHtml(months, filtered);
   _drawChart(months, period);
+  _drawPurchasersChart(months, period);
 };
 
 // ── troca de sub-aba ─────────────────────────────────────────

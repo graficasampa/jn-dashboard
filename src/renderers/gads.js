@@ -1,12 +1,18 @@
-const fmt0 = v => Number(v).toLocaleString('pt-BR', {minimumFractionDigits:0, maximumFractionDigits:0});
-const fmt2 = v => Number(v).toLocaleString('pt-BR', {minimumFractionDigits:2, maximumFractionDigits:2});
-const brl  = v => 'R$ ' + fmt2(v);
-const brl0 = v => 'R$ ' + fmt0(v);
-const pct  = (v, d=1) => Number(v).toFixed(d).replace('.',',') + '%';
-const mult = v => Number(v).toFixed(1).replace('.',',') + '×';
+const num = v => {
+  const n = Number(v);
+  return Number.isFinite(n) ? n : null;
+};
+const fmt0 = v => num(v) == null ? '—' : num(v).toLocaleString('pt-BR', {minimumFractionDigits:0, maximumFractionDigits:0});
+const fmt2 = v => num(v) == null ? '—' : num(v).toLocaleString('pt-BR', {minimumFractionDigits:2, maximumFractionDigits:2});
+const brl  = v => num(v) == null ? '—' : 'R$ ' + fmt2(v);
+const brl0 = v => num(v) == null ? '—' : 'R$ ' + fmt0(v);
+const pct  = (v, d=1) => num(v) == null ? '—' : num(v).toFixed(d).replace('.',',') + '%';
+const mult = v => num(v) == null ? '—' : num(v).toFixed(1).replace('.',',') + '×';
+const monFromPeriod = p => (p?.month || '').slice(5) || '??';
 
 // ── Daily cost + conversions chart (canvas) ──────────────────────────────
 function drawGadsChart(canvas, daily) {
+  if (!canvas || !daily?.length) return;
   const dpr = window.devicePixelRatio || 1;
   const W   = (canvas.parentElement.clientWidth || 900) - 36;
   const H   = 180;
@@ -16,19 +22,28 @@ function drawGadsChart(canvas, daily) {
 
   const n   = daily.length;
   const PL=48, PR=12, PT=14, PB=44, CW=W-PL-PR, CH=H-PT-PB;
-  const maxCost = Math.max(...daily.map(d => d.cost), 1);
-  const maxConv = Math.max(...daily.map(d => d.conversions), 1);
+  const convs = daily.map(d => num(d.attributedConversions));
+  const hasDailyConversions = convs.filter(v => v != null && v > 0).length > 1;
+  const maxCost = Math.max(...daily.map(d => d.cost || 0), 1);
+  const maxConv = Math.max(...convs.filter(v => v != null), 1);
   const sw = CW / n;
   const xm = i => PL + (i + .5) * sw;
   const yc  = v => PT + CH - (v / maxCost) * CH;
   const ycv = v => PT + CH - (v / maxConv) * CH;
 
-  // pause zone shading (days 9–20 = indices 9–19)
-  ctx.fillStyle = 'rgba(190,43,43,.04)';
-  ctx.fillRect(PL + 9*sw, PT, 11*sw, CH);
-  ctx.fillStyle = 'rgba(190,43,43,.08)';
-  ctx.font = '9px system-ui,sans-serif'; ctx.textAlign = 'center'; ctx.fillStyle = '#BE2B2B';
-  ctx.fillText('campanhas pausadas', PL + 9*sw + 5.5*sw, PT + 10);
+  let pauseStart = null;
+  daily.forEach((d, i) => {
+    const paused = (d.cost || 0) < 1;
+    if (paused && pauseStart == null) pauseStart = i;
+    if ((!paused || i === daily.length - 1) && pauseStart != null) {
+      const end = paused && i === daily.length - 1 ? i : i - 1;
+      if (end - pauseStart >= 1) {
+        ctx.fillStyle = 'rgba(190,43,43,.04)';
+        ctx.fillRect(PL + pauseStart * sw, PT, (end - pauseStart + 1) * sw, CH);
+      }
+      pauseStart = null;
+    }
+  });
 
   // grid
   [0, .25, .5, .75, 1].forEach(t => {
@@ -50,13 +65,13 @@ function drawGadsChart(canvas, daily) {
   });
 
   // conversions line
-  const hasPts = daily.filter(d => d.conversions > 0);
-  if (hasPts.length > 1) {
+  if (hasDailyConversions) {
     ctx.beginPath(); ctx.strokeStyle = '#0A8A58'; ctx.lineWidth = 1.5; ctx.setLineDash([3,3]); ctx.lineJoin = 'round';
     let started = false;
     daily.forEach((d, i) => {
-      if (d.conversions > 0 || d.cost > 0) {
-        started ? ctx.lineTo(xm(i), ycv(d.conversions)) : (ctx.moveTo(xm(i), ycv(d.conversions)), started=true);
+      const cv = convs[i];
+      if (cv != null) {
+        started ? ctx.lineTo(xm(i), ycv(cv)) : (ctx.moveTo(xm(i), ycv(cv)), started=true);
       }
     });
     ctx.stroke(); ctx.setLineDash([]);
@@ -64,7 +79,11 @@ function drawGadsChart(canvas, daily) {
 
   // x labels
   ctx.fillStyle = '#7A8FA3'; ctx.font = '9px system-ui,sans-serif'; ctx.textAlign = 'center';
-  [0,3,6,8,12,15,18,21,22].forEach(i => ctx.fillText((i+1)+'.06', xm(i), PT+CH+13));
+  const step = Math.max(1, Math.ceil(n / 8));
+  const mo = monFromPeriod(window.__gadsPeriod);
+  daily.forEach((d, i) => {
+    if (i === 0 || i === n - 1 || i % step === 0) ctx.fillText(`${d.day || i + 1}.${mo}`, xm(i), PT+CH+13);
+  });
 
   // cost labels on active bars
   ctx.font = 'bold 8px system-ui,sans-serif';
@@ -78,9 +97,15 @@ function drawGadsChart(canvas, daily) {
 export function renderGads(data) {
   const s   = data.summary;
   const k   = data.kpis;
-  const maxSpend = Math.max(...data.campaigns.map(c => c.spend));
+  const campaigns = data.campaigns || [];
+  const adGroups = data.adGroups || [];
+  const keywords = data.keywords || [];
+  const maxSpend = Math.max(...campaigns.map(c => c.spend || 0), 1);
+  const conversionRate = k?.conversionRate ?? (s.clicks > 0 ? (s.attributedConversions || 0) / s.clicks * 100 : null);
+  const activeDays = s.activeDays ?? (data.daily || []).filter(d => (d.cost || 0) > 1).length;
+  const hasDailyAttributedConversions = (data.daily || []).some(d => num(d.attributedConversions) != null);
 
-  const campRows = data.campaigns.map(c => {
+  const campRows = campaigns.map(c => {
     const roasCls  = c.roas >= 10 ? 'tok' : c.roas >= 1 ? '' : 'twarn';
     const cpaCls   = c.cpa  <= 10 ? 'tok' : c.cpa  >= 30 ? 'twarn' : '';
     const typeColor = c.type === 'PERFORMANCE_MAX' ? 'var(--blu)' : '#EA580C';
@@ -97,7 +122,7 @@ export function renderGads(data) {
     </tr>`;
   }).join('');
 
-  const kwRows = data.keywords.map((kw, i) => {
+  const kwRows = keywords.map((kw, i) => {
     const roasCls = kw.roas >= 10 ? 'tok' : kw.roas > 0 ? '' : kw.spend > 10 ? 'twarn' : '';
     const convCls = kw.conversions > 0 ? 'tok' : kw.spend > 10 ? 'twarn' : '';
     return `<tr>
@@ -114,7 +139,7 @@ export function renderGads(data) {
     </tr>`;
   }).join('');
 
-  const agRows = data.adGroups.map(ag => {
+  const agRows = adGroups.map(ag => {
     const roasCls = ag.roas >= 10 ? 'tok' : ag.roas >= 1 ? '' : 'twarn';
     const bw = Math.round((ag.spend / maxSpend) * 100);
     return `<tr>
@@ -140,7 +165,7 @@ export function renderGads(data) {
     <div>
       <div class="hl-val" style="color:var(--blu)">${brl0(s.spend)}</div>
       <div class="hl-lbl">Investimento Total</div>
-      <div><span class="hl-trend hl-neutral">${data.period.days} dias · ${data.campaigns.length} campanhas</span></div>
+      <div><span class="hl-trend hl-neutral">${data.period.days} dias · ${campaigns.length} campanhas</span></div>
     </div>
     <div>
       <div class="hl-val hl-grn">${brl0(s.attributedRevenue)}</div>
@@ -174,7 +199,7 @@ export function renderGads(data) {
     <div class="kpi">
       <div class="kpi-lbl">CPA — Custo por Conversão</div>
       <div class="kpi-val grn">${brl(s.cpa)}</div>
-      <div class="kpi-sub">${pct(s.conversionRate)} de conversão nos cliques</div>
+      <div class="kpi-sub">${pct(conversionRate)} de conversão nos cliques</div>
     </div>
     <div class="kpi">
       <div class="kpi-lbl">CPC Médio</div>
@@ -183,8 +208,8 @@ export function renderGads(data) {
     </div>
     <div class="kpi" style="border-left:3px solid var(--red)">
       <div class="kpi-lbl">Dias Ativos no Mês</div>
-      <div class="kpi-val" style="color:var(--red)">${s.activeDays} / ${data.period.days}</div>
-      <div class="kpi-sub"><span class="badge br">Pausado ${s.pausedRange}</span></div>
+      <div class="kpi-val" style="color:var(--red)">${activeDays} / ${data.period.days}</div>
+      <div class="kpi-sub">${s.pausedRange ? `<span class="badge br">Pausado ${s.pausedRange}</span>` : 'dias com gasto relevante'}</div>
     </div>
   </div>
 
@@ -192,8 +217,8 @@ export function renderGads(data) {
   <div style="padding:12px 16px;background:#FFF0F0;border:1px solid #FFCDD2;border-left:3px solid var(--red);border-radius:var(--rs);margin-bottom:24px;display:flex;align-items:flex-start;gap:10px">
     <div style="font-size:16px;flex-shrink:0">⚠️</div>
     <div>
-      <div style="font-size:12px;font-weight:700;color:var(--red);margin-bottom:3px">Campanhas ficaram pausadas de 10/06 a 20/06 (11 dias)</div>
-      <div style="font-size:11.5px;color:var(--t2)">97,6% do orçamento foi gasto nos primeiros 9 dias. Os dias 10–20 tiveram custo praticamente zero. Reative o orçamento para distribuir melhor o investimento ao longo do mês.</div>
+      <div style="font-size:12px;font-weight:700;color:var(--red);margin-bottom:3px">Atenção à distribuição diária do orçamento</div>
+      <div style="font-size:11.5px;color:var(--t2)">Distribua o orçamento ao longo do mês para evitar perda de demanda em dias sem entrega.</div>
     </div>
   </div>
 </section>
@@ -205,7 +230,7 @@ export function renderGads(data) {
     <div style="display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-bottom:10px">
       <div>
         <div class="card-ttl">Custo por Dia — ${data.period.label}</div>
-        <div class="card-sub" style="margin-bottom:0">Barras azuis = gasto · tracejado verde = conversões · área vermelha = campanhas pausadas</div>
+        <div class="card-sub" style="margin-bottom:0">Barras azuis = gasto${hasDailyAttributedConversions ? ' · tracejado verde = conversões atribuídas' : ' · conversões atribuídas diárias indisponíveis'} · fundo vermelho claro = dias sem gasto relevante</div>
       </div>
       <div style="display:flex;gap:14px;align-items:center">
         <span style="display:flex;align-items:center;gap:5px;font-size:11px;color:var(--t2)"><span style="width:10px;height:10px;border-radius:2px;background:var(--blu);display:inline-block;opacity:.75"></span>Gasto</span>
@@ -236,7 +261,7 @@ export function renderGads(data) {
     <div class="card">
       <div class="card-ttl" style="margin-bottom:10px">Distribuição do Budget</div>
       <div class="hbl">
-        ${data.campaigns.map(c => {
+        ${campaigns.map(c => {
           const pctW = (c.spend / s.spend * 100).toFixed(1);
           const color = c.type === 'PERFORMANCE_MAX' ? 'var(--blu)' : '#EA580C';
           return `<div class="hbr">
@@ -293,5 +318,6 @@ export function renderGads(data) {
 
 export function initGadsCharts(data) {
   const canvas = document.getElementById('gadsChart');
+  window.__gadsPeriod = data.period;
   if (canvas) drawGadsChart(canvas, data.daily);
 }
