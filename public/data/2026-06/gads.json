@@ -1,23 +1,32 @@
 {
-  "period": { "month": "2026-06", "label": "Junho 2026", "days": 25, "range": "01 a 25/06" },
-  "account": { "id": "4987645148", "name": "JN Impressão", "currency": "BRL" },
+  "period": {
+    "month": "2026-06",
+    "label": "Junho 2026",
+    "days": 25,
+    "range": "01 a 25/06"
+  },
+  "account": {
+    "id": "4987645148",
+    "name": "JN Impressão",
+    "currency": "BRL"
+  },
   "summary": {
     "spend": 896.18,
     "clicks": 787,
     "impressions": 9366,
-    "ctr": 8.40,
+    "ctr": 8.4,
     "cpc": 1.14,
-    "attributedRevenue": 22079.43,
-    "attributedConversions": 225,
-    "roas": 24.6,
-    "cpa": 3.98,
+    "attributedRevenue": 22343.30,
+    "attributedConversions": 228,
+    "roas": 24.9,
+    "cpa": 3.93,
     "activeDays": 10,
     "pausedRange": "10/06 – 20/06 e 22/06 – 25/06"
   },
   "kpis": {
     "spendPerActiveDay": 89.62,
-    "revenuePerClick": 28.05,
-    "conversionRate": 28.6,
+    "revenuePerClick": 28.39,
+    "conversionRate": 29.0,
     "impressionShare": null,
     "searchTopImprShare": null
   },
@@ -42,7 +51,7 @@
       "type": "SEARCH",
       "typeBadge": "Search",
       "status": "ACTIVE",
-      "spend": 352.40,
+      "spend": 352.4,
       "clicks": 312,
       "impressions": 2246,
       "ctr": 13.89,
@@ -72,7 +81,7 @@
     {
       "name": "GRÁFICA",
       "campaign": "[SEARCH] GENÉRICA",
-      "spend": 352.40,
+      "spend": 352.4,
       "clicks": 312,
       "impressions": 2246,
       "ctr": 13.89,
@@ -95,76 +104,418 @@
     }
   ],
   "keywords": [
-    { "keyword": "gráfica online",           "matchType": "Ampla Mod.", "spend": 204.79, "clicks": 201, "impressions": 1042, "ctr": 19.29, "cpc": 1.02, "revenue": 5256.00, "conversions": 68, "roas": 25.7 },
-    { "keyword": "wind banner",              "matchType": "Frase",      "spend": 65.97,  "clicks": 22,  "impressions": 340,  "ctr": 6.47,  "cpc": 3.00, "revenue": 173.19,  "conversions": 4,  "roas": 2.6  },
-    { "keyword": "gráfica perto de mim",     "matchType": "Frase",      "spend": 37.96,  "clicks": 9,   "impressions": 190,  "ctr": 4.74,  "cpc": 4.22, "revenue": 183.50,  "conversions": 1,  "roas": 4.8  },
-    { "keyword": "gráficas são paulo",       "matchType": "Ampla Mod.", "spend": 30.76,  "clicks": 34,  "impressions": 161,  "ctr": 21.12, "cpc": 0.90, "revenue": 621.14,  "conversions": 5,  "roas": 20.2 },
-    { "keyword": "grafica para impressao",   "matchType": "Ampla Mod.", "spend": 14.71,  "clicks": 24,  "impressions": 289,  "ctr": 8.30,  "cpc": 0.61, "revenue": 695.72,  "conversions": 6,  "roas": 47.3 },
-    { "keyword": "grafica jn",               "matchType": "Exata",      "spend": 15.22,  "clicks": 9,   "impressions": 35,   "ctr": 25.71, "cpc": 1.69, "revenue": 50.00,   "conversions": 2,  "roas": 3.3  },
-    { "keyword": "windbanner",               "matchType": "Frase",      "spend": 17.54,  "clicks": 1,   "impressions": 35,   "ctr": 2.86,  "cpc": 17.54,"revenue": 0,       "conversions": 0,  "roas": 0    },
-    { "keyword": "grafica sp",               "matchType": "Ampla Mod.", "spend": 15.81,  "clicks": 8,   "impressions": 98,   "ctr": 8.16,  "cpc": 1.98, "revenue": 0,       "conversions": 0,  "roas": 0    },
-    { "keyword": "wind banner 24h",          "matchType": "Frase",      "spend": 13.17,  "clicks": 2,   "impressions": 33,   "ctr": 6.06,  "cpc": 6.59, "revenue": 0,       "conversions": 0,  "roas": 0    },
-    { "keyword": "wind banner personalizado","matchType": "Frase",      "spend": 8.14,   "clicks": 1,   "impressions": 7,    "ctr": 14.29, "cpc": 8.14, "revenue": 0,       "conversions": 0,  "roas": 0    },
-    { "keyword": "grafica",                  "matchType": "Ampla",      "spend": 7.65,   "clicks": 10,  "impressions": 119,  "ctr": 8.40,  "cpc": 0.76, "revenue": 0,       "conversions": 0,  "roas": 0    },
-    { "keyword": "grafica perto de mim",     "matchType": "Exata",      "spend": 1.30,   "clicks": 1,   "impressions": 58,   "ctr": 1.72,  "cpc": 1.30, "revenue": 0,       "conversions": 0,  "roas": 0    }
+    {
+      "keyword": "gráfica online",
+      "matchType": "Ampla Mod.",
+      "spend": 204.79,
+      "clicks": 201,
+      "impressions": 1042,
+      "ctr": 19.29,
+      "cpc": 1.02,
+      "revenue": 5256,
+      "conversions": 68,
+      "roas": 25.7
+    },
+    {
+      "keyword": "wind banner",
+      "matchType": "Frase",
+      "spend": 65.97,
+      "clicks": 22,
+      "impressions": 340,
+      "ctr": 6.47,
+      "cpc": 3,
+      "revenue": 173.19,
+      "conversions": 4,
+      "roas": 2.6
+    },
+    {
+      "keyword": "gráfica perto de mim",
+      "matchType": "Frase",
+      "spend": 37.96,
+      "clicks": 9,
+      "impressions": 190,
+      "ctr": 4.74,
+      "cpc": 4.22,
+      "revenue": 183.5,
+      "conversions": 1,
+      "roas": 4.8
+    },
+    {
+      "keyword": "gráficas são paulo",
+      "matchType": "Ampla Mod.",
+      "spend": 30.76,
+      "clicks": 34,
+      "impressions": 161,
+      "ctr": 21.12,
+      "cpc": 0.9,
+      "revenue": 621.14,
+      "conversions": 5,
+      "roas": 20.2
+    },
+    {
+      "keyword": "grafica para impressao",
+      "matchType": "Ampla Mod.",
+      "spend": 14.71,
+      "clicks": 24,
+      "impressions": 289,
+      "ctr": 8.3,
+      "cpc": 0.61,
+      "revenue": 695.72,
+      "conversions": 6,
+      "roas": 47.3
+    },
+    {
+      "keyword": "grafica jn",
+      "matchType": "Exata",
+      "spend": 15.22,
+      "clicks": 9,
+      "impressions": 35,
+      "ctr": 25.71,
+      "cpc": 1.69,
+      "revenue": 50,
+      "conversions": 2,
+      "roas": 3.3
+    },
+    {
+      "keyword": "windbanner",
+      "matchType": "Frase",
+      "spend": 17.54,
+      "clicks": 1,
+      "impressions": 35,
+      "ctr": 2.86,
+      "cpc": 17.54,
+      "revenue": 0,
+      "conversions": 0,
+      "roas": 0
+    },
+    {
+      "keyword": "grafica sp",
+      "matchType": "Ampla Mod.",
+      "spend": 15.81,
+      "clicks": 8,
+      "impressions": 98,
+      "ctr": 8.16,
+      "cpc": 1.98,
+      "revenue": 0,
+      "conversions": 0,
+      "roas": 0
+    },
+    {
+      "keyword": "wind banner 24h",
+      "matchType": "Frase",
+      "spend": 13.17,
+      "clicks": 2,
+      "impressions": 33,
+      "ctr": 6.06,
+      "cpc": 6.59,
+      "revenue": 0,
+      "conversions": 0,
+      "roas": 0
+    },
+    {
+      "keyword": "wind banner personalizado",
+      "matchType": "Frase",
+      "spend": 8.14,
+      "clicks": 1,
+      "impressions": 7,
+      "ctr": 14.29,
+      "cpc": 8.14,
+      "revenue": 0,
+      "conversions": 0,
+      "roas": 0
+    },
+    {
+      "keyword": "grafica",
+      "matchType": "Ampla",
+      "spend": 7.65,
+      "clicks": 10,
+      "impressions": 119,
+      "ctr": 8.4,
+      "cpc": 0.76,
+      "revenue": 0,
+      "conversions": 0,
+      "roas": 0
+    },
+    {
+      "keyword": "grafica perto de mim",
+      "matchType": "Exata",
+      "spend": 1.3,
+      "clicks": 1,
+      "impressions": 58,
+      "ctr": 1.72,
+      "cpc": 1.3,
+      "revenue": 0,
+      "conversions": 0,
+      "roas": 0
+    }
   ],
   "daily": [
-    {"day":"01","cost":109.75,"clicks":109,"impressions":1377,"sessions":578,"revenue":6908.00,"conversions":85},
-    {"day":"02","cost":75.83,"clicks":134,"impressions":1418,"sessions":634,"revenue":11751.67,"conversions":143},
-    {"day":"03","cost":54.57,"clicks":122,"impressions":987,"sessions":592,"revenue":7956.41,"conversions":102},
-    {"day":"04","cost":95.10,"clicks":80,"impressions":937,"sessions":171,"revenue":2560.83,"conversions":26},
-    {"day":"05","cost":154.15,"clicks":127,"impressions":1298,"sessions":525,"revenue":7058.44,"conversions":88},
-    {"day":"06","cost":43.93,"clicks":40,"impressions":695,"sessions":146,"revenue":579.75,"conversions":10},
-    {"day":"07","cost":142.11,"clicks":41,"impressions":885,"sessions":101,"revenue":688.91,"conversions":12},
-    {"day":"08","cost":182.63,"clicks":99,"impressions":1211,"sessions":584,"revenue":9168.14,"conversions":111},
-    {"day":"09","cost":16.67,"clicks":19,"impressions":278,"sessions":617,"revenue":12036.57,"conversions":134},
-    {"day":"10","cost":0.06,"clicks":3,"impressions":16,"sessions":759,"revenue":17747.42,"conversions":136},
-    {"day":"11","cost":0.02,"clicks":2,"impressions":18,"sessions":671,"revenue":7105.61,"conversions":117},
-    {"day":"12","cost":0.01,"clicks":2,"impressions":10,"sessions":542,"revenue":5309.40,"conversions":54},
-    {"day":"13","cost":0.02,"clicks":1,"impressions":7,"sessions":120,"revenue":1272.33,"conversions":10},
-    {"day":"14","cost":0.00,"clicks":1,"impressions":2,"sessions":107,"revenue":1420.24,"conversions":12},
-    {"day":"15","cost":0.01,"clicks":0,"impressions":1,"sessions":547,"revenue":12375.51,"conversions":116},
-    {"day":"16","cost":0.00,"clicks":0,"impressions":1,"sessions":695,"revenue":9649.57,"conversions":121},
-    {"day":"17","cost":0.01,"clicks":0,"impressions":5,"sessions":696,"revenue":9626.52,"conversions":117},
-    {"day":"18","cost":0.00,"clicks":0,"impressions":0,"sessions":683,"revenue":9076.43,"conversions":126},
-    {"day":"19","cost":0.00,"clicks":0,"impressions":0,"sessions":591,"revenue":8878.93,"conversions":79},
-    {"day":"20","cost":0.00,"clicks":0,"impressions":0,"sessions":177,"revenue":172.38,"conversions":4},
-    {"day":"21","cost":21.31,"clicks":7,"impressions":220,"sessions":133,"revenue":719.29,"conversions":17},
-    {"day":"22","cost":0.00,"clicks":0,"impressions":0,"sessions":592,"revenue":13935.69,"conversions":123},
-    {"day":"23","cost":0.00,"clicks":0,"impressions":0,"sessions":699,"revenue":11315.33,"conversions":128},
-    {"day":"24","cost":0.00,"clicks":0,"impressions":0,"sessions":597,"revenue":6747.81,"conversions":86},
-    {"day":"25","cost":0.00,"clicks":0,"impressions":0,"sessions":2,"revenue":48.05,"conversions":1}
+    {
+      "day": "01",
+      "cost": 109.75,
+      "clicks": 109,
+      "impressions": 1377,
+      "sessions": 578,
+      "siteRevenue": 6908,
+      "siteOrders": 85
+    },
+    {
+      "day": "02",
+      "cost": 75.83,
+      "clicks": 134,
+      "impressions": 1418,
+      "sessions": 634,
+      "siteRevenue": 11751.67,
+      "siteOrders": 143
+    },
+    {
+      "day": "03",
+      "cost": 54.57,
+      "clicks": 122,
+      "impressions": 987,
+      "sessions": 592,
+      "siteRevenue": 7956.41,
+      "siteOrders": 102
+    },
+    {
+      "day": "04",
+      "cost": 95.1,
+      "clicks": 80,
+      "impressions": 937,
+      "sessions": 171,
+      "siteRevenue": 2560.83,
+      "siteOrders": 26
+    },
+    {
+      "day": "05",
+      "cost": 154.15,
+      "clicks": 127,
+      "impressions": 1298,
+      "sessions": 525,
+      "siteRevenue": 7058.44,
+      "siteOrders": 88
+    },
+    {
+      "day": "06",
+      "cost": 43.93,
+      "clicks": 40,
+      "impressions": 695,
+      "sessions": 146,
+      "siteRevenue": 579.75,
+      "siteOrders": 10
+    },
+    {
+      "day": "07",
+      "cost": 142.11,
+      "clicks": 41,
+      "impressions": 885,
+      "sessions": 101,
+      "siteRevenue": 688.91,
+      "siteOrders": 12
+    },
+    {
+      "day": "08",
+      "cost": 182.63,
+      "clicks": 99,
+      "impressions": 1211,
+      "sessions": 584,
+      "siteRevenue": 9168.14,
+      "siteOrders": 111
+    },
+    {
+      "day": "09",
+      "cost": 16.67,
+      "clicks": 19,
+      "impressions": 278,
+      "sessions": 617,
+      "siteRevenue": 12036.57,
+      "siteOrders": 134
+    },
+    {
+      "day": "10",
+      "cost": 0.06,
+      "clicks": 3,
+      "impressions": 16,
+      "sessions": 759,
+      "siteRevenue": 17747.42,
+      "siteOrders": 136
+    },
+    {
+      "day": "11",
+      "cost": 0.02,
+      "clicks": 2,
+      "impressions": 18,
+      "sessions": 671,
+      "siteRevenue": 7105.61,
+      "siteOrders": 117
+    },
+    {
+      "day": "12",
+      "cost": 0.01,
+      "clicks": 2,
+      "impressions": 10,
+      "sessions": 542,
+      "siteRevenue": 5309.4,
+      "siteOrders": 54
+    },
+    {
+      "day": "13",
+      "cost": 0.02,
+      "clicks": 1,
+      "impressions": 7,
+      "sessions": 120,
+      "siteRevenue": 1272.33,
+      "siteOrders": 10
+    },
+    {
+      "day": "14",
+      "cost": 0,
+      "clicks": 1,
+      "impressions": 2,
+      "sessions": 107,
+      "siteRevenue": 1420.24,
+      "siteOrders": 12
+    },
+    {
+      "day": "15",
+      "cost": 0.01,
+      "clicks": 0,
+      "impressions": 1,
+      "sessions": 547,
+      "siteRevenue": 12375.51,
+      "siteOrders": 116
+    },
+    {
+      "day": "16",
+      "cost": 0,
+      "clicks": 0,
+      "impressions": 1,
+      "sessions": 695,
+      "siteRevenue": 9649.57,
+      "siteOrders": 121
+    },
+    {
+      "day": "17",
+      "cost": 0.01,
+      "clicks": 0,
+      "impressions": 5,
+      "sessions": 696,
+      "siteRevenue": 9626.52,
+      "siteOrders": 117
+    },
+    {
+      "day": "18",
+      "cost": 0,
+      "clicks": 0,
+      "impressions": 0,
+      "sessions": 683,
+      "siteRevenue": 9076.43,
+      "siteOrders": 126
+    },
+    {
+      "day": "19",
+      "cost": 0,
+      "clicks": 0,
+      "impressions": 0,
+      "sessions": 591,
+      "siteRevenue": 8878.93,
+      "siteOrders": 79
+    },
+    {
+      "day": "20",
+      "cost": 0,
+      "clicks": 0,
+      "impressions": 0,
+      "sessions": 177,
+      "siteRevenue": 172.38,
+      "siteOrders": 4
+    },
+    {
+      "day": "21",
+      "cost": 21.31,
+      "clicks": 7,
+      "impressions": 220,
+      "sessions": 133,
+      "siteRevenue": 719.29,
+      "siteOrders": 17
+    },
+    {
+      "day": "22",
+      "cost": 0,
+      "clicks": 0,
+      "impressions": 0,
+      "sessions": 592,
+      "siteRevenue": 13935.69,
+      "siteOrders": 123
+    },
+    {
+      "day": "23",
+      "cost": 0,
+      "clicks": 0,
+      "impressions": 0,
+      "sessions": 699,
+      "siteRevenue": 11315.33,
+      "siteOrders": 128
+    },
+    {
+      "day": "24",
+      "cost": 0,
+      "clicks": 0,
+      "impressions": 0,
+      "sessions": 596,
+      "siteRevenue": 6747.81,
+      "siteOrders": 86
+    },
+    {
+      "day": "25",
+      "cost": 0,
+      "clicks": 0,
+      "impressions": 0,
+      "sessions": 579,
+      "siteRevenue": 9737.18,
+      "siteOrders": 104
+    }
   ],
   "insights": [
     {
-      "type": "pos", "tag": "★ ROAS",
-      "title": "ROAS de 24,6× — excelente eficiência de investimento",
-      "body": "R$896 investidos geraram R$22.079 em receita atribuída. Performance Max lidera com ROAS 39,6× e CPA de apenas R$3,01. GENÉRICA Search melhorou para ROAS 21,8×."
+      "type": "pos",
+      "tag": "★ ROAS",
+      "title": "ROAS de 24,9× — excelente eficiência de investimento",
+      "body": "R$896 investidos geraram R$22.343 em receita atribuída (GA4). Performance Max lidera com ROAS 39,6× e CPA de apenas R$3,01. GENÉRICA Search melhorou para ROAS 21,8×."
     },
     {
-      "type": "neg", "tag": "⚠ Campanhas Pausadas",
+      "type": "neg",
+      "tag": "⚠ Campanhas Pausadas",
       "title": "Sem gasto significativo de 10/06 a 25/06 — apenas dia 21 ativo",
       "body": "97,6% do budget foi gasto nos dias 1–9. Campanhas ficaram pausadas a maior parte do mês com reativação breve no dia 21 (R$21,31). Oportunidade de receita não capturada."
     },
     {
-      "type": "neg", "tag": "⚠ Wind Banner",
+      "type": "neg",
+      "tag": "⚠ Wind Banner",
       "title": "Campanha Wind Banner com ROAS de 0,94× — abaixo do break-even",
       "body": "R$185 gastos geraram apenas R$173 em receita. CPA de R$46,27 por conversão — revisar landing page, criativos e match types urgente."
     },
     {
-      "type": "pos", "tag": "★ Search GENÉRICA",
+      "type": "pos",
+      "tag": "★ Search GENÉRICA",
       "title": "\"gráfica online\" — melhor keyword com ROAS 25,7×",
       "body": "201 cliques a R$1,02/clique, 68 conversões, R$5.256 em receita. \"grafica para impressao\" também se destaca com ROAS 47,3×. Search GENÉRICA agora em ROAS 21,8×."
     },
     {
-      "type": "pos", "tag": "✓ CTR",
+      "type": "pos",
+      "tag": "✓ CTR",
       "title": "CTR de 8,40% — muito acima da média do setor (2–5%)",
       "body": "Alta taxa de cliques indica boa relevância de anúncio e intenção do público. [SEARCH] GENÉRICA alcançou CTR de 13,89%."
     },
     {
-      "type": "warn", "tag": "⚑ Zero Conversões",
+      "type": "warn",
+      "tag": "⚑ Zero Conversões",
       "title": "5 keywords com gasto e zero conversões — R$62,56 desperdiçados",
       "body": "\"windbanner\", \"grafica sp\", \"wind banner 24h\", \"wind banner personalizado\" e \"grafica\" somaram R$62,56 sem nenhuma conversão. Considere pausar ou negativar."
     }
-  ]
+  ],
+  "notes": {
+    "daily": "cost/clicks/impressions são de Google Ads; siteRevenue/siteOrders são contexto GA4 e não conversões atribuídas por dia.",
+    "automation": "Google Ads ainda é snapshot manual; GA4 e Meta são atualizados pelo workflow."
+  }
 }

@@ -1,37 +1,531 @@
 {
   "months": [
     {
+      "value": "2025-07",
+      "label": "Julho 2025",
+      "short": "Jul/25",
+      "slug": "julho-2025",
+      "days": 31,
+      "sources": {
+        "ga4": true,
+        "gads": true,
+        "meta": true
+      },
+      "ga4": {
+        "revenue": 181858.93,
+        "orders": 2046,
+        "purchasers": 407,
+        "sessions": 10813,
+        "avgTicket": 88.89,
+        "users": 1918,
+        "newUsers": 1004,
+        "returningUsers": 914,
+        "newRevenue": 7593.78,
+        "returningRevenue": 173645.87,
+        "newOrders": 84,
+        "returningOrders": 1944,
+        "addToCart": 2979,
+        "itemsPurchased": 2577
+      },
+      "gads": {
+        "spend": 104.59,
+        "conversions": 18,
+        "roas": 22,
+        "clicks": 47
+      },
+      "meta": {
+        "spend": 425.84,
+        "purchases": 12,
+        "roas": 1.54,
+        "reach": 16393
+      },
+      "derived": {
+        "totalInvestment": 530.4,
+        "overallROAS": 342.9
+      }
+    },
+    {
+      "value": "2025-08",
+      "label": "Agosto 2025",
+      "short": "Ago/25",
+      "slug": "agosto-2025",
+      "days": 31,
+      "sources": {
+        "ga4": true,
+        "gads": true,
+        "meta": true
+      },
+      "ga4": {
+        "revenue": 187977.3,
+        "orders": 1988,
+        "purchasers": 421,
+        "sessions": 11826,
+        "avgTicket": 94.56,
+        "users": 2346,
+        "newUsers": 1361,
+        "returningUsers": 985,
+        "newRevenue": 6453.75,
+        "returningRevenue": 180127.95,
+        "newOrders": 57,
+        "returningOrders": 1903,
+        "addToCart": 3007,
+        "itemsPurchased": 2513
+      },
+      "gads": {
+        "spend": 717.45,
+        "conversions": 157,
+        "roas": 22,
+        "clicks": 456
+      },
+      "meta": {
+        "spend": 522.01,
+        "purchases": 21,
+        "roas": 3.4,
+        "reach": 15470
+      },
+      "derived": {
+        "totalInvestment": 1239.5,
+        "overallROAS": 151.7
+      }
+    },
+    {
+      "value": "2025-09",
+      "label": "Setembro 2025",
+      "short": "Set/25",
+      "slug": "setembro-2025",
+      "days": 30,
+      "sources": {
+        "ga4": true,
+        "gads": true,
+        "meta": true
+      },
+      "ga4": {
+        "revenue": 202650.24,
+        "orders": 2136,
+        "purchasers": 433,
+        "sessions": 14388,
+        "avgTicket": 94.87,
+        "users": 4267,
+        "newUsers": 3089,
+        "returningUsers": 1178,
+        "newRevenue": 5565.99,
+        "returningRevenue": 196122.07,
+        "newOrders": 59,
+        "returningOrders": 2056,
+        "addToCart": 3217,
+        "itemsPurchased": 2682
+      },
+      "gads": {
+        "spend": 2088.68,
+        "conversions": 546,
+        "roas": 22,
+        "clicks": 1492
+      },
+      "meta": {
+        "spend": 1377.99,
+        "purchases": 415,
+        "roas": 30.88,
+        "reach": 28159
+      },
+      "derived": {
+        "totalInvestment": 3466.7,
+        "overallROAS": 58.5
+      }
+    },
+    {
+      "value": "2025-10",
+      "label": "Outubro 2025",
+      "short": "Out/25",
+      "slug": "outubro-2025",
+      "days": 31,
+      "sources": {
+        "ga4": true,
+        "gads": true,
+        "meta": true
+      },
+      "ga4": {
+        "revenue": 203463.07,
+        "orders": 2316,
+        "purchasers": 459,
+        "sessions": 15047,
+        "avgTicket": 87.85,
+        "users": 4816,
+        "newUsers": 3521,
+        "returningUsers": 1295,
+        "newRevenue": 7742.79,
+        "returningRevenue": 195720.28,
+        "newOrders": 80,
+        "returningOrders": 2236,
+        "addToCart": 3442,
+        "itemsPurchased": 2824
+      },
+      "gads": {
+        "spend": 2494.05,
+        "conversions": 637,
+        "roas": 22,
+        "clicks": 1509
+      },
+      "meta": {
+        "spend": 902.08,
+        "purchases": 442,
+        "roas": 55.79,
+        "reach": 13411
+      },
+      "derived": {
+        "totalInvestment": 3396.1,
+        "overallROAS": 59.9
+      }
+    },
+    {
+      "value": "2025-11",
+      "label": "Novembro 2025",
+      "short": "Nov/25",
+      "slug": "novembro-2025",
+      "days": 30,
+      "sources": {
+        "ga4": true,
+        "gads": true,
+        "meta": true
+      },
+      "ga4": {
+        "revenue": 177675.56,
+        "orders": 2044,
+        "purchasers": 447,
+        "sessions": 14788,
+        "avgTicket": 86.93,
+        "users": 5055,
+        "newUsers": 3761,
+        "returningUsers": 1294,
+        "newRevenue": 5880.31,
+        "returningRevenue": 171795.25,
+        "newOrders": 63,
+        "returningOrders": 1981,
+        "addToCart": 3190,
+        "itemsPurchased": 2600
+      },
+      "gads": {
+        "spend": 3115.86,
+        "conversions": 683,
+        "roas": 22,
+        "clicks": 1807
+      },
+      "meta": {
+        "spend": 2485.52,
+        "purchases": 567,
+        "roas": 22.06,
+        "reach": 26592
+      },
+      "derived": {
+        "totalInvestment": 5601.4,
+        "overallROAS": 31.7
+      }
+    },
+    {
+      "value": "2025-12",
+      "label": "Dezembro 2025",
+      "short": "Dez/25",
+      "slug": "dezembro-2025",
+      "days": 31,
+      "sources": {
+        "ga4": true,
+        "gads": true,
+        "meta": true
+      },
+      "ga4": {
+        "revenue": 133855.8,
+        "orders": 1483,
+        "purchasers": 381,
+        "sessions": 10080,
+        "avgTicket": 90.26,
+        "users": 2706,
+        "newUsers": 1638,
+        "returningUsers": 1068,
+        "newRevenue": 4128.16,
+        "returningRevenue": 129727.64,
+        "newOrders": 48,
+        "returningOrders": 1435,
+        "addToCart": 2339,
+        "itemsPurchased": 1974
+      },
+      "gads": {
+        "spend": 2231.68,
+        "conversions": 526,
+        "roas": 22,
+        "clicks": 1438
+      },
+      "meta": {
+        "spend": 1112.44,
+        "purchases": 481,
+        "roas": 41.66,
+        "reach": 8410
+      },
+      "derived": {
+        "totalInvestment": 3344.1,
+        "overallROAS": 40
+      }
+    },
+    {
+      "value": "2026-01",
+      "label": "Janeiro 2026",
+      "short": "Jan/26",
+      "slug": "janeiro-2026",
+      "days": 31,
+      "sources": {
+        "ga4": true,
+        "gads": true,
+        "meta": true
+      },
+      "ga4": {
+        "revenue": 163679.85,
+        "orders": 1747,
+        "purchasers": 375,
+        "sessions": 12147,
+        "avgTicket": 93.69,
+        "users": 3678,
+        "newUsers": 2554,
+        "returningUsers": 1124,
+        "newRevenue": 9144.55,
+        "returningRevenue": 154535.3,
+        "newOrders": 56,
+        "returningOrders": 1691,
+        "addToCart": 2616,
+        "itemsPurchased": 2226
+      },
+      "gads": {
+        "spend": 2239.27,
+        "conversions": 566,
+        "roas": 22,
+        "clicks": 1416
+      },
+      "meta": {
+        "spend": 1317.77,
+        "purchases": 418,
+        "roas": 33.65,
+        "reach": 23746
+      },
+      "derived": {
+        "totalInvestment": 3557,
+        "overallROAS": 46
+      }
+    },
+    {
+      "value": "2026-02",
+      "label": "Fevereiro 2026",
+      "short": "Fev/26",
+      "slug": "fevereiro-2026",
+      "days": 28,
+      "sources": {
+        "ga4": true,
+        "gads": true,
+        "meta": true
+      },
+      "ga4": {
+        "revenue": 159199.22,
+        "orders": 1892,
+        "purchasers": 412,
+        "sessions": 13414,
+        "avgTicket": 84.14,
+        "users": 4081,
+        "newUsers": 2862,
+        "returningUsers": 1219,
+        "newRevenue": 5460.71,
+        "returningRevenue": 153738.51,
+        "newOrders": 53,
+        "returningOrders": 1839,
+        "addToCart": 2855,
+        "itemsPurchased": 2336
+      },
+      "gads": {
+        "spend": 2448.68,
+        "conversions": 639,
+        "roas": 22,
+        "clicks": 1893
+      },
+      "meta": {
+        "spend": 2635.49,
+        "purchases": 410,
+        "roas": 15.78,
+        "reach": 30661
+      },
+      "derived": {
+        "totalInvestment": 5084.2,
+        "overallROAS": 31.3
+      }
+    },
+    {
+      "value": "2026-03",
+      "label": "Março 2026",
+      "short": "Mar/26",
+      "slug": "marco-2026",
+      "days": 31,
+      "sources": {
+        "ga4": true,
+        "gads": true,
+        "meta": true
+      },
+      "ga4": {
+        "revenue": 217518.88,
+        "orders": 2339,
+        "purchasers": 426,
+        "sessions": 14282,
+        "avgTicket": 93,
+        "users": 3286,
+        "newUsers": 2061,
+        "returningUsers": 1225,
+        "newRevenue": 2911.46,
+        "returningRevenue": 214607.42,
+        "newOrders": 48,
+        "returningOrders": 2291,
+        "addToCart": 2700,
+        "itemsPurchased": 2934
+      },
+      "gads": {
+        "spend": 1060.55,
+        "conversions": 271,
+        "roas": 22,
+        "clicks": 726
+      },
+      "meta": {
+        "spend": 1502.21,
+        "purchases": 303,
+        "roas": 19.97,
+        "reach": 26048
+      },
+      "derived": {
+        "totalInvestment": 2562.8,
+        "overallROAS": 84.9
+      }
+    },
+    {
+      "value": "2026-04",
+      "label": "Abril 2026",
+      "short": "Abr/26",
+      "slug": "abril-2026",
+      "days": 30,
+      "sources": {
+        "ga4": true,
+        "gads": true,
+        "meta": true
+      },
+      "ga4": {
+        "revenue": 188166.93,
+        "orders": 2111,
+        "purchasers": 437,
+        "sessions": 13508,
+        "avgTicket": 89.14,
+        "users": 3570,
+        "newUsers": 2275,
+        "returningUsers": 1295,
+        "newRevenue": 5428.36,
+        "returningRevenue": 182738.57,
+        "newOrders": 62,
+        "returningOrders": 2049,
+        "addToCart": 2808,
+        "itemsPurchased": 2670
+      },
+      "gads": {
+        "spend": 2162.41,
+        "conversions": 526,
+        "roas": 22,
+        "clicks": 1661
+      },
+      "meta": {
+        "spend": 1317.38,
+        "purchases": 462,
+        "roas": 31.82,
+        "reach": 91436
+      },
+      "derived": {
+        "totalInvestment": 3479.8,
+        "overallROAS": 54.1
+      }
+    },
+    {
+      "value": "2026-05",
+      "label": "Maio 2026",
+      "short": "Mai/26",
+      "slug": "maio-2026",
+      "days": 31,
+      "sources": {
+        "ga4": true,
+        "gads": true,
+        "meta": true
+      },
+      "ga4": {
+        "revenue": 209217.61,
+        "orders": 2328,
+        "purchasers": 457,
+        "sessions": 15212,
+        "avgTicket": 89.87,
+        "users": 4234,
+        "newUsers": 2868,
+        "returningUsers": 1366,
+        "newRevenue": 6223.06,
+        "returningRevenue": 202994.55,
+        "newOrders": 64,
+        "returningOrders": 2264,
+        "addToCart": 3096,
+        "itemsPurchased": 2939
+      },
+      "gads": {
+        "spend": 2245.91,
+        "conversions": 592,
+        "roas": 22,
+        "clicks": 1753
+      },
+      "meta": {
+        "spend": 2635.24,
+        "purchases": 506,
+        "roas": 21.74,
+        "reach": 86062
+      },
+      "derived": {
+        "totalInvestment": 4881.2,
+        "overallROAS": 42.9
+      }
+    },
+    {
       "value": "2026-06",
       "label": "Junho 2026",
       "short": "Jun/26",
-      "days": 23,
-      "sources": { "ga4": true, "gads": true, "meta": true },
+      "slug": "junho-2026",
+      "days": 25,
+      "sources": {
+        "ga4": true,
+        "gads": true,
+        "meta": true
+      },
       "ga4": {
-        "revenue":        167313,
-        "orders":         1871,
-        "sessions":       10848,
-        "avgTicket":      89.42,
-        "users":          2647,
-        "newUsers":       1534,
-        "returningUsers": 1113,
-        "addToCart":      531,
-        "itemsPurchased": 2404
+        "revenue": 183798.36,
+        "orders": 2061,
+        "purchasers": 416,
+        "sessions": 12037,
+        "avgTicket": 89.18,
+        "users": 2826,
+        "newUsers": 1640,
+        "returningUsers": 1186,
+        "newRevenue": 4481,
+        "returningRevenue": 179318,
+        "newOrders": 60,
+        "returningOrders": 2001,
+        "addToCart": 556,
+        "itemsPurchased": 2642
       },
       "gads": {
-        "spend":       896.18,
-        "conversions": 212,
-        "roas":        24.0,
-        "clicks":      787
+        "spend": 896.18,
+        "conversions": 228,
+        "roas": 24.9,
+        "clicks": 787
       },
       "meta": {
-        "spend":     4099.97,
-        "purchases": 298,
-        "roas":      7.3,
-        "reach":     107366
+        "spend": 4531.16,
+        "purchases": 357,
+        "roas": 7.34,
+        "reach": 117775
       },
       "derived": {
-        "totalInvestment": 4996.15,
-        "overallROAS":     33.5
+        "totalInvestment": 5427.3,
+        "overallROAS": 33.9
       }
     }
   ]

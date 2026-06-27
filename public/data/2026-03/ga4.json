@@ -13,7 +13,8 @@
     "revenue": 217518.88,
     "orders": 2339,
     "avgTicket": 93.0,
-    "conversionRate": 16.38
+    "conversionRate": 16.38,
+    "purchasers": 426
   },
   "kpis": {
     "revenuePerDay": 7016.74,
@@ -27,7 +28,9 @@
     "bounceRate": 31.3,
     "returningCustomerRate": 37.28,
     "returningRevenue": 214607.42,
-    "returningCustomers": 2291
+    "returningCustomers": 2291,
+    "purchasers": 426,
+    "itemsAddedToCart": 2700
   },
   "dailyRevenue": [
     {
